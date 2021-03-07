@@ -16,7 +16,7 @@ The bot allows members to register the country they're located, so when question
  - [x] Ping folks from a location:
     - [x] English: `/pingMembersAt NL`, `/whoisat NL`
     - [x] Portuguese: `/quem NL`
- - [ ] Deregister member location:
+ - [x] Deregister member location:
     - [x] English: `/leave NL`
     - [x] Portuguese: `/sair NL`
  - [ ] Help Sections:
