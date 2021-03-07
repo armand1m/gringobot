@@ -28,12 +28,16 @@ const ConfigSchema = yup.object({
   botToken: yup
     .string()
     .required(createRequiredErrMessage('BOT_TOKEN')),
+  dataPath: yup
+    .string()
+    .required(createRequiredErrMessage('DATA_PATH')),
 });
 
 export const loadConfiguration = async () => {
   const unsafeConfig = {
     environment: process.env.NODE_ENV,
     botToken: process.env.BOT_TOKEN,
+    dataPath: process.env.DATA_PATH,
   };
 
   const config = await ConfigSchema.validate(unsafeConfig);

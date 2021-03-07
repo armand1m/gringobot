@@ -1,48 +1,80 @@
-import { Telegraf } from 'telegraf';
-import { InlineQueryResult } from 'typegram';
+import { Telegraf, Context } from 'telegraf';
+import { Command } from './command';
 import { loadConfiguration } from './config';
+import { Country } from './countries';
+import { createDatabase, DatabaseInstance } from './database';
 import { createLogger } from './logger';
 
+interface BotContext extends Context {
+  database: DatabaseInstance;
+}
 const main = async () => {
   const config = await loadConfiguration();
   const logger = createLogger(config.environment);
-  const bot = new Telegraf(config.botToken);
+  const databaseLogger = logger.child({ source: 'database' });
+  const bot = new Telegraf<BotContext>(config.botToken);
 
-  bot.command('quit', (ctx) => {
-    // Explicit usage
-    ctx.telegram.leaveChat(ctx.message.chat.id);
+  bot.use(async (ctx, next) => {
+    const chatId = ctx?.chat?.id;
 
-    // Using context shortcut
-    ctx.leaveChat();
-  });
+    if (!chatId) {
+      return ctx.reply(
+        'GringoBot does not support this type of chat.'
+      );
+    }
 
-  bot.on('text', (ctx) => {
-    // Explicit usage
-    ctx.telegram.sendMessage(
-      ctx.message.chat.id,
-      `Hello ${ctx.state.role}`
+    const database = await createDatabase(
+      chatId,
+      config.dataPath,
+      databaseLogger
     );
 
-    // Using context shortcut
-    ctx.reply(`Hello ${ctx.state.role}`);
+    ctx.database = database;
+
+    return next();
   });
 
-  bot.on('callback_query', (ctx) => {
-    // Explicit usage
-    ctx.telegram.answerCbQuery(ctx.callbackQuery.id);
+  bot.command(Command.PingMembersAt, async (ctx) => {
+    const chatId = ctx.chat.id;
+    const database = ctx.database;
+    const country = Country.Netherlands;
+    const memberIds = database.getMembersAt(country);
+    const members = await Promise.all(
+      memberIds.map(async (userId) => {
+        const member = await bot.telegram.getChatMember(
+          chatId,
+          userId
+        );
+        return '@' + member.user.username;
+      })
+    );
 
-    // Using context shortcut
-    ctx.answerCbQuery();
+    const message =
+      members.length === 0
+        ? 'There are no members registered in this location.'
+        : `These members are registered in the location you're interested in: ${members.join(
+            ', '
+          )}`;
+
+    ctx.reply(message);
   });
 
-  bot.on('inline_query', (ctx) => {
-    const result: InlineQueryResult[] = [];
+  bot.command(Command.RegisterMemberAt, async (ctx) => {
+    const userId = ctx.from.id;
+    const database = ctx.database;
+    const country = Country.Netherlands;
 
-    // Explicit usage
-    ctx.telegram.answerInlineQuery(ctx.inlineQuery.id, result);
+    /**
+     * TODO: Only add member if he is not added yet.
+     * If the member is registered in another location,
+     * throw an error and let the user know he needs to deregister
+     * first and then register to the new one.
+     */
+    database.addMemberLocation(userId, country);
 
-    // Using context shortcut
-    ctx.answerInlineQuery(result);
+    ctx.reply(
+      `Your location is registered at ${country}. You'll be mentioned whenever folks ask about this location.`
+    );
   });
 
   // Enable graceful stop
