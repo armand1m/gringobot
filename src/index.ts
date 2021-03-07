@@ -1,4 +1,6 @@
+import path from 'path';
 import { Telegraf, Context } from 'telegraf';
+import TelegrafI18n from 'telegraf-i18n';
 import { Command } from './command';
 import { loadConfiguration } from './config';
 import { Country } from './countries';
@@ -7,12 +9,22 @@ import { createLogger } from './logger';
 
 interface BotContext extends Context {
   database: DatabaseInstance;
+  i18n: TelegrafI18n;
 }
+
 const main = async () => {
   const config = await loadConfiguration();
   const logger = createLogger(config.environment);
   const databaseLogger = logger.child({ source: 'database' });
   const bot = new Telegraf<BotContext>(config.botToken);
+
+  const i18n = new TelegrafI18n({
+    defaultLanguage: 'pt_BR',
+    allowMissing: false, // Default true
+    directory: path.resolve(process.cwd(), config.localesPath),
+  });
+
+  bot.use(i18n.middleware());
 
   bot.use(async (ctx, next) => {
     const chatId = ctx?.chat?.id;
@@ -35,6 +47,7 @@ const main = async () => {
   });
 
   bot.command(Command.PingMembersAt, async (ctx) => {
+    const i18n = ctx.i18n;
     const chatId = ctx.chat.id;
     const database = ctx.database;
     const country = Country.Netherlands;
@@ -51,15 +64,16 @@ const main = async () => {
 
     const message =
       members.length === 0
-        ? 'There are no members registered in this location.'
-        : `These members are registered in the location you're interested in: ${members.join(
-            ', '
-          )}`;
+        ? i18n.t('location.noMembersAtLocation')
+        : i18n.t('location.membersAtLocation', {
+            members: members.join(', '),
+          });
 
     ctx.reply(message);
   });
 
   bot.command(Command.RegisterMemberAt, async (ctx) => {
+    const i18n = ctx.i18n;
     const userId = ctx.from.id;
     const database = ctx.database;
     const country = Country.Netherlands;
@@ -73,7 +87,18 @@ const main = async () => {
     database.addMemberLocation(userId, country);
 
     ctx.reply(
-      `Your location is registered at ${country}. You'll be mentioned whenever folks ask about this location.`
+      i18n.t('location.memberRegisteredAtLocation', {
+        country,
+      })
+    );
+  });
+
+  bot.command(Command.PingAdmins, async (ctx) => {
+    const chatId = ctx.chat.id;
+    const admins = await bot.telegram.getChatAdministrators(chatId);
+
+    ctx.reply(
+      admins.map((admin) => '@' + admin.user.username).join(', ')
     );
   });
 
