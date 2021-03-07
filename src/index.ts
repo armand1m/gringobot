@@ -1,16 +1,14 @@
 import path from 'path';
-import { Telegraf, Context } from 'telegraf';
+import { Telegraf } from 'telegraf';
 import TelegrafI18n from 'telegraf-i18n';
 import { Command } from './command';
+import { cmdPingAdmins } from './commands/pingAdmins';
+import { cmdPingMemberAt } from './commands/pingMembersAt';
+import { cmdRegisterMemberAt } from './commands/registerMemberAt';
 import { loadConfiguration } from './config';
-import { Country } from './countries';
-import { createDatabase, DatabaseInstance } from './database';
+import { BotContext } from './context';
+import { createDatabase } from './database';
 import { createLogger } from './logger';
-
-interface BotContext extends Context {
-  database: DatabaseInstance;
-  i18n: TelegrafI18n;
-}
 
 const main = async () => {
   const config = await loadConfiguration();
@@ -19,12 +17,22 @@ const main = async () => {
   const bot = new Telegraf<BotContext>(config.botToken);
 
   const i18n = new TelegrafI18n({
-    defaultLanguage: 'pt_BR',
-    allowMissing: false, // Default true
+    defaultLanguage: 'ptbr',
+    allowMissing: false,
     directory: path.resolve(process.cwd(), config.localesPath),
   });
 
   bot.use(i18n.middleware());
+
+  /**
+   * telegraf-i18n uses the user session to determine
+   * which locale to use. This basically forces
+   * all answers to be sent in ptbr.
+   */
+  bot.use((ctx, next) => {
+    ctx.i18n.locale('ptbr');
+    return next();
+  });
 
   bot.use(async (ctx, next) => {
     const chatId = ctx?.chat?.id;
@@ -42,65 +50,15 @@ const main = async () => {
     );
 
     ctx.database = database;
+    ctx.logger = logger;
+    ctx.config = config;
 
     return next();
   });
 
-  bot.command(Command.PingMembersAt, async (ctx) => {
-    const i18n = ctx.i18n;
-    const chatId = ctx.chat.id;
-    const database = ctx.database;
-    const country = Country.Netherlands;
-    const memberIds = database.getMembersAt(country);
-    const members = await Promise.all(
-      memberIds.map(async (userId) => {
-        const member = await bot.telegram.getChatMember(
-          chatId,
-          userId
-        );
-        return '@' + member.user.username;
-      })
-    );
-
-    const message =
-      members.length === 0
-        ? i18n.t('location.noMembersAtLocation')
-        : i18n.t('location.membersAtLocation', {
-            members: members.join(', '),
-          });
-
-    ctx.reply(message);
-  });
-
-  bot.command(Command.RegisterMemberAt, async (ctx) => {
-    const i18n = ctx.i18n;
-    const userId = ctx.from.id;
-    const database = ctx.database;
-    const country = Country.Netherlands;
-
-    /**
-     * TODO: Only add member if he is not added yet.
-     * If the member is registered in another location,
-     * throw an error and let the user know he needs to deregister
-     * first and then register to the new one.
-     */
-    database.addMemberLocation(userId, country);
-
-    ctx.reply(
-      i18n.t('location.memberRegisteredAtLocation', {
-        country,
-      })
-    );
-  });
-
-  bot.command(Command.PingAdmins, async (ctx) => {
-    const chatId = ctx.chat.id;
-    const admins = await bot.telegram.getChatAdministrators(chatId);
-
-    ctx.reply(
-      admins.map((admin) => '@' + admin.user.username).join(', ')
-    );
-  });
+  bot.command(Command.PingAdmins, cmdPingAdmins);
+  bot.command(Command.PingMembersAt, cmdPingMemberAt);
+  bot.command(Command.RegisterMemberAt, cmdRegisterMemberAt);
 
   // Enable graceful stop
   process.once('SIGINT', () => bot.stop('SIGINT'));

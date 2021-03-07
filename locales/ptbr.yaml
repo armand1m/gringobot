@@ -2,3 +2,10 @@ location:
   noMembersAtLocation: "Nao existem membros registrados nessa localizacao."
   membersAtLocation: "Estes membros estao registrados nessa localizacao: ${members}"
   memberRegisteredAtLocation: "@${from.username} Voce agora esta registrado na localizao '${country}'. Voce sera mencionado sempre que alguem procurar informacoes sobre esta localizacao."
+commands:
+  registerMemberAt: 'estou'
+  pingMembersAt: 'quem'
+  pingAdmins: 'admins'
+  deregisterMemberAt: 'sair'
+errors:
+  failedToIdentifyUser: "Nao pude identificar o usuario. O comando nao foi executado."
