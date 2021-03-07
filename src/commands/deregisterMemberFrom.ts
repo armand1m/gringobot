@@ -2,7 +2,7 @@ import { Middleware } from 'telegraf';
 import { BotContext } from '../context';
 import { Country } from '../countries';
 
-export const cmdRegisterMemberAt: Middleware<BotContext> = async (
+export const cmdDeregisterMemberFrom: Middleware<BotContext> = async (
   ctx
 ) => {
   const i18n = ctx.i18n;
@@ -14,14 +14,10 @@ export const cmdRegisterMemberAt: Middleware<BotContext> = async (
     return ctx.reply(i18n.t('errors.failedToIdentifyUser'));
   }
 
-  if (database.hasMemberRegistered(userId, country)) {
-    return ctx.reply(i18n.t('errors.memberAlreadyRegistered'));
-  }
-
-  database.addMemberLocation(userId, country);
+  database.removeMemberFrom(userId, country);
 
   return ctx.reply(
-    i18n.t('location.memberRegisteredAtLocation', {
+    i18n.t('location.memberDeregisteredFromLocation', {
       country,
     })
   );

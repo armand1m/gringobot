@@ -11,7 +11,9 @@ interface DatabaseSchema {
 
 export interface DatabaseInstance {
   addMemberLocation: (userId: number, country: Country) => void;
+  removeMemberFrom: (userId: number, country: Country) => void;
   getMembersAt: (country: Country) => number[];
+  hasMemberRegistered: (userId: number, country: Country) => boolean;
 }
 
 const emptyDatabase: DatabaseSchema = {
@@ -51,11 +53,21 @@ export const createDatabase = async (
   db.defaults(emptyDatabase).write();
 
   const instance: DatabaseInstance = {
-    addMemberLocation: (userHandle: number, code: Country) => {
-      db.get(`locationIndex`).get(code).push(userHandle).write();
+    removeMemberFrom: (userId: number, code: Country) => {
+      const collection = db.get('locationIndex').get(code);
+      collection.pull(userId).write();
+    },
+    hasMemberRegistered: (userId: number, code: Country) => {
+      const collection = db.get('locationIndex').get(code);
+      return collection.value().includes(userId);
+    },
+    addMemberLocation: (userId: number, code: Country) => {
+      const collection = db.get('locationIndex').get(code);
+      collection.push(userId).write();
     },
     getMembersAt: (code: Country) => {
-      const members = db.get('locationIndex').get(code).value() || [];
+      const collection = db.get('locationIndex').get(code);
+      const members = collection.value() || [];
       return members;
     },
   };

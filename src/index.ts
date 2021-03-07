@@ -1,7 +1,8 @@
 import path from 'path';
 import { Telegraf } from 'telegraf';
 import TelegrafI18n from 'telegraf-i18n';
-import { Command } from './command';
+import { Command, CommandAliases } from './command';
+import { cmdDeregisterMemberFrom } from './commands/deregisterMemberFrom';
 import { cmdPingAdmins } from './commands/pingAdmins';
 import { cmdPingMemberAt } from './commands/pingMembersAt';
 import { cmdRegisterMemberAt } from './commands/registerMemberAt';
@@ -56,9 +57,16 @@ const main = async () => {
     return next();
   });
 
-  bot.command(Command.PingAdmins, cmdPingAdmins);
-  bot.command(Command.PingMembersAt, cmdPingMemberAt);
-  bot.command(Command.RegisterMemberAt, cmdRegisterMemberAt);
+  bot.command(CommandAliases[Command.PingAdmins], cmdPingAdmins);
+  bot.command(CommandAliases[Command.PingMembersAt], cmdPingMemberAt);
+  bot.command(
+    CommandAliases[Command.RegisterMemberAt],
+    cmdRegisterMemberAt
+  );
+  bot.command(
+    CommandAliases[Command.DeregisterMemberFrom],
+    cmdDeregisterMemberFrom
+  );
 
   // Enable graceful stop
   process.once('SIGINT', () => bot.stop('SIGINT'));

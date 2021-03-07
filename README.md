@@ -12,18 +12,18 @@ The bot allows members to register the country they're located, so when question
 
  - [x] Register member location:
     - [x] English: `/registerMemberAt NL`, `/imat NL`
-    - [ ] Portuguese: `/estou Holanda`
+    - [x] Portuguese: `/estou NL`
  - [x] Ping folks from a location:
-    - [x] English: `/pingMembersAt NL`, `/whoat NL`, `!whoat The Netherlands`
-    - [ ] Portuguese: `/quem NL`, `!quem Holanda`
+    - [x] English: `/pingMembersAt NL`, `/whoisat NL`
+    - [x] Portuguese: `/quem NL`
  - [ ] Deregister member location:
-    - [ ] English: `/left NL`, `!left The Netherlands`
-    - [ ] Portuguese: `/sair NL`, `!sair Holanda`
+    - [x] English: `/leave NL`
+    - [x] Portuguese: `/sair NL`
  - [ ] Help Sections:
     - [ ] English: `/help international transfers`
     - [ ] Portuguese: `/ajuda transferencias`
  - [x] Ping all admins:
-    - [x] `/pingAdmins`
+    - [x] `/pingAdmins`, `/admins`, `/eita`
 
 ## Developing
 
