@@ -46,6 +46,8 @@ You must have a Telegram Bot Token created by the Bot Father. Once you have that
 cat > ./.env <<EOL
 NODE_ENV=development
 BOT_TOKEN="your-bot-token-here"
+DATA_PATH=./data
+LOCALES_PATH=./locales
 EOL
 ```
 
