@@ -1,0 +1,63 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: gringobot-pv-claim-csi
+  labels:
+    app: gringobot 
+spec:
+  storageClassName: standard-rwo 
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gringobot 
+  namespace: default
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: gringobot 
+      version: v1
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: 'false'
+      labels:
+        app: gringobot 
+        version: v1
+    spec:
+      volumes:
+      - name: gringobot-volume
+        persistentVolumeClaim:
+          claimName: gringobot-pv-claim-csi
+      containers:
+      - image: armand1m/gringobot:main
+        imagePullPolicy: IfNotPresent
+        name: gringobot 
+        env:
+        - name: BOT_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: gringobot-secrets
+              key: bot_token
+        - name: DATA_PATH
+          value: /app/data/
+        - name: NODE_ENV
+          value: production
+        resources:
+          limits:
+            cpu: 128m 
+            memory: 156Mi 
+          requests:
+            cpu: 100m 
+            memory: 128Mi
+        volumeMounts:
+        - mountPath: /app/data
+          name: gringobot-volume

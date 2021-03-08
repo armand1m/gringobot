@@ -26,21 +26,11 @@ const emptyDatabase: DatabaseSchema = {
   locationIndex: {},
 };
 
-const databaseInstances: Partial<
-  Record<number, DatabaseInstance>
-> = {};
-
 export const createDatabase = async (
   chatId: number,
   dataPath: string,
   logger: pino.Logger
 ): Promise<DatabaseInstance> => {
-  const cachedInstance = databaseInstances[chatId];
-
-  if (cachedInstance !== undefined) {
-    return cachedInstance;
-  }
-
   const chatDatabasePath = path.resolve(dataPath, `chat_${chatId}`);
 
   /**
@@ -90,8 +80,6 @@ export const createDatabase = async (
       return members;
     },
   };
-
-  databaseInstances[chatId] = instance;
 
   return instance;
 };
