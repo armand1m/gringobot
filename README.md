@@ -10,20 +10,25 @@ The bot allows members to register the country they're located, so when question
 
 ## Features
 
+The bot currently replies in Portuguese by default, and parses names of countries in Portuguese only. This will change in the future.
+
  - [x] Register member location:
-    - [x] English: `/registerMemberAt NL`, `/imat NL`
-    - [x] Portuguese: `/estou NL`
+    - [x] English: `/register_member_at NL`, `/imat NL`
+    - [x] Portuguese: `/estou NL`, `/estou Holanda`
  - [x] Ping folks from a location:
-    - [x] English: `/pingMembersAt NL`, `/whoisat NL`
-    - [x] Portuguese: `/quem NL`
+    - [x] English: `/ping_members_at NL`, `/whoisat NL`
+    - [x] Portuguese: `/quem NL`, `/quem Holanda`
  - [x] Deregister member location:
     - [x] English: `/leave NL`
-    - [x] Portuguese: `/sair NL`
+    - [x] Portuguese: `/sair NL`, `/sair Holanda`
+ - [x] Find member registered locations:
+    - [x] English: `/find_member`, `/whereami`
+    - [x] Portuguese: `/ondeestou`
  - [ ] Help Sections:
-    - [ ] English: `/help international transfers`
-    - [ ] Portuguese: `/ajuda transferencias`
+    - [ ] English: `/help <subject> <search>`
+    - [ ] Portuguese: `/ajuda <assunto> <search>`
  - [x] Ping all admins:
-    - [x] `/pingAdmins`, `/admins`, `/eita`
+    - [x] `/ping_admins`, `/admins`, `/eita`
 
 ## Developing
 
@@ -55,6 +60,19 @@ Now run `yarn dev` and your bot should be working. Changes will restart the proc
 
 ## Deploying
 
+### Host
+
+Follow the same configuration step for development, but run the following to start the process:
+
+```sh
+yarn build
+node ./build/index.js
+```
+
+You probably want to use a process manager like `systemd` or PM2.
+
+### Docker
+
 This bot is published publicly as a Docker Image, so you should be able to run it anywhere you can run a Docker Container.
 
 To run it locally, just run the following:
@@ -63,7 +81,24 @@ To run it locally, just run the following:
 docker run -e BOT_TOKEN="your-bot-token-here" armand1m/gringobot
 ```
 
+### Kubernetes
+
 Kubernetes manifests are available at the `./kubernetes` folder.
+
+Create a secret named `gringobot-secret` with the `bot_token`:
+
+```sh
+kubectl create secret generic gringobot-secrets \
+    --from-literal=bot_token='<token-goes-here>'
+```
+
+Then apply the manifest:
+
+```sh
+kubectl apply -f ./kubernetes/deployment.yml
+```
+
+You might have to adjust the PersistentVolumeClaim if you're not using a CSI driver.
 
 ## Credits
 
