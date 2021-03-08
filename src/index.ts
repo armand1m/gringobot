@@ -1,7 +1,11 @@
 import path from 'path';
 import { Telegraf } from 'telegraf';
 import TelegrafI18n from 'telegraf-i18n';
-import { Command, CommandAliases } from './command';
+import {
+  Command,
+  CommandAliases,
+  CommandDescriptions,
+} from './command';
 import { cmdDeregisterMemberFrom } from './commands/deregisterMemberFrom';
 import { cmdPingAdmins } from './commands/pingAdmins';
 import { cmdPingMemberAt } from './commands/pingMembersAt';
@@ -25,17 +29,13 @@ const main = async () => {
 
   bot.use(i18n.middleware());
 
-  /**
-   * telegraf-i18n uses the user session to determine
-   * which locale to use. This basically forces
-   * all answers to be sent in ptbr.
-   */
-  bot.use((ctx, next) => {
-    ctx.i18n.locale('ptbr');
-    return next();
-  });
-
   bot.use(async (ctx, next) => {
+    /**
+     * telegraf-i18n uses the user session to determine
+     * which locale to use. This basically forces
+     * all answers to be sent in ptbr.
+     */
+    ctx.i18n.locale('ptbr');
     const chatId = ctx?.chat?.id;
 
     if (!chatId) {
@@ -53,6 +53,8 @@ const main = async () => {
     ctx.database = database;
     ctx.logger = logger;
     ctx.config = config;
+
+    ctx.setMyCommands(CommandDescriptions);
 
     return next();
   });
