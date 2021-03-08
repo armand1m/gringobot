@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "repository": "git@github.com:armand1m/gringobot.git",
-  "author": "Armando Magalhães <amagalhaes@netflix.com>",
+  "author": "Armando Magalhães <armando.mag95@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "dotenv": "^8.2.0",

@@ -1,0 +1,14 @@
+node_modules
+*.log
+build
+Dockerfile
+data
+.env.example
+.env
+.editorconfig
+.prettierrc
+README.md
+scripts
+.gcloud-credentials
+.git
+.gitignore

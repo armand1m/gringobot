@@ -18,7 +18,7 @@ export const cmdRegisterMemberAt: Middleware<BotContext> = async (
     return ctx.reply(i18n.t('errors.memberAlreadyRegistered'));
   }
 
-  database.addMemberLocation(userId, country);
+  await database.addMemberLocation(userId, country);
 
   return ctx.reply(
     i18n.t('location.memberRegisteredAtLocation', {
