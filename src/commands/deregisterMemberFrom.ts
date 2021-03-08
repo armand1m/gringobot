@@ -29,7 +29,7 @@ export const cmdDeregisterMemberFrom: Middleware<BotContext> = async (
     return ctx.reply(i18n.t('errors.failedToIdentifyUser'));
   }
 
-  database.removeMemberFrom(userId, country);
+  await database.removeMemberFrom(userId, country);
 
   return ctx.reply(
     i18n.t('location.memberDeregisteredFromLocation', {

@@ -5,6 +5,7 @@ export enum Command {
   PingMembersAt = 'ping_members_at',
   DeregisterMemberFrom = 'deregister_member_from',
   PingAdmins = 'ping_admins',
+  FindMember = 'find_member',
 }
 
 enum PortugueseCommandAlias {
@@ -12,6 +13,7 @@ enum PortugueseCommandAlias {
   PingMembersAt = 'quem',
   PingAdmins = 'eita',
   DeregisterMemberFrom = 'sair',
+  FindMember = 'ondeestou',
 }
 
 enum EnglishCommandAlias {
@@ -19,6 +21,7 @@ enum EnglishCommandAlias {
   PingMembersAt = 'whoat',
   PingAdmins = 'admins',
   DeregisterMemberFrom = 'leave',
+  FindMember = 'whereami',
 }
 
 const DefaultCommandDescriptions: Record<Command, string> = {
@@ -28,6 +31,7 @@ const DefaultCommandDescriptions: Record<Command, string> = {
   [Command.DeregisterMemberFrom]:
     'Deregisters yourself from a specific location.',
   [Command.PingAdmins]: 'Ping all admins.',
+  [Command.FindMember]: 'Find all locations you are registered to.',
 };
 
 const CommandDescriptionMap: Record<string, string> = {
@@ -40,6 +44,8 @@ const CommandDescriptionMap: Record<string, string> = {
     DefaultCommandDescriptions[Command.DeregisterMemberFrom],
   [EnglishCommandAlias.PingMembersAt]:
     DefaultCommandDescriptions[Command.PingMembersAt],
+  [EnglishCommandAlias.FindMember]:
+    DefaultCommandDescriptions[Command.FindMember],
   [PortugueseCommandAlias.PingAdmins]: 'Chama os administradores.',
   [PortugueseCommandAlias.RegisterMemberAt]:
     'Registra voce em uma localizacao especifica.',
@@ -47,6 +53,8 @@ const CommandDescriptionMap: Record<string, string> = {
     'Retira voce de uma localizacao especifica.',
   [PortugueseCommandAlias.PingMembersAt]:
     'Chama os membros de uma localizacao especifica.',
+  [PortugueseCommandAlias.FindMember]:
+    'Encontra as localizacoes que voce esta registrado.',
 };
 
 export const CommandDescriptions: BotCommand[] = Object.keys(
@@ -78,5 +86,10 @@ export const CommandAliases: Record<Command, string[]> = {
     Command.DeregisterMemberFrom,
     PortugueseCommandAlias.DeregisterMemberFrom,
     EnglishCommandAlias.DeregisterMemberFrom,
+  ],
+  [Command.FindMember]: [
+    Command.FindMember,
+    PortugueseCommandAlias.FindMember,
+    EnglishCommandAlias.FindMember,
   ],
 };

@@ -12,6 +12,18 @@ export const getCountryCodeForText = (text: string) => {
   return countryCode as Country;
 };
 
+export const getCountryNameForCountryCode = (
+  countryCode: Country
+) => {
+  if (!Countries.isValid(countryCode)) {
+    return undefined;
+  }
+
+  const name = Countries.getName(countryCode, 'pt');
+
+  return `${name} (${countryCode})`;
+};
+
 export enum Country {
   UnitedStates = 'US',
   Afghanistan = 'AF',

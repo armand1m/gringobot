@@ -7,6 +7,7 @@ import {
   CommandDescriptions,
 } from './command';
 import { cmdDeregisterMemberFrom } from './commands/deregisterMemberFrom';
+import { cmdFindMember } from './commands/findMember';
 import { cmdPingAdmins } from './commands/pingAdmins';
 import { cmdPingMemberAt } from './commands/pingMembersAt';
 import { cmdRegisterMemberAt } from './commands/registerMemberAt';
@@ -90,6 +91,7 @@ const main = async () => {
     CommandAliases[Command.DeregisterMemberFrom],
     cmdDeregisterMemberFrom
   );
+  bot.command(CommandAliases[Command.FindMember], cmdFindMember);
 
   // Enable graceful stop
   process.once('SIGINT', () => bot.stop('SIGINT'));
