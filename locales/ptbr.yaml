@@ -1,6 +1,6 @@
 location:
-  noMembersAtLocation: "Não existem pessoas registradas nesta localização."
-  membersAtLocation: "Estas pessoas estão registradas nesta localização: ${members}"
+  noMembersAtLocation: "@${from.username} Não existem pessoas registradas nesta localização."
+  membersAtLocation: "@${from.username} Estas pessoas estão registradas nesta localização: ${members}"
   memberRegisteredAtLocation: "@${from.username} Você se registrou na localização '${country}'. Você receberá uma notificação sempre que alguém procurar informações sobre esta localização."
   memberDeregisteredFromLocation: "@${from.username} Você se removeu da localização '${country}'. Você não receberá mais notificaçoes sempre que alguém procurar informações sobre esta localização."
   memberNotFoundAnywhere: "@${from.username} Você ainda há de se registrar em uma localização."
