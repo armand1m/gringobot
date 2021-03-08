@@ -2,7 +2,7 @@ import Countries from 'i18n-iso-countries';
 
 export const getCountryCodeForText = (text: string) => {
   const countryCode = Countries.isValid(text)
-    ? text
+    ? text.toUpperCase()
     : Countries.getAlpha2Code(text, 'pt');
 
   if (!countryCode) {
