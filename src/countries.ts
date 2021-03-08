@@ -1,3 +1,17 @@
+import Countries from 'i18n-iso-countries';
+
+export const getCountryCodeForText = (text: string) => {
+  const countryCode = Countries.isValid(text)
+    ? text
+    : Countries.getAlpha2Code(text, 'pt');
+
+  if (!countryCode) {
+    return undefined;
+  }
+
+  return countryCode as Country;
+};
+
 export enum Country {
   UnitedStates = 'US',
   Afghanistan = 'AF',

@@ -1,13 +1,29 @@
 import { Middleware } from 'telegraf';
 import { BotContext } from '../context';
-import { Country } from '../countries';
+import { getCountryCodeForText } from '../countries';
 
 export const cmdPingMemberAt: Middleware<BotContext> = async (
   ctx
 ) => {
   const i18n = ctx.i18n;
   const database = ctx.database;
-  const country = Country.Netherlands;
+
+  const unsafeCountryName = ctx.command.args;
+
+  if (!unsafeCountryName) {
+    return ctx.reply(i18n.t('errors.noCountryProvided'));
+  }
+
+  const country = getCountryCodeForText(unsafeCountryName);
+
+  if (!country) {
+    return ctx.reply(
+      i18n.t('errors.failedToIdentifyCountry', {
+        countryName: unsafeCountryName,
+      })
+    );
+  }
+
   const memberIds = database.getMembersAt(country);
   const members = await Promise.all(
     memberIds.map(async (userId) => {
@@ -23,5 +39,5 @@ export const cmdPingMemberAt: Middleware<BotContext> = async (
           members: members.join(', '),
         });
 
-  ctx.reply(message);
+  return ctx.reply(message);
 };

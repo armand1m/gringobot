@@ -6,3 +6,5 @@ location:
 errors:
   failedToIdentifyUser: "Nao pude identificar o usuario. O comando nao foi executado."
   memberAlreadyRegistered: "@${from.username} voce ja esta registrado nessa localizacao."
+  noCountryProvided: "@${from.username} nenhuma localizacao foi especificada. Especifique o codigo de um pais (como 'NL' ou 'PT') ou o nome do pais em portugues ('Holanda', 'Alemanha') apos o comando."
+  failedToIdentifyCountry: "@${from.username} nao pude identificar o codigo para o pais '${countryName}'. Tente especificar o codigo do pais em vez do nome, se estiver em duvida a respeito do nome em portugues."

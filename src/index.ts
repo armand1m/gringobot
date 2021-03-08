@@ -15,6 +15,8 @@ import { BotContext } from './context';
 import { createDatabase } from './database';
 import { createLogger } from './logger';
 
+const commandPartsRegex = /^\/([^@\s]+)@?(?:(\S+)|)\s?([\s\S]+)?$/i;
+
 const main = async () => {
   const config = await loadConfiguration();
   const logger = createLogger(config.environment);
@@ -28,6 +30,25 @@ const main = async () => {
   });
 
   bot.use(i18n.middleware());
+
+  bot.use(async (ctx, next) => {
+    // @ts-ignore
+    const messageText = ctx.message?.text;
+
+    const parts = commandPartsRegex.exec(messageText);
+
+    if (!parts) return next();
+    const command = {
+      text: messageText,
+      command: parts[1],
+      bot: parts[2],
+      args: parts[3],
+    };
+
+    ctx.command = command;
+
+    return next();
+  });
 
   bot.use(async (ctx, next) => {
     /**
