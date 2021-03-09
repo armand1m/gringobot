@@ -5,6 +5,7 @@ import { BotContext } from './context';
 import { createLogger } from './logger';
 import { loadConfiguration } from './config';
 import { Command, CommandAliases } from './command';
+import { cmdHelp } from './commands/help';
 import { cmdFindMember } from './commands/findMember';
 import { cmdPingAdmins } from './commands/pingAdmins';
 import { cmdPingMemberAt } from './commands/pingMembersAt';
@@ -33,6 +34,7 @@ const main = async () => {
     })
   );
 
+  bot.command(CommandAliases[Command.Help], cmdHelp);
   bot.command(CommandAliases[Command.FindMember], cmdFindMember);
   bot.command(CommandAliases[Command.PingAdmins], cmdPingAdmins);
   bot.command(CommandAliases[Command.PingMembersAt], cmdPingMemberAt);

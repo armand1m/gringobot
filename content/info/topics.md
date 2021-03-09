@@ -1,0 +1,1 @@
+- **bot**: informacoes sobre o bot

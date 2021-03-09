@@ -7,6 +7,7 @@
   "license": "MIT",
   "dependencies": {
     "dotenv": "^8.2.0",
+    "got": "^11.8.2",
     "i18n-iso-countries": "^6.5.0",
     "lowdb": "^1.0.0",
     "mkdirp": "^1.0.4",

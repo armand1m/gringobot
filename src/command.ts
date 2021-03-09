@@ -6,6 +6,7 @@ export enum Command {
   DeregisterMemberFrom = 'deregister_member_from',
   PingAdmins = 'ping_admins',
   FindMember = 'find_member',
+  Help = 'help',
 }
 
 enum PortugueseCommandAlias {
@@ -32,6 +33,7 @@ const DefaultCommandDescriptions: Record<Command, string> = {
     'Deregisters yourself from a specific location.',
   [Command.PingAdmins]: 'Ping all admins.',
   [Command.FindMember]: 'Find all locations you are registered to.',
+  [Command.Help]: 'Help about various subjects.',
 };
 
 const CommandDescriptionMap: Record<string, string> = {
@@ -90,4 +92,5 @@ export const CommandAliases: Record<Command, string[]> = {
     PortugueseCommandAlias.FindMember,
     EnglishCommandAlias.FindMember,
   ],
+  [Command.Help]: [Command.Help],
 };
