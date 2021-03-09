@@ -83,19 +83,11 @@ export const createDatabase = async (
       return members;
     },
     findMember: async (userId) => {
-      const collection = db.get('locationIndex');
-      const value = collection.value();
-
-      const result: Country[] = [];
-
-      Object.keys(value).forEach((key) => {
-        const countryCode = key as Country;
-        if (value[countryCode]?.includes(userId)) {
-          result.push(countryCode);
-        }
-      });
-
-      return result;
+      return db
+        .get('locationIndex')
+        .pickBy((value) => value?.includes(userId))
+        .keys()
+        .value() as Country[];
     },
   };
 
