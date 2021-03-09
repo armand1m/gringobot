@@ -7,7 +7,10 @@ export const cmdDeregisterMemberFrom: Middleware<BotContext> = async (
 ) => {
   const i18n = ctx.i18n;
   const userId = ctx.from?.id;
-  const database = ctx.database;
+
+  if (!userId) {
+    return ctx.reply(i18n.t('errors.failedToIdentifyUser'));
+  }
 
   const unsafeCountryName = ctx.command.args;
 
@@ -25,11 +28,7 @@ export const cmdDeregisterMemberFrom: Middleware<BotContext> = async (
     );
   }
 
-  if (!userId) {
-    return ctx.reply(i18n.t('errors.failedToIdentifyUser'));
-  }
-
-  await database.removeMemberFrom(userId, country);
+  await ctx.database.removeMemberFrom(userId, country);
 
   return ctx.reply(
     i18n.t('location.memberDeregisteredFromLocation', {

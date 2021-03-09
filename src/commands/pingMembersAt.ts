@@ -6,8 +6,6 @@ export const cmdPingMemberAt: Middleware<BotContext> = async (
   ctx
 ) => {
   const i18n = ctx.i18n;
-  const database = ctx.database;
-
   const unsafeCountryName = ctx.command.args;
 
   if (!unsafeCountryName) {
@@ -24,7 +22,7 @@ export const cmdPingMemberAt: Middleware<BotContext> = async (
     );
   }
 
-  const memberIds = database.getMembersAt(country);
+  const memberIds = ctx.database.getMembersAt(country);
   const members = await Promise.all(
     memberIds.map(async (userId) => {
       const member = await ctx.getChatMember(userId);

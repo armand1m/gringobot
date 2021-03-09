@@ -4,14 +4,13 @@ import { getCountryNameForCountryCode } from '../countries';
 
 export const cmdFindMember: Middleware<BotContext> = async (ctx) => {
   const i18n = ctx.i18n;
-  const database = ctx.database;
   const userId = ctx.from?.id;
 
   if (!userId) {
     return ctx.reply(i18n.t('errors.failedToIdentifyUser'));
   }
 
-  const locations = await database.findMember(userId);
+  const locations = await ctx.database.findMember(userId);
 
   const message =
     locations.length === 0

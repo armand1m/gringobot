@@ -12,7 +12,6 @@ export const cmdRegisterMemberAt: Middleware<BotContext> = async (
     return ctx.reply(i18n.t('errors.failedToIdentifyUser'));
   }
 
-  const database = ctx.database;
   const unsafeCountryName = ctx.command.args;
 
   if (!unsafeCountryName) {
@@ -28,6 +27,8 @@ export const cmdRegisterMemberAt: Middleware<BotContext> = async (
       })
     );
   }
+
+  const database = ctx.database;
 
   if (database.hasMemberRegistered(userId, country)) {
     return ctx.reply(i18n.t('errors.memberAlreadyRegistered'));

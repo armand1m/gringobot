@@ -46,25 +46,23 @@ const CommandDescriptionMap: Record<string, string> = {
     DefaultCommandDescriptions[Command.PingMembersAt],
   [EnglishCommandAlias.FindMember]:
     DefaultCommandDescriptions[Command.FindMember],
-  [PortugueseCommandAlias.PingAdmins]: 'Chama os administradores.',
+  [PortugueseCommandAlias.PingAdmins]: 'Notifica todos admins.',
   [PortugueseCommandAlias.RegisterMemberAt]:
     'Registra voce em uma localizacao especifica.',
   [PortugueseCommandAlias.DeregisterMemberFrom]:
     'Retira voce de uma localizacao especifica.',
   [PortugueseCommandAlias.PingMembersAt]:
-    'Chama os membros de uma localizacao especifica.',
+    'Chama pessoas de uma localizacao especifica.',
   [PortugueseCommandAlias.FindMember]:
-    'Encontra as localizacoes que voce esta registrado.',
+    'Encontra as localizacoes que tem voce nos registros.',
 };
 
 export const CommandDescriptions: BotCommand[] = Object.keys(
   CommandDescriptionMap
-).map((key) => {
-  return {
-    command: key,
-    description: CommandDescriptionMap[key],
-  };
-});
+).map((key) => ({
+  command: key,
+  description: CommandDescriptionMap[key],
+}));
 
 export const CommandAliases: Record<Command, string[]> = {
   [Command.RegisterMemberAt]: [

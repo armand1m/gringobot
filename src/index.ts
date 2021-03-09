@@ -1,27 +1,21 @@
 import path from 'path';
 import { Telegraf } from 'telegraf';
 import TelegrafI18n from 'telegraf-i18n';
-import {
-  Command,
-  CommandAliases,
-  CommandDescriptions,
-} from './command';
-import { cmdDeregisterMemberFrom } from './commands/deregisterMemberFrom';
+import { BotContext } from './context';
+import { createLogger } from './logger';
+import { loadConfiguration } from './config';
+import { Command, CommandAliases } from './command';
 import { cmdFindMember } from './commands/findMember';
 import { cmdPingAdmins } from './commands/pingAdmins';
 import { cmdPingMemberAt } from './commands/pingMembersAt';
 import { cmdRegisterMemberAt } from './commands/registerMemberAt';
-import { loadConfiguration } from './config';
-import { BotContext } from './context';
-import { createDatabase } from './database';
-import { createLogger } from './logger';
-
-const commandPartsRegex = /^\/([^@\s]+)@?(?:(\S+)|)\s?([\s\S]+)?$/i;
+import { cmdDeregisterMemberFrom } from './commands/deregisterMemberFrom';
+import { createContextMiddleware } from './middleware/createContextMiddleware';
+import { createCommandMiddleware } from './middleware/createCommandMiddleware';
 
 const main = async () => {
   const config = await loadConfiguration();
   const logger = createLogger(config.environment);
-  const databaseLogger = logger.child({ source: 'database' });
   const bot = new Telegraf<BotContext>(config.botToken);
 
   const i18n = new TelegrafI18n({
@@ -31,56 +25,15 @@ const main = async () => {
   });
 
   bot.use(i18n.middleware());
+  bot.use(createCommandMiddleware());
+  bot.use(
+    createContextMiddleware({
+      config,
+      logger: logger.child({ source: 'database' }),
+    })
+  );
 
-  bot.use(async (ctx, next) => {
-    // @ts-ignore
-    const messageText = ctx.message?.text;
-
-    const parts = commandPartsRegex.exec(messageText);
-
-    if (!parts) return next();
-    const command = {
-      text: messageText,
-      command: parts[1],
-      bot: parts[2],
-      args: parts[3],
-    };
-
-    ctx.command = command;
-
-    return next();
-  });
-
-  bot.use(async (ctx, next) => {
-    /**
-     * telegraf-i18n uses the user session to determine
-     * which locale to use. This basically forces
-     * all answers to be sent in ptbr.
-     */
-    ctx.i18n.locale('ptbr');
-    const chatId = ctx?.chat?.id;
-
-    if (!chatId) {
-      return ctx.reply(
-        'GringoBot does not support this type of chat.'
-      );
-    }
-
-    const database = await createDatabase(
-      chatId,
-      config.dataPath,
-      databaseLogger
-    );
-
-    ctx.database = database;
-    ctx.logger = logger;
-    ctx.config = config;
-
-    ctx.setMyCommands(CommandDescriptions);
-
-    return next();
-  });
-
+  bot.command(CommandAliases[Command.FindMember], cmdFindMember);
   bot.command(CommandAliases[Command.PingAdmins], cmdPingAdmins);
   bot.command(CommandAliases[Command.PingMembersAt], cmdPingMemberAt);
   bot.command(
@@ -91,9 +44,7 @@ const main = async () => {
     CommandAliases[Command.DeregisterMemberFrom],
     cmdDeregisterMemberFrom
   );
-  bot.command(CommandAliases[Command.FindMember], cmdFindMember);
 
-  // Enable graceful stop
   process.once('SIGINT', () => bot.stop('SIGINT'));
   process.once('SIGTERM', () => bot.stop('SIGTERM'));
 
