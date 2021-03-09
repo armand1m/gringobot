@@ -15,6 +15,7 @@ enum PortugueseCommandAlias {
   PingAdmins = 'eita',
   DeregisterMemberFrom = 'sair',
   FindMember = 'ondeestou',
+  Help = 'ajuda',
 }
 
 enum EnglishCommandAlias {
@@ -57,6 +58,8 @@ const CommandDescriptionMap: Record<string, string> = {
     'Chama pessoas de uma localizacao especifica.',
   [PortugueseCommandAlias.FindMember]:
     'Encontra as localizacoes que tem voce nos registros.',
+  [PortugueseCommandAlias.Help]:
+    'Ajuda sobre assuntos e topicos diversos.',
 };
 
 export const CommandDescriptions: BotCommand[] = Object.keys(

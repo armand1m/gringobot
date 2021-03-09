@@ -10,3 +10,4 @@ errors:
   memberAlreadyRegistered: "@${from.username} Você já tem registro nesta localização."
   noCountryProvided: "@${from.username} nenhuma localização foi especificada. Especifique o código de um país (como 'NL' ou 'PT') ou o nome do país em Português ('Holanda', 'Alemanha') após o comando."
   failedToIdentifyCountry: "@${from.username} não pude identificar o código para o país '${countryName}'. Tente especificar o código do país em vez do nome, se estiver em dúvida a respeito do nome em Português."
+  failedToFetchContent: "@${from.username} nao pude buscar o conteudo que voce procura. Tente outro assunto ou topico."

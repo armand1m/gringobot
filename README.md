@@ -24,9 +24,9 @@ The bot currently replies in Portuguese by default, and parses names of countrie
  - [x] Find member registered locations:
     - [x] English: `/find_member`, `/whereami`
     - [x] Portuguese: `/ondeestou`
- - [ ] Help Sections:
-    - [ ] English: `/help <subject> <search>`
-    - [ ] Portuguese: `/ajuda <assunto> <search>`
+ - [x] Help Sections:
+    - [x] English: `/help <subject> <topic>`
+    - [x] Portuguese: `/ajuda <assunto> <topico>`
  - [x] Ping all admins:
     - [x] `/ping_admins`, `/admins`, `/eita`
 
