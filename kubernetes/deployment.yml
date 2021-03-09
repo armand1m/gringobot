@@ -38,7 +38,7 @@ spec:
         persistentVolumeClaim:
           claimName: gringobot-pv-claim-csi
       containers:
-      - image: armand1m/gringobot:sha-777ed4d
+      - image: armand1m/gringobot:main
         imagePullPolicy: IfNotPresent
         name: gringobot 
         env:
