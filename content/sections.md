@@ -1,1 +1,1 @@
-- **info**: informacoes sobre diversos topicos
+- *info*: informacoes sobre diversos topicos

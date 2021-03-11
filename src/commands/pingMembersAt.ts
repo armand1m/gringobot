@@ -1,6 +1,7 @@
 import { Middleware } from 'telegraf';
 import { BotContext } from '../context';
 import { getCountryCodeForText } from '../countries';
+import { createMemberMention } from '../member';
 
 export const cmdPingMemberAt: Middleware<BotContext> = async (
   ctx
@@ -12,9 +13,9 @@ export const cmdPingMemberAt: Middleware<BotContext> = async (
     return ctx.reply(i18n.t('errors.noCountryProvided'));
   }
 
-  const country = getCountryCodeForText(unsafeCountryName);
+  const countryCode = getCountryCodeForText(unsafeCountryName);
 
-  if (!country) {
+  if (!countryCode) {
     return ctx.reply(
       i18n.t('errors.failedToIdentifyCountry', {
         countryName: unsafeCountryName,
@@ -22,20 +23,23 @@ export const cmdPingMemberAt: Middleware<BotContext> = async (
     );
   }
 
-  const memberIds = ctx.database.getMembersAt(country);
+  const memberIds = ctx.database.getMembersAt(countryCode);
   const members = await Promise.all(
     memberIds.map(async (userId) => {
       const member = await ctx.getChatMember(userId);
-      return '@' + member.user.username;
+      return createMemberMention(member.user);
     })
   );
 
   const message =
     members.length === 0
-      ? i18n.t('location.noMembersAtLocation')
+      ? i18n.t('location.noMembersAtLocation', {
+          mention: ctx.safeUser.mention,
+        })
       : i18n.t('location.membersAtLocation', {
+          mention: ctx.safeUser.mention,
           members: members.join(', '),
         });
 
-  return ctx.reply(message);
+  return ctx.replyWithMarkdown(message);
 };

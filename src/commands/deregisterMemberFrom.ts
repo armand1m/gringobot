@@ -1,26 +1,23 @@
 import { Middleware } from 'telegraf';
 import { BotContext } from '../context';
-import { getCountryCodeForText } from '../countries';
+import {
+  getCountryCodeForText,
+  getCountryNameForCountryCode,
+} from '../countries';
 
 export const cmdDeregisterMemberFrom: Middleware<BotContext> = async (
   ctx
 ) => {
   const i18n = ctx.i18n;
-  const userId = ctx.from?.id;
-
-  if (!userId) {
-    return ctx.reply(i18n.t('errors.failedToIdentifyUser'));
-  }
-
   const unsafeCountryName = ctx.command.args;
 
   if (!unsafeCountryName) {
     return ctx.reply(i18n.t('errors.noCountryProvided'));
   }
 
-  const country = getCountryCodeForText(unsafeCountryName);
+  const countryCode = getCountryCodeForText(unsafeCountryName);
 
-  if (!country) {
+  if (!countryCode) {
     return ctx.reply(
       i18n.t('errors.failedToIdentifyCountry', {
         countryName: unsafeCountryName,
@@ -28,11 +25,12 @@ export const cmdDeregisterMemberFrom: Middleware<BotContext> = async (
     );
   }
 
-  await ctx.database.removeMemberFrom(userId, country);
+  await ctx.database.removeMemberFrom(ctx.safeUser.id, countryCode);
 
-  return ctx.reply(
+  return ctx.replyWithMarkdown(
     i18n.t('location.memberDeregisteredFromLocation', {
-      country,
+      mention: ctx.safeUser.mention,
+      country: getCountryNameForCountryCode(countryCode),
     })
   );
 };

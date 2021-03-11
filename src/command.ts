@@ -95,8 +95,5 @@ export const CommandAliases: Record<Command, string[]> = {
     PortugueseCommandAlias.FindMember,
     EnglishCommandAlias.FindMember,
   ],
-  [Command.Help]: [
-    Command.Help,
-    PortugueseCommandAlias.Help
-  ],
+  [Command.Help]: [Command.Help, PortugueseCommandAlias.Help],
 };

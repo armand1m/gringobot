@@ -1,8 +1,0 @@
-location:
-  noMembersAtLocation: "There are no members registered in this location."
-  membersAtLocation: "These members are registered in the location you're interested in: ${members}"
-  memberRegisteredAtLocation: "@${from.username} Your location is now registered at ${country}. You'll be mentioned whenever someone asks about this location."
-  memberDeregisteredFromLocation: "@${from.username} You've been deregistered from ${country}. You'll not be mentioned whenever someone asks about this location anymore."
-errors:
-  failedToIdentifyUser: "Failed to identify user. Command was not executed."
-  memberAlreadyRegistered: "@${from.username} you're already registered in this location."

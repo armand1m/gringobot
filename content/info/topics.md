@@ -1,1 +1,2 @@
-- **bot**: informacoes sobre o bot
+- *bot*: informacoes sobre o Gringo Bot.
+- *group*: informacoes sobre o grupo.

@@ -4,6 +4,7 @@ import { CommandDescriptions } from '../command';
 import { Config } from '../config';
 import { BotContext } from '../context';
 import { createDatabase } from '../database';
+import { createMemberMention } from '../member';
 
 interface Props {
   config: Config;
@@ -30,6 +31,10 @@ export const createContextMiddleware = ({
       );
     }
 
+    if (!ctx.from) {
+      return ctx.reply(ctx.i18n.t('failedToIdentifyUser'));
+    }
+
     const database = await createDatabase(
       chatId,
       config.dataPath,
@@ -39,6 +44,10 @@ export const createContextMiddleware = ({
     ctx.database = database;
     ctx.logger = logger;
     ctx.config = config;
+    ctx.safeUser = {
+      id: ctx.from.id,
+      mention: createMemberMention(ctx.from),
+    };
 
     ctx.setMyCommands(CommandDescriptions);
 

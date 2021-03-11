@@ -9,6 +9,10 @@ export interface BotContext extends Context {
   database: DatabaseInstance;
   logger: pino.Logger;
   i18n: TelegrafI18n;
+  safeUser: {
+    mention: string;
+    id: number;
+  };
   command: {
     text: string;
     command: string;

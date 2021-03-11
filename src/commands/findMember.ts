@@ -4,22 +4,19 @@ import { getCountryNameForCountryCode } from '../countries';
 
 export const cmdFindMember: Middleware<BotContext> = async (ctx) => {
   const i18n = ctx.i18n;
-  const userId = ctx.from?.id;
-
-  if (!userId) {
-    return ctx.reply(i18n.t('errors.failedToIdentifyUser'));
-  }
-
-  const locations = await ctx.database.findMember(userId);
+  const locations = await ctx.database.findMember(ctx.safeUser.id);
 
   const message =
     locations.length === 0
-      ? i18n.t('location.memberNotFoundAnywhere')
+      ? i18n.t('location.memberNotFoundAnywhere', {
+          mention: ctx.safeUser.mention,
+        })
       : i18n.t('location.foundMemberAt', {
+          mention: ctx.safeUser.mention,
           locations: locations
             .map(getCountryNameForCountryCode)
             .join(', '),
         });
 
-  return ctx.reply(message);
+  return ctx.replyWithMarkdown(message);
 };
