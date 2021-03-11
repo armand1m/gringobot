@@ -1,4 +1,5 @@
 import { Middleware } from 'telegraf';
+import { markdown } from 'telegram-format';
 import { BotContext } from '../context';
 import {
   getCountryCodeForText,
@@ -9,7 +10,7 @@ export const cmdRegisterMemberAt: Middleware<BotContext> = async (
   ctx
 ) => {
   const i18n = ctx.i18n;
-  const unsafeCountryName = ctx.command.args;
+  const unsafeCountryName = markdown.escape(ctx.command.args ?? '');
 
   if (!unsafeCountryName) {
     return ctx.replyWithMarkdown(

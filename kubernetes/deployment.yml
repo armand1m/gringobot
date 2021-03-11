@@ -2,6 +2,7 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: gringobot-pv-claim-csi
+  namespace: test
   labels:
     app: gringobot 
 spec:
@@ -16,7 +17,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: gringobot 
-  namespace: default
+  namespace: test 
 spec:
   replicas: 1
   strategy:
@@ -38,14 +39,14 @@ spec:
         persistentVolumeClaim:
           claimName: gringobot-pv-claim-csi
       containers:
-      - image: armand1m/gringobot:main
+      - image: armand1m/gringobot:sha-78f65f0
         imagePullPolicy: IfNotPresent
         name: gringobot 
         env:
         - name: BOT_TOKEN
           valueFrom:
             secretKeyRef:
-              name: gringobot-secrets
+              name: gringobot-test-secrets
               key: bot_token
         - name: DATA_PATH
           value: /app/data/

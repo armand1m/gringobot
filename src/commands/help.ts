@@ -1,5 +1,6 @@
 import got from 'got';
 import { Middleware } from 'telegraf';
+import { markdown } from 'telegram-format/dist/source';
 import { BotContext } from '../context';
 
 const getContentUrl = (section?: string, topic?: string) => {
@@ -15,7 +16,10 @@ const getContentUrl = (section?: string, topic?: string) => {
 };
 
 export const cmdHelp: Middleware<BotContext> = async (ctx) => {
-  const [section, topic] = (ctx.command.args || '').trim().split(' ');
+  const [section, topic] = markdown
+    .escape(ctx.command.args ?? '')
+    .trim()
+    .split(' ');
 
   try {
     const { body } = await got(getContentUrl(section, topic));
