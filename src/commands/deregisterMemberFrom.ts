@@ -12,7 +12,11 @@ export const cmdDeregisterMemberFrom: Middleware<BotContext> = async (
   const unsafeCountryName = ctx.command.args;
 
   if (!unsafeCountryName) {
-    return ctx.reply(i18n.t('errors.noCountryProvided'));
+    return ctx.replyWithMarkdown(
+      i18n.t('errors.noCountryProvided', {
+        mention: ctx.safeUser.mention,
+      })
+    );
   }
 
   const countryCode = getCountryCodeForText(unsafeCountryName);
@@ -20,6 +24,7 @@ export const cmdDeregisterMemberFrom: Middleware<BotContext> = async (
   if (!countryCode) {
     return ctx.reply(
       i18n.t('errors.failedToIdentifyCountry', {
+        mention: ctx.safeUser.mention,
         countryName: unsafeCountryName,
       })
     );
