@@ -22,7 +22,7 @@ export const cmdDeregisterMemberFrom: Middleware<BotContext> = async (
   const countryCode = getCountryCodeForText(unsafeCountryName);
 
   if (!countryCode) {
-    return ctx.reply(
+    return ctx.replyWithMarkdown(
       i18n.t('errors.failedToIdentifyCountry', {
         mention: ctx.safeUser.mention,
         countryName: unsafeCountryName,

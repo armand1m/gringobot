@@ -10,7 +10,7 @@ export const cmdPingMemberAt: Middleware<BotContext> = async (
   const unsafeCountryName = ctx.command.args;
 
   if (!unsafeCountryName) {
-    return ctx.reply(
+    return ctx.replyWithMarkdown(
       i18n.t('errors.noCountryProvided', {
         mention: ctx.safeUser.mention,
       })
