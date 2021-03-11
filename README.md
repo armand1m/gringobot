@@ -6,7 +6,7 @@ This bot offer features that make the management of a large international group 
 
 All content is managed in markdown and is requested over the network through Github API's, so we don't have to redeploy the bot to have updated content.
 
-The bot allows members to register the country they're located, so when questions about specific places come up, they can just use the bot to ping those folks through a simple command like `!whoisat NL`
+The bot allows members to register the country they're located, so when questions about specific places come up, they can just use the bot to ping those folks through a simple command like `/whoisat NL`
 
 ## Features
 
@@ -102,4 +102,4 @@ You might have to adjust the PersistentVolumeClaim if you're not using a CSI dri
 
 ## Credits
 
-Credits goes to all the maintainers of the Programando na Gringa group.
+Credits goes to all the maintainers and participants of the Programando na Gringa group.
