@@ -12,7 +12,7 @@ export const cmdRegisterMemberAt: Middleware<BotContext> = async (
   const unsafeCountryName = ctx.command.args;
 
   if (!unsafeCountryName) {
-    return ctx.reply(
+    return ctx.replyWithMarkdown(
       i18n.t('errors.noCountryProvided', {
         mention: ctx.safeUser.mention,
       })
@@ -22,7 +22,7 @@ export const cmdRegisterMemberAt: Middleware<BotContext> = async (
   const countryCode = getCountryCodeForText(unsafeCountryName);
 
   if (!countryCode) {
-    return ctx.reply(
+    return ctx.replyWithMarkdown(
       i18n.t('errors.failedToIdentifyCountry', {
         mention: ctx.safeUser.mention,
         countryName: unsafeCountryName,
@@ -34,7 +34,7 @@ export const cmdRegisterMemberAt: Middleware<BotContext> = async (
   const userId = ctx.safeUser.id;
 
   if (database.hasMemberRegistered(userId, countryCode)) {
-    return ctx.reply(
+    return ctx.replyWithMarkdown(
       i18n.t('errors.memberAlreadyRegistered', {
         mention: ctx.safeUser.mention,
       })
