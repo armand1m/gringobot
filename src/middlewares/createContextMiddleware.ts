@@ -32,6 +32,14 @@ export const createContextMiddleware = ({
     }
 
     if (!ctx.from) {
+      if (!ctx.reply) {
+        /**
+         * This is not a message, but an event from the group
+         * For now we can ignore it.
+         */
+        return;
+      }
+
       return ctx.reply(ctx.i18n.t('failedToIdentifyUser'));
     }
 

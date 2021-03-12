@@ -1,7 +1,10 @@
 import { Middleware } from 'telegraf';
 import { markdown } from 'telegram-format';
 import { BotContext } from '../context';
-import { getCountryCodeForText } from '../countries';
+import {
+  getCountryCodeForText,
+  getCountryNameForCountryCode,
+} from '../countries';
 import { createMemberMention } from '../member';
 
 export const cmdPingMemberAt: Middleware<BotContext> = async (
@@ -41,10 +44,12 @@ export const cmdPingMemberAt: Middleware<BotContext> = async (
     members.length === 0
       ? i18n.t('location.noMembersAtLocation', {
           mention: ctx.safeUser.mention,
+          country: getCountryNameForCountryCode(countryCode),
         })
       : i18n.t('location.membersAtLocation', {
           mention: ctx.safeUser.mention,
           members: members.join(', '),
+          country: getCountryNameForCountryCode(countryCode),
         });
 
   return ctx.replyWithMarkdown(message);

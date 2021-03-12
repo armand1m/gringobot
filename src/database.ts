@@ -4,24 +4,27 @@ import mkdirp from 'mkdirp';
 import pino from 'pino';
 import low from 'lowdb';
 import FileAsync from 'lowdb/adapters/FileAsync';
-import { Country } from './countries';
+import { Alpha2Code } from 'i18n-iso-countries';
 
 interface DatabaseSchema {
-  locationIndex: Partial<Record<Country, number[]>>;
+  locationIndex: Partial<Record<Alpha2Code, number[]>>;
 }
 
 export interface DatabaseInstance {
   addMemberLocation: (
     userId: number,
-    country: Country
+    countryCode: Alpha2Code
   ) => Promise<void>;
   removeMemberFrom: (
     userId: number,
-    country: Country
+    countryCode: Alpha2Code
   ) => Promise<void>;
-  getMembersAt: (country: Country) => number[];
-  hasMemberRegistered: (userId: number, country: Country) => boolean;
-  findMember: (userId: number) => Promise<Country[]>;
+  getMembersAt: (countryCode: Alpha2Code) => number[];
+  hasMemberRegistered: (
+    userId: number,
+    countryCode: Alpha2Code
+  ) => boolean;
+  findMember: (userId: number) => Promise<Alpha2Code[]>;
 }
 
 const emptyDatabase: DatabaseSchema = {
@@ -47,37 +50,38 @@ export const createDatabase = async (
     chatDatabasePath,
     'database.json'
   );
+
   const adapter = new FileAsync(databaseFilePath);
   const db = await low<low.AdapterAsync<DatabaseSchema>>(adapter);
 
   await db.defaults(emptyDatabase).write();
 
   const instance: DatabaseInstance = {
-    removeMemberFrom: async (userId: number, code: Country) => {
-      const collection = db.get('locationIndex').get(code);
+    removeMemberFrom: async (userId, countryCode) => {
+      const collection = db.get('locationIndex').get(countryCode);
       await collection.pull(userId).write();
     },
-    hasMemberRegistered: (userId: number, code: Country) => {
-      const collection = db.get('locationIndex').get(code);
+    hasMemberRegistered: (userId, countryCode) => {
+      const collection = db.get('locationIndex').get(countryCode);
       const members = collection.value() || [];
       return members.includes(userId);
     },
-    addMemberLocation: async (userId: number, code: Country) => {
+    addMemberLocation: async (userId, countryCode) => {
       const collection = db.get('locationIndex');
       const currentState = collection.value();
 
-      if (currentState[code] === undefined) {
+      if (currentState[countryCode] === undefined) {
         await collection
           .assign({
             ...currentState,
-            [code]: [userId],
+            [countryCode]: [userId],
           })
           .write();
       } else {
-        await collection.get(code).push(userId).write();
+        await collection.get(countryCode).push(userId).write();
       }
     },
-    getMembersAt: (code: Country) => {
+    getMembersAt: (code) => {
       const collection = db.get('locationIndex').get(code);
       const members = collection.value() || [];
       return members;
@@ -87,7 +91,7 @@ export const createDatabase = async (
         .get('locationIndex')
         .pickBy((value) => value?.includes(userId))
         .keys()
-        .value() as Country[];
+        .value() as Alpha2Code[];
     },
   };
 

@@ -11,8 +11,8 @@ import { cmdPingAdmins } from './commands/pingAdmins';
 import { cmdPingMemberAt } from './commands/pingMembersAt';
 import { cmdRegisterMemberAt } from './commands/registerMemberAt';
 import { cmdDeregisterMemberFrom } from './commands/deregisterMemberFrom';
-import { createContextMiddleware } from './middleware/createContextMiddleware';
-import { createCommandMiddleware } from './middleware/createCommandMiddleware';
+import { createContextMiddleware } from './middlewares/createContextMiddleware';
+import { createCommandMiddleware } from './middlewares/createCommandMiddleware';
 
 const main = async () => {
   const config = await loadConfiguration();
