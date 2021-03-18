@@ -9,11 +9,12 @@ import { cmdHelp } from './commands/help';
 import { cmdFindMember } from './commands/findMember';
 import { cmdPingAdmins } from './commands/pingAdmins';
 import { cmdPingMemberAt } from './commands/pingMembersAt';
+import { cmdFindMembersAt } from './commands/findMembersAt';
 import { cmdRegisterMemberAt } from './commands/registerMemberAt';
 import { cmdDeregisterMemberFrom } from './commands/deregisterMemberFrom';
+import { cmdListCountryMemberCount } from './commands/listCountryMemberCount';
 import { createContextMiddleware } from './middlewares/createContextMiddleware';
 import { createCommandMiddleware } from './middlewares/createCommandMiddleware';
-import { cmdFindMembersAt } from './commands/findMembersAt';
 
 const main = async () => {
   const config = await loadConfiguration();
@@ -39,6 +40,10 @@ const main = async () => {
   bot.command(CommandAliases[Command.FindMember], cmdFindMember);
   bot.command(CommandAliases[Command.PingAdmins], cmdPingAdmins);
   bot.command(CommandAliases[Command.PingMembersAt], cmdPingMemberAt);
+  bot.command(
+    CommandAliases[Command.ListCountryMemberCount],
+    cmdListCountryMemberCount
+  );
   bot.command(
     CommandAliases[Command.FindMembersAt],
     cmdFindMembersAt

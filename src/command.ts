@@ -2,6 +2,7 @@ import { BotCommand } from 'typegram';
 
 export enum Command {
   RegisterMemberAt = 'register_member_at',
+  ListCountryMemberCount = 'list_country_member_count',
   FindMembersAt = 'find_members_at',
   PingMembersAt = 'ping_members_at',
   DeregisterMemberFrom = 'deregister_member_from',
@@ -12,6 +13,7 @@ export enum Command {
 
 enum PortugueseCommandAlias {
   RegisterMemberAt = 'estou',
+  ListCountryMemberCount = 'quantos',
   FindMembersAt = 'quem',
   PingMembersAt = 'alo',
   PingAdmins = 'eita',
@@ -22,6 +24,7 @@ enum PortugueseCommandAlias {
 
 enum EnglishCommandAlias {
   RegisterMemberAt = 'imat',
+  ListCountryMemberCount = 'list',
   FindMembersAt = 'whoat',
   PingMembersAt = 'ping',
   PingAdmins = 'admins',
@@ -31,6 +34,8 @@ enum EnglishCommandAlias {
 
 const DefaultCommandDescriptions: Record<Command, string> = {
   [Command.RegisterMemberAt]: 'Registers you at a specific location.',
+  [Command.ListCountryMemberCount]:
+    'List a member count per country.',
   [Command.FindMembersAt]:
     'Find members living in a specific location.',
   [Command.PingMembersAt]:
@@ -46,6 +51,8 @@ const CommandDescriptionMap: Record<string, string> = {
   ...DefaultCommandDescriptions,
   [EnglishCommandAlias.PingAdmins]:
     DefaultCommandDescriptions[Command.PingAdmins],
+  [EnglishCommandAlias.ListCountryMemberCount]:
+    DefaultCommandDescriptions[Command.ListCountryMemberCount],
   [EnglishCommandAlias.RegisterMemberAt]:
     DefaultCommandDescriptions[Command.RegisterMemberAt],
   [EnglishCommandAlias.DeregisterMemberFrom]:
@@ -67,6 +74,8 @@ const CommandDescriptionMap: Record<string, string> = {
     'Encontra pessoas de uma localização específica.',
   [PortugueseCommandAlias.FindMember]:
     'Encontra as localizações que tem você nos registros.',
+  [PortugueseCommandAlias.ListCountryMemberCount]:
+    'Lista a quantidade de membros por países.',
   [PortugueseCommandAlias.Help]:
     'Ajuda sobre assuntos e tópicos diversos.',
 };
@@ -108,6 +117,11 @@ export const CommandAliases: Record<Command, string[]> = {
     Command.FindMember,
     PortugueseCommandAlias.FindMember,
     EnglishCommandAlias.FindMember,
+  ],
+  [Command.ListCountryMemberCount]: [
+    Command.ListCountryMemberCount,
+    PortugueseCommandAlias.ListCountryMemberCount,
+    EnglishCommandAlias.ListCountryMemberCount,
   ],
   [Command.Help]: [Command.Help, PortugueseCommandAlias.Help],
 };

@@ -24,6 +24,7 @@ export interface DatabaseInstance {
     userId: number,
     countryCode: Alpha2Code
   ) => boolean;
+  getLocationIndex: () => DatabaseSchema['locationIndex'];
   findMember: (userId: number) => Promise<Alpha2Code[]>;
 }
 
@@ -57,6 +58,10 @@ export const createDatabase = async (
   await db.defaults(emptyDatabase).write();
 
   const instance: DatabaseInstance = {
+    getLocationIndex: () => {
+      const collection = db.get('locationIndex').value();
+      return collection;
+    },
     removeMemberFrom: async (userId, countryCode) => {
       const collection = db.get('locationIndex').get(countryCode);
       await collection.pull(userId).write();
