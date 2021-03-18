@@ -2,6 +2,7 @@ import { BotCommand } from 'typegram';
 
 export enum Command {
   RegisterMemberAt = 'register_member_at',
+  FindMembersAt = 'find_members_at',
   PingMembersAt = 'ping_members_at',
   DeregisterMemberFrom = 'deregister_member_from',
   PingAdmins = 'ping_admins',
@@ -11,7 +12,8 @@ export enum Command {
 
 enum PortugueseCommandAlias {
   RegisterMemberAt = 'estou',
-  PingMembersAt = 'quem',
+  FindMembersAt = 'quem',
+  PingMembersAt = 'alo',
   PingAdmins = 'eita',
   DeregisterMemberFrom = 'sair',
   FindMember = 'ondeestou',
@@ -20,7 +22,8 @@ enum PortugueseCommandAlias {
 
 enum EnglishCommandAlias {
   RegisterMemberAt = 'imat',
-  PingMembersAt = 'whoat',
+  FindMembersAt = 'whoat',
+  PingMembersAt = 'ping',
   PingAdmins = 'admins',
   DeregisterMemberFrom = 'leave',
   FindMember = 'whereami',
@@ -28,8 +31,10 @@ enum EnglishCommandAlias {
 
 const DefaultCommandDescriptions: Record<Command, string> = {
   [Command.RegisterMemberAt]: 'Registers you at a specific location.',
+  [Command.FindMembersAt]:
+    'Find members living in a specific location.',
   [Command.PingMembersAt]:
-    'Ping the members living in a specific location.',
+    'Ping members living in a specific location.',
   [Command.DeregisterMemberFrom]:
     'Deregisters yourself from a specific location.',
   [Command.PingAdmins]: 'Ping all admins.',
@@ -45,21 +50,25 @@ const CommandDescriptionMap: Record<string, string> = {
     DefaultCommandDescriptions[Command.RegisterMemberAt],
   [EnglishCommandAlias.DeregisterMemberFrom]:
     DefaultCommandDescriptions[Command.DeregisterMemberFrom],
+  [EnglishCommandAlias.FindMembersAt]:
+    DefaultCommandDescriptions[Command.FindMembersAt],
   [EnglishCommandAlias.PingMembersAt]:
     DefaultCommandDescriptions[Command.PingMembersAt],
   [EnglishCommandAlias.FindMember]:
     DefaultCommandDescriptions[Command.FindMember],
-  [PortugueseCommandAlias.PingAdmins]: 'Notifica todos admins.',
+  [PortugueseCommandAlias.PingAdmins]: 'Notifica admins.',
   [PortugueseCommandAlias.RegisterMemberAt]:
-    'Registra voce em uma localizacao especifica.',
+    'Registra você em uma localização específica.',
   [PortugueseCommandAlias.DeregisterMemberFrom]:
-    'Retira voce de uma localizacao especifica.',
+    'Retira você de uma localização específica.',
   [PortugueseCommandAlias.PingMembersAt]:
-    'Chama pessoas de uma localizacao especifica.',
+    'Chama pessoas de uma localização específica.',
+  [PortugueseCommandAlias.FindMembersAt]:
+    'Encontra pessoas de uma localização específica.',
   [PortugueseCommandAlias.FindMember]:
-    'Encontra as localizacoes que tem voce nos registros.',
+    'Encontra as localizações que tem você nos registros.',
   [PortugueseCommandAlias.Help]:
-    'Ajuda sobre assuntos e topicos diversos.',
+    'Ajuda sobre assuntos e tópicos diversos.',
 };
 
 export const CommandDescriptions: BotCommand[] = Object.keys(
@@ -74,6 +83,11 @@ export const CommandAliases: Record<Command, string[]> = {
     Command.RegisterMemberAt,
     PortugueseCommandAlias.RegisterMemberAt,
     EnglishCommandAlias.RegisterMemberAt,
+  ],
+  [Command.FindMembersAt]: [
+    Command.FindMembersAt,
+    PortugueseCommandAlias.FindMembersAt,
+    EnglishCommandAlias.FindMembersAt,
   ],
   [Command.PingMembersAt]: [
     Command.PingMembersAt,

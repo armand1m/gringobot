@@ -13,6 +13,7 @@ import { cmdRegisterMemberAt } from './commands/registerMemberAt';
 import { cmdDeregisterMemberFrom } from './commands/deregisterMemberFrom';
 import { createContextMiddleware } from './middlewares/createContextMiddleware';
 import { createCommandMiddleware } from './middlewares/createCommandMiddleware';
+import { cmdFindMembersAt } from './commands/findMembersAt';
 
 const main = async () => {
   const config = await loadConfiguration();
@@ -38,6 +39,10 @@ const main = async () => {
   bot.command(CommandAliases[Command.FindMember], cmdFindMember);
   bot.command(CommandAliases[Command.PingAdmins], cmdPingAdmins);
   bot.command(CommandAliases[Command.PingMembersAt], cmdPingMemberAt);
+  bot.command(
+    CommandAliases[Command.FindMembersAt],
+    cmdFindMembersAt
+  );
   bot.command(
     CommandAliases[Command.RegisterMemberAt],
     cmdRegisterMemberAt
