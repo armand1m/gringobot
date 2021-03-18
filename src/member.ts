@@ -10,7 +10,7 @@ export const createMemberMention = (
     : user.first_name;
 
   if (silenced) {
-    return markdown.monospaceBlock(username);
+    return markdown.monospace(username);
   }
 
   return markdown.userMention(username, user.id);
