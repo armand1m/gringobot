@@ -29,6 +29,9 @@ The bot currently replies in Portuguese by default, and parses names of countrie
  - [x] Find member registered locations:
     - [x] English: `/find_member`, `/whereami`
     - [x] Portuguese: `/ondeestou`
+ - [x] List Member count per Country:
+    - [x] English: `/list_country_member_count`, `/list`
+    - [x] Portuguese: `/quantos`
  - [x] Help Sections:
     - [x] English: `/help <subject> <topic>`
     - [x] Portuguese: `/ajuda <assunto> <topico>`
