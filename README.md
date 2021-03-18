@@ -6,7 +6,9 @@ This bot offer features that make the management of a large international group 
 
 All content is managed in markdown and is requested over the network through Github API's, so we don't have to redeploy the bot to have updated content.
 
-The bot allows members to register the country they're located, so when questions about specific places come up, they can just use the bot to ping those folks through a simple command like `/whoisat NL`
+The bot allows members to register the country they're located, so when questions about specific places come up, they can just use the bot to find those folks through a simple command like `/whoat NL` and ping them if needed with `/ping NL`
+
+This bot is available in Telegram as [@PNGGringoBot](https://t.me/PNGGringoBot) and it works in multiple groups. Keep in mind that the admins of [Programando na Gringa](https://go.d1m.dev/png) own this instance as a community effort and manage this data accordingly. Feel free to reach out if you have any questions.
 
 ## Features
 
@@ -15,9 +17,12 @@ The bot currently replies in Portuguese by default, and parses names of countrie
  - [x] Register member location:
     - [x] English: `/register_member_at NL`, `/imat NL`
     - [x] Portuguese: `/estou NL`, `/estou Holanda`
- - [x] Ping folks from a location:
-    - [x] English: `/ping_members_at NL`, `/whoisat NL`
+ - [x] Fuind folks from a location:
+    - [x] English: `/find_members_at NL`, `/whoat NL`
     - [x] Portuguese: `/quem NL`, `/quem Holanda`
+ - [x] Ping folks from a location:
+    - [x] English: `/ping_members_at NL`, `/ping NL`
+    - [x] Portuguese: `/alo NL`, `/alo Holanda`
  - [x] Deregister member location:
     - [x] English: `/leave NL`
     - [x] Portuguese: `/sair NL`, `/sair Holanda`
