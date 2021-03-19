@@ -9,11 +9,7 @@ export const cmdListCountryMemberCount: Middleware<BotContext> = async (
   const locationIndex = ctx.database.getLocationIndex();
   const locationCount = Object.entries(locationIndex)
     .filter(([, value]) => {
-      if (value === undefined) {
-        return false;
-      }
-
-      return value.length > 0;
+      return value !== undefined && value.length > 0;
     })
     .map(([key, value]) => {
       const countryCode = key as Alpha2Code;
@@ -21,7 +17,8 @@ export const cmdListCountryMemberCount: Middleware<BotContext> = async (
       const count = value?.length || 0;
 
       return `${countryName}: ${count}`;
-    });
+    })
+    .sort((a, b) => a.localeCompare(b));
 
   return ctx.replyWithMarkdown(locationCount.join('\n'));
 };
