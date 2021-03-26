@@ -15,3 +15,15 @@ export const createMemberMention = (
 
   return markdown.userMention(username, user.id);
 };
+
+const isCyrillic = (text: string = '') => {
+  return text.match(/[\u0430-\u044f]+/gi);
+};
+
+export const hasCyrillicName = (user: User) => {
+  return (
+    isCyrillic(user.first_name) ||
+    isCyrillic(user.last_name) ||
+    isCyrillic(user.username)
+  );
+};

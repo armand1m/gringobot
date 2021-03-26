@@ -26,6 +26,10 @@ export const createContextMiddleware = ({
     const chatId = ctx?.chat?.id;
 
     if (!chatId) {
+      if (!ctx.reply) {
+        return;
+      }
+
       return ctx.reply(
         'GringoBot does not support this type of chat.'
       );
@@ -50,7 +54,6 @@ export const createContextMiddleware = ({
     );
 
     ctx.database = database;
-    ctx.logger = logger;
     ctx.config = config;
     ctx.safeUser = {
       id: ctx.from.id,

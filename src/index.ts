@@ -15,6 +15,8 @@ import { cmdDeregisterMemberFrom } from './commands/deregisterMemberFrom';
 import { cmdListCountryMemberCount } from './commands/listCountryMemberCount';
 import { createContextMiddleware } from './middlewares/createContextMiddleware';
 import { createCommandMiddleware } from './middlewares/createCommandMiddleware';
+import { createBlockMiddleware } from './middlewares/createBlockMiddleware';
+import { createLoggerMiddleware } from './middlewares/createLoggerMiddleware';
 
 const main = async () => {
   const config = await loadConfiguration();
@@ -28,6 +30,8 @@ const main = async () => {
   });
 
   bot.use(i18n.middleware());
+  bot.use(createLoggerMiddleware({ logger }));
+  bot.use(createBlockMiddleware());
   bot.use(createCommandMiddleware());
   bot.use(
     createContextMiddleware({

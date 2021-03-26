@@ -1,6 +1,6 @@
 import got from 'got';
 import { Middleware } from 'telegraf';
-import { markdown } from 'telegram-format/dist/source';
+import { markdown } from 'telegram-format';
 import { BotContext } from '../context';
 
 const getContentUrl = (section?: string, topic?: string) => {
