@@ -1,3 +1,5 @@
+*Sobre o grupo*
+
 Este grupo é sobre Trabalho de Programadores(as) e TI no Exterior.
 
 Ele foi criado justamente pra todas as pessoas que não se sentem à vontade em outros grupos e foruns, tipo mulheres, novatos na área, etc. 
