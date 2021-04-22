@@ -8,4 +8,5 @@ Os tópicos disponíveis são:
 - *servicos*: Informações sobre serviços que podem ser úteis. Use `/ajuda servicos` para saber mais.
 
 Todo conteúdo disponível na seção de ajuda vem do repositório do github do GringoBot.
+
 Contribuições em conteúdo via Pull Request são muito bem vindas.
