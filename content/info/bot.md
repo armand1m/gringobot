@@ -19,7 +19,7 @@ Se você tem interesse em saber mais sobre um local especifico, use o comando `/
 
 O comando `/admins` vai notificar admins do grupo. Use a vontade para chamar a atenção de admins.
 
-O comand `/ajuda` oferece uma navegação de tópicos e sub tópicos relacionados com o tema do grupo. Toda a informação que vem do comando `/ajuda` se encontra no reposítorio do github. Contribuições são muito bem vindas.
+O comando `/ajuda` oferece uma navegação de tópicos e sub-tópicos relacionados com o tema do grupo. Toda a informação que vem do comando `/ajuda` se encontra no reposítorio do github. Contribuições são muito bem vindas.
 
 *Feedback*
 
