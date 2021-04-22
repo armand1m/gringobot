@@ -15,9 +15,11 @@ Para se retirar de uma localização, use `/sair` seguido pelo nome ou código d
 
 Se você tem interesse em saber mais sobre um local especifico, use o comando `/quem` seguido pelo nome ou código do país que você deseja saber mais _(exemplo: `/quem Alemanha` ou `/quem DE`)_
 
-*Utilitarios*
+*Utilitários*
 
 O comando `/admins` vai notificar admins do grupo. Use a vontade para chamar a atenção de admins.
+
+O comand `/ajuda` oferece uma navegação de tópicos e sub tópicos relacionados com o tema do grupo. Toda a informação que vem do comando `/ajuda` se encontra no reposítorio do github. Contribuições são muito bem vindas.
 
 *Feedback*
 
