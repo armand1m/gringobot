@@ -84,7 +84,7 @@ const CommandDescriptionMap: Record<string, string> = {
   [PortugueseCommandAlias.ListCountryMemberCount]:
     'Lista a quantidade de membros por países.',
   [PortugueseCommandAlias.RankCountryMemberCount]:
-    'Classifica os países baseado no número de membros',
+    'Classifica os países baseado no número de pessoas registradas.',
   [PortugueseCommandAlias.Help]:
     'Ajuda sobre assuntos e tópicos diversos.',
 };
