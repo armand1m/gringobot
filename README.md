@@ -32,6 +32,9 @@ The bot currently replies in Portuguese by default, and parses names of countrie
  - [x] List Member count per Country:
     - [x] English: `/list_country_member_count`, `/list`
     - [x] Portuguese: `/quantos`
+ - [x] Rank countries by number of members
+    - [x] English: `/rank_country_member_count`, `/rank`
+    - [x] Portuguese: `/classificacao`
  - [x] Help Sections:
     - [x] English: `/help <subject> <topic>`
     - [x] Portuguese: `/ajuda <assunto> <topico>`
