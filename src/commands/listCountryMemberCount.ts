@@ -6,6 +6,8 @@ import { getCountryNameForCountryCode } from '../countries';
 export const cmdListCountryMemberCount: Middleware<BotContext> = async (
   ctx
 ) => {
+  const i18n = ctx.i18n;
+
   const locationIndex = ctx.database.getLocationIndex();
   const locationCount = Object.entries(locationIndex)
     .filter(([, value]) => {
@@ -19,6 +21,13 @@ export const cmdListCountryMemberCount: Middleware<BotContext> = async (
       return `${countryName}: ${count}`;
     })
     .sort((a, b) => a.localeCompare(b));
+
+  if (locationCount.length === 0)
+    return ctx.replyWithMarkdown(
+      i18n.t('listing.noMembers', {
+        mention: ctx.safeUser.mention,
+      })
+    );
 
   return ctx.replyWithMarkdown(locationCount.join('\n'));
 };
