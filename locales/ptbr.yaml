@@ -11,3 +11,5 @@ errors:
   noCountryProvided: "${mention} nenhuma localização foi especificada. Especifique o [código de um país](https://en.wikipedia.org/wiki/ISO_3166-2) _(como 'NL' ou 'PT')_ ou o nome do país em Português _('Holanda', 'Alemanha')_ após o comando."
   failedToIdentifyCountry: "${mention} não pude identificar o código para o país '${countryName}'. Tente especificar o código do país em vez do nome, se estiver em dúvida a respeito do nome em Português."
   failedToFetchContent: "${mention} nao pude buscar o conteudo que voce procura. Tente outro assunto ou topico."
+listing:
+  noMembers: "${mention} Não existem pessoas registradas."
