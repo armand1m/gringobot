@@ -3,6 +3,7 @@ import { BotCommand } from 'typegram';
 export enum Command {
   RegisterMemberAt = 'register_member_at',
   ListCountryMemberCount = 'list_country_member_count',
+  RankCountryMemberCount = 'rank_country_member_count',
   FindMembersAt = 'find_members_at',
   PingMembersAt = 'ping_members_at',
   DeregisterMemberFrom = 'deregister_member_from',
@@ -14,6 +15,7 @@ export enum Command {
 enum PortugueseCommandAlias {
   RegisterMemberAt = 'estou',
   ListCountryMemberCount = 'quantos',
+  RankCountryMemberCount = 'classificacao',
   FindMembersAt = 'quem',
   PingMembersAt = 'alo',
   PingAdmins = 'eita',
@@ -25,6 +27,7 @@ enum PortugueseCommandAlias {
 enum EnglishCommandAlias {
   RegisterMemberAt = 'imat',
   ListCountryMemberCount = 'list',
+  RankCountryMemberCount = 'rank',
   FindMembersAt = 'whoat',
   PingMembersAt = 'ping',
   PingAdmins = 'admins',
@@ -36,6 +39,8 @@ const DefaultCommandDescriptions: Record<Command, string> = {
   [Command.RegisterMemberAt]: 'Registers you at a specific location.',
   [Command.ListCountryMemberCount]:
     'List a member count per country.',
+  [Command.RankCountryMemberCount]:
+    'Ranks countries based on number of members',
   [Command.FindMembersAt]:
     'Find members living in a specific location.',
   [Command.PingMembersAt]:
@@ -53,6 +58,8 @@ const CommandDescriptionMap: Record<string, string> = {
     DefaultCommandDescriptions[Command.PingAdmins],
   [EnglishCommandAlias.ListCountryMemberCount]:
     DefaultCommandDescriptions[Command.ListCountryMemberCount],
+  [EnglishCommandAlias.RankCountryMemberCount]:
+    DefaultCommandDescriptions[Command.RankCountryMemberCount],
   [EnglishCommandAlias.RegisterMemberAt]:
     DefaultCommandDescriptions[Command.RegisterMemberAt],
   [EnglishCommandAlias.DeregisterMemberFrom]:
@@ -76,6 +83,8 @@ const CommandDescriptionMap: Record<string, string> = {
     'Encontra as localizações que tem você nos registros.',
   [PortugueseCommandAlias.ListCountryMemberCount]:
     'Lista a quantidade de membros por países.',
+  [PortugueseCommandAlias.RankCountryMemberCount]:
+    'Classifica os países baseado no número de membros',
   [PortugueseCommandAlias.Help]:
     'Ajuda sobre assuntos e tópicos diversos.',
 };
@@ -122,6 +131,11 @@ export const CommandAliases: Record<Command, string[]> = {
     Command.ListCountryMemberCount,
     PortugueseCommandAlias.ListCountryMemberCount,
     EnglishCommandAlias.ListCountryMemberCount,
+  ],
+  [Command.RankCountryMemberCount]: [
+    Command.RankCountryMemberCount,
+    PortugueseCommandAlias.RankCountryMemberCount,
+    EnglishCommandAlias.RankCountryMemberCount,
   ],
   [Command.Help]: [Command.Help, PortugueseCommandAlias.Help],
 };
