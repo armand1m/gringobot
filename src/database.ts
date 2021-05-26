@@ -5,9 +5,11 @@ import pino from 'pino';
 import low from 'lowdb';
 import FileAsync from 'lowdb/adapters/FileAsync';
 import { Alpha2Code } from 'i18n-iso-countries';
+import { AutoDeleteMessage } from './autoDeleteMessages';
 
 interface DatabaseSchema {
   locationIndex: Partial<Record<Alpha2Code, number[]>>;
+  autoDeleteMessages: AutoDeleteMessage;
 }
 
 export interface DatabaseInstance {
@@ -26,10 +28,14 @@ export interface DatabaseInstance {
   ) => boolean;
   getLocationIndex: () => DatabaseSchema['locationIndex'];
   findMember: (userId: number) => Promise<Alpha2Code[]>;
+  addAutoDeleteMessage: (messageId: number) => Promise<void>;
+  getAutoDeleteMessages: () => AutoDeleteMessage;
+  removeAutoDeleteMessage: (messageId: number) => Promise<void>;
 }
 
 const emptyDatabase: DatabaseSchema = {
   locationIndex: {},
+  autoDeleteMessages: {},
 };
 
 export const createDatabase = async (
@@ -97,6 +103,22 @@ export const createDatabase = async (
         .pickBy((value) => value?.includes(userId))
         .keys()
         .value() as Alpha2Code[];
+    },
+    addAutoDeleteMessage: async (messageId: number) => {
+      const messages = db.get('autoDeleteMessages');
+      const currentState = messages.value();
+
+      await messages
+        .assign(currentState, { [messageId]: Date.now() })
+        .write();
+    },
+    getAutoDeleteMessages: () => {
+      return db.get('autoDeleteMessages').value();
+    },
+    removeAutoDeleteMessage: async (messageId: number) => {
+      const messages = db.get('autoDeleteMessages');
+
+      await messages.unset(messageId).write();
     },
   };
 

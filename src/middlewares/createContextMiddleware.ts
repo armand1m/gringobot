@@ -1,5 +1,6 @@
 import pino from 'pino';
 import { Middleware } from 'telegraf';
+import { runMessageRecycling } from '../autoDeleteMessages';
 import { CommandDescriptions } from '../command';
 import { Config } from '../config';
 import { BotContext } from '../context';
@@ -15,6 +16,8 @@ export const createContextMiddleware = ({
   config,
   logger,
 }: Props) => {
+  let interval: NodeJS.Timeout;
+
   const middleware: Middleware<BotContext> = async (ctx, next) => {
     /**
      * telegraf-i18n uses the user session to determine
@@ -61,6 +64,14 @@ export const createContextMiddleware = ({
     };
 
     ctx.setMyCommands(CommandDescriptions);
+
+    if (!interval) {
+      interval = setInterval(() => callMessageRecycling(), 5000);
+    }
+
+    const callMessageRecycling = () => {
+      runMessageRecycling(ctx);
+    };
 
     return next();
   };
