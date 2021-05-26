@@ -4,6 +4,7 @@ import { getCountryNameForCountryCode } from '../countries';
 
 export const cmdFindMember: Middleware<BotContext> = async (ctx) => {
   const i18n = ctx.i18n;
+  const database = ctx.database;
   const locations = await ctx.database.findMember(ctx.safeUser.id);
 
   const message =
@@ -18,5 +19,9 @@ export const cmdFindMember: Middleware<BotContext> = async (ctx) => {
             .join(', '),
         });
 
-  return ctx.replyWithMarkdown(message);
+  const messageSent = await ctx.replyWithMarkdown(message);
+
+  await database.addAutoDeleteMessage(messageSent.message_id);
+
+  return messageSent;
 };
