@@ -19,7 +19,6 @@ export interface BotContext extends Context {
   ) => ReturnType<Context['replyWithMarkdown']>;
   logger: pino.Logger;
   i18n: TelegrafI18n;
-  autoDeleteInterval?: NodeJS.Timeout;
   safeUser: {
     mention: string;
     id: number;

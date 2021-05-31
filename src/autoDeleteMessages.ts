@@ -20,33 +20,34 @@ export const runMessageRecycling = async (
     const id = Number(unsafeId);
 
     try {
-      ctx.logger.info(`Trying to delete message`, {
-        id,
-        chatId: ctx.chat?.id,
-      });
+      ctx.logger.info(
+        `Trying to delete expired message with id "${id}" from the chat "${ctx.chat?.id}"`
+      );
 
       await ctx.deleteMessage(id);
 
       ctx.logger.info(
-        `Deleted auto delete scheduled message with id "${id}"`
+        `Deleted expired message with id "${id}" from the chat "${ctx.chat?.id}"`
       );
     } catch (err) {
-      ctx.logger.warn(`Failed to delete message with id "${id}"`);
+      ctx.logger.warn(
+        `Failed to delete expired message with id "${id}" from the chat "${ctx.chat?.id}"`
+      );
     }
 
     try {
       ctx.logger.info(
-        `Trying to delete message with id "${id}" from the database`
+        `Trying to delete expired message with id "${id}" from the database`
       );
 
       await database.removeAutoDeleteMessage(id);
 
       ctx.logger.info(
-        `Deleted auto delete scheduled message with id "${id}" from the database`
+        `Deleted expired message with id "${id}" from the database`
       );
     } catch (err) {
       ctx.logger.warn(
-        `Failed to delete message with id "${id}" from the database`
+        `Failed to delete expired message with id "${id}" from the database`
       );
     }
   });
