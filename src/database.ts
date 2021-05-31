@@ -5,11 +5,10 @@ import pino from 'pino';
 import low from 'lowdb';
 import FileAsync from 'lowdb/adapters/FileAsync';
 import { Alpha2Code } from 'i18n-iso-countries';
-import { AutoDeleteMessage } from './autoDeleteMessages';
 
 interface DatabaseSchema {
   locationIndex: Partial<Record<Alpha2Code, number[]>>;
-  autoDeleteMessages: AutoDeleteMessage;
+  autoDeleteMessages: Record<string, number>;
 }
 
 export interface DatabaseInstance {
@@ -29,7 +28,7 @@ export interface DatabaseInstance {
   getLocationIndex: () => DatabaseSchema['locationIndex'];
   findMember: (userId: number) => Promise<Alpha2Code[]>;
   addAutoDeleteMessage: (messageId: number) => Promise<void>;
-  getAutoDeleteMessages: () => AutoDeleteMessage;
+  getAutoDeleteMessages: () => DatabaseSchema['autoDeleteMessages'];
   removeAutoDeleteMessage: (messageId: number) => Promise<void>;
 }
 

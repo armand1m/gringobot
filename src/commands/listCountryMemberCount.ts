@@ -23,7 +23,7 @@ export const cmdListCountryMemberCount: Middleware<BotContext> = async (
     .sort((a, b) => a.localeCompare(b));
 
   if (locationCount.length === 0)
-    return ctx.replyWithMarkdown(
+    return ctx.replyWithAutoDestructiveMessage(
       i18n.t('listing.noMembers', {
         mention: ctx.safeUser.mention,
       })
