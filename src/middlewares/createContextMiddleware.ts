@@ -74,6 +74,10 @@ export const createContextMiddleware = ({ config }: Props) => {
         markdownMessage
       );
 
+      if (!config.messageTimeoutEnabled) {
+        return messageSent;
+      }
+
       if (options.deleteCommandMessage && ctx.message?.message_id) {
         await ctx.database.addAutoDeleteMessage(
           ctx.message?.message_id
@@ -100,20 +104,22 @@ export const createContextMiddleware = ({ config }: Props) => {
 
     ctx.setMyCommands(CommandDescriptions);
 
-    const chatMessageRecyclingInterval =
-      messageDeletionIntervals[chatId];
+    if (config.messageTimeoutEnabled) {
+      const chatMessageRecyclingInterval =
+        messageDeletionIntervals[chatId];
 
-    if (!chatMessageRecyclingInterval) {
-      ctx.logger.info(
-        `Creating message deletion interval for chat "${chatId}".`
-      );
-      messageDeletionIntervals[chatId] = setInterval(() => {
-        runMessageRecycling(ctx);
-      }, 10000);
+      if (!chatMessageRecyclingInterval) {
+        ctx.logger.info(
+          `Creating message deletion interval for chat "${chatId}".`
+        );
+        messageDeletionIntervals[chatId] = setInterval(() => {
+          runMessageRecycling(ctx);
+        }, 10000);
 
-      process.on('SIGINT', () =>
-        clearInterval(messageDeletionIntervals[chatId])
-      );
+        process.on('SIGINT', () =>
+          clearInterval(messageDeletionIntervals[chatId])
+        );
+      }
     }
 
     return next();

@@ -77,6 +77,7 @@ NODE_ENV=development
 BOT_TOKEN=your-bot-token-here
 DATA_PATH=./data
 LOCALES_PATH=./locales
+MESSAGE_TIMEOUT_ENABLED=true
 MESSAGE_TIMEOUT_IN_MINUTES=2
 EOL
 ```
