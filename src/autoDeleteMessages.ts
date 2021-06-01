@@ -10,7 +10,7 @@ export const runMessageRecycling = async (
 ): Promise<void> => {
   const database = await ctx.loadDatabase();
   const messages = database.getAutoDeleteMessages();
-  const messageTimeout = 1;
+  const messageTimeout = ctx.config.messageTimeoutInMinutes;
 
   Object.entries(messages).map(async ([unsafeId, createdAt]) => {
     if (!expired(createdAt, messageTimeout)) {
@@ -18,20 +18,21 @@ export const runMessageRecycling = async (
     }
 
     const id = Number(unsafeId);
+    const chatId = ctx.chat?.id;
 
     try {
       ctx.logger.info(
-        `Trying to delete expired message with id "${id}" from the chat "${ctx.chat?.id}"`
+        `Trying to delete expired message with id "${id}" from the chat "${chatId}"`
       );
 
       await ctx.deleteMessage(id);
 
       ctx.logger.info(
-        `Deleted expired message with id "${id}" from the chat "${ctx.chat?.id}"`
+        `Deleted expired message with id "${id}" from the chat "${chatId}"`
       );
     } catch (err) {
       ctx.logger.warn(
-        `Failed to delete expired message with id "${id}" from the chat "${ctx.chat?.id}"`
+        `Failed to delete expired message with id "${id}" from the chat "${chatId}"`
       );
     }
 
