@@ -1,3 +1,4 @@
+import to from 'await-to-js';
 import { BotContext } from './context';
 
 const expired = (createdAt: number, timeout: number) => {
@@ -12,44 +13,54 @@ export const runMessageRecycling = async (
   const messages = database.getAutoDeleteMessages();
   const messageTimeout = ctx.config.messageTimeoutInMinutes;
 
-  Object.entries(messages).map(async ([unsafeId, createdAt]) => {
-    if (!expired(createdAt, messageTimeout)) {
-      return;
+  const promises = Object.entries(messages).map(
+    async ([unsafeId, createdAt]) => {
+      if (!expired(createdAt, messageTimeout)) {
+        return;
+      }
+
+      const id = Number(unsafeId);
+      const chatId = ctx.chat?.id;
+
+      ctx.logger.info(
+        `Trying to delete expired message with id "${id}" from the chat "${chatId}"..`
+      );
+
+      const [deleteChatMessageError, deleted] = await to(
+        ctx.deleteMessage(id)
+      );
+
+      if (deleteChatMessageError) {
+        ctx.logger.error(
+          `Failed to delete expired message with id "${id}" from the chat "${chatId}"`
+        );
+      }
+
+      if (deleted) {
+        ctx.logger.info(
+          `Deleted expired message with id "${id}" from the chat "${chatId}"`
+        );
+      }
+
+      ctx.logger.info(
+        `Trying to delete expired message with id "${id}" from the database..`
+      );
+
+      const [deleteDbMessageError] = await to(
+        database.removeAutoDeleteMessage(id)
+      );
+
+      if (deleteDbMessageError) {
+        ctx.logger.error(
+          `Failed to delete expired message with id "${id}" from the database`
+        );
+      } else {
+        ctx.logger.info(
+          `Deleted expired message with id "${id}" from the database`
+        );
+      }
     }
+  );
 
-    const id = Number(unsafeId);
-    const chatId = ctx.chat?.id;
-
-    try {
-      ctx.logger.info(
-        `Trying to delete expired message with id "${id}" from the chat "${chatId}"`
-      );
-
-      await ctx.deleteMessage(id);
-
-      ctx.logger.info(
-        `Deleted expired message with id "${id}" from the chat "${chatId}"`
-      );
-    } catch (err) {
-      ctx.logger.warn(
-        `Failed to delete expired message with id "${id}" from the chat "${chatId}"`
-      );
-    }
-
-    try {
-      ctx.logger.info(
-        `Trying to delete expired message with id "${id}" from the database`
-      );
-
-      await database.removeAutoDeleteMessage(id);
-
-      ctx.logger.info(
-        `Deleted expired message with id "${id}" from the database`
-      );
-    } catch (err) {
-      ctx.logger.warn(
-        `Failed to delete expired message with id "${id}" from the database`
-      );
-    }
-  });
+  await Promise.all(promises);
 };

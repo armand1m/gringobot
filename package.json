@@ -6,6 +6,7 @@
   "author": "Armando Magalhães <armando.mag95@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "await-to-js": "^3.0.0",
     "dotenv": "^8.2.0",
     "got": "^11.8.2",
     "i18n-iso-countries": "^6.5.0",
