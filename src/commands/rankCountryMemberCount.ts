@@ -28,23 +28,22 @@ export const cmdRankCountryMemberCount: Middleware<BotContext> = async (
       return 0;
     });
 
-  if (locationCount.length == 0)
-    return ctx.replyWithMarkdown(
+  if (locationCount.length == 0) {
+    return ctx.replyWithAutoDestructiveMessage(
       i18n.t('listing.noMembers', {
         mention: ctx.safeUser.mention,
       })
     );
+  }
 
   const counts = locationCount.map((lc) => lc.count);
 
   // Standard competition ranking ("1224" ranking)
-  const locationCountRank = locationCount.map(
-    (countryAndCounts, index) => {
-      const { countryName, count } = countryAndCounts;
-      const rank = counts.indexOf(count) + 1;
-      return `${rank}. ${countryName}: ${count}`;
-    }
-  );
+  const locationCountRank = locationCount.map((countryAndCounts) => {
+    const { countryName, count } = countryAndCounts;
+    const rank = counts.indexOf(count) + 1;
+    return `${rank}. ${countryName}: ${count}`;
+  });
 
   return ctx.replyWithMarkdown(locationCountRank.join('\n'));
 };

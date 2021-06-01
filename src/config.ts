@@ -32,6 +32,8 @@ const ConfigSchema = yup.object({
     .string()
     .required(createRequiredErrMessage('DATA_PATH')),
   localesPath: yup.string().default('./locales'),
+  messageTimeoutInMinutes: yup.number().integer().default(2),
+  messageTimeoutEnabled: yup.boolean().default(true),
 });
 
 export const loadConfiguration = async () => {
@@ -40,6 +42,10 @@ export const loadConfiguration = async () => {
     botToken: process.env.BOT_TOKEN,
     dataPath: process.env.DATA_PATH,
     localesPath: process.env.LOCALES_PATH,
+    messageTimeoutEnabled: process.env.MESSAGE_TIMEOUT_ENABLED
+      ? process.env.MESSAGE_TIMEOUT_ENABLED === 'true'
+      : undefined,
+    messageTimeoutInMinutes: process.env.MESSAGE_TIMEOUT_IN_MINUTES,
   };
 
   const config = await ConfigSchema.validate(unsafeConfig);
