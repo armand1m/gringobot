@@ -40,8 +40,8 @@ export const runMessageRecycling = async (
             `[Attempt No ${attempt}]: Failed to delete expired message with id "${id}" from the chat "${chatId}"`
           );
 
-          // @ts-ignore
           const errorMessage =
+            // @ts-ignore
             deleteChatMessageError.response.description;
 
           if (
