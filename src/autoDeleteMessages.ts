@@ -1,4 +1,5 @@
 import to from 'await-to-js';
+import retry, { RetryFunction } from 'async-retry';
 import { BotContext } from './context';
 
 const expired = (createdAt: number, timeout: number) => {
@@ -26,19 +27,53 @@ export const runMessageRecycling = async (
         `Trying to delete expired message with id "${id}" from the chat "${chatId}"..`
       );
 
-      const [deleteChatMessageError, deleted] = await to(
-        ctx.deleteMessage(id)
+      const deleteMessage: RetryFunction<void> = async (
+        bail,
+        attempt
+      ) => {
+        const [deleteChatMessageError, deleted] = await to(
+          ctx.deleteMessage(id)
+        );
+
+        if (deleteChatMessageError) {
+          ctx.logger.error(
+            `[Attempt No ${attempt}]: Failed to delete expired message with id "${id}" from the chat "${chatId}"`
+          );
+
+          // @ts-ignore
+          const errorMessage =
+            deleteChatMessageError.response.description;
+
+          if (
+            errorMessage ===
+            'Bad Request: message to delete not found'
+          ) {
+            ctx.logger.info(
+              `Message with id "${id}" does not exists in the chat "${chatId}"`
+            );
+            bail(deleteChatMessageError);
+            return;
+          }
+
+          throw deleteChatMessageError;
+        }
+
+        if (deleted) {
+          ctx.logger.info(
+            `Deleted expired message with id "${id}" from the chat "${chatId}"`
+          );
+        }
+      };
+
+      const [deleteChatMessageError] = await to(
+        retry(deleteMessage, {
+          retries: 3,
+        })
       );
 
       if (deleteChatMessageError) {
         ctx.logger.error(
-          `Failed to delete expired message with id "${id}" from the chat "${chatId}"`
-        );
-      }
-
-      if (deleted) {
-        ctx.logger.info(
-          `Deleted expired message with id "${id}" from the chat "${chatId}"`
+          `Failed to delete expired message with id "${id}" from the chat`
         );
       }
 
