@@ -104,7 +104,9 @@ export const createContextMiddleware = ({ config }: Props) => {
       messageDeletionIntervals[chatId];
 
     if (!chatMessageRecyclingInterval) {
-      ctx.logger.info('Creating auto delete interval.');
+      ctx.logger.info(
+        `Creating message deletion interval for chat "${chatId}".`
+      );
       messageDeletionIntervals[chatId] = setInterval(() => {
         runMessageRecycling(ctx);
       }, 10000);
