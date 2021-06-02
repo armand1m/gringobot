@@ -14,7 +14,7 @@ export const cmdPingMemberAt: Middleware<BotContext> = async (
   const unsafeCountryName = markdown.escape(ctx.command.args ?? '');
 
   if (!unsafeCountryName) {
-    return ctx.replyWithMarkdown(
+    return ctx.replyWithAutoDestructiveMessage(
       i18n.t('errors.noCountryProvided', {
         mention: ctx.safeUser.mention,
       })
@@ -24,7 +24,7 @@ export const cmdPingMemberAt: Middleware<BotContext> = async (
   const countryCode = getCountryCodeForText(unsafeCountryName);
 
   if (!countryCode) {
-    return ctx.replyWithMarkdown(
+    return ctx.replyWithAutoDestructiveMessage(
       i18n.t('errors.failedToIdentifyCountry', {
         mention: ctx.safeUser.mention,
         countryName: unsafeCountryName,
@@ -40,17 +40,21 @@ export const cmdPingMemberAt: Middleware<BotContext> = async (
     })
   );
 
-  const message =
-    members.length === 0
-      ? i18n.t('location.noMembersAtLocation', {
-          mention: ctx.safeUser.mention,
-          country: getCountryNameForCountryCode(countryCode),
-        })
-      : i18n.t('location.membersAtLocation', {
-          mention: ctx.safeUser.mention,
-          members: members.join(', '),
-          country: getCountryNameForCountryCode(countryCode),
-        });
+  const hasNoMembers = members.length === 0;
 
-  return ctx.replyWithMarkdown(message);
+  const message = hasNoMembers
+    ? i18n.t('location.noMembersAtLocation', {
+        mention: ctx.safeUser.mention,
+        country: getCountryNameForCountryCode(countryCode),
+      })
+    : i18n.t('location.membersAtLocation', {
+        mention: ctx.safeUser.mention,
+        members: members.join(', '),
+        country: getCountryNameForCountryCode(countryCode),
+      });
+
+  return ctx.replyWithAutoDestructiveMessage(message, {
+    deleteReplyMessage: hasNoMembers,
+    deleteCommandMessage: hasNoMembers,
+  });
 };

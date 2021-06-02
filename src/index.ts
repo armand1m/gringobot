@@ -37,7 +37,6 @@ const main = async () => {
   bot.use(
     createContextMiddleware({
       config,
-      logger: logger.child({ source: 'database' }),
     })
   );
 

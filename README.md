@@ -40,6 +40,19 @@ The bot currently replies in Portuguese by default, and parses names of countrie
     - [x] Portuguese: `/ajuda <assunto> <topico>`
  - [x] Ping all admins:
     - [x] `/ping_admins`, `/admins`, `/eita`
+ - [x] Message Auto Deletion:
+    - [x] Configurable through the `MESSAGE_TIMEOUT_IN_MINUTES` environment variable. Default is `2`.
+    - [x] Feature can be toggled through the `MESSAGE_TIMEOUT_ENABLED` environment variable. Default is `true`.
+    - [x] Deletes both command and reply messages after timeout is reached.
+    - [x] Deletes all interactions that were replied with error messages.
+    - [x] Deletes messages from the following commands:
+      - `/leave`
+      - `/find_member`
+      - `/register_member_at`
+      - `/find_members_at` (only if no members are found)
+      - `/ping_members_at` (only if no members are found)
+      - `/list_country_member_count` (only if no members are registered)
+      - `/rank_country_member_count` (only if no members are registered)
 
 ## Developing
 
@@ -64,6 +77,8 @@ NODE_ENV=development
 BOT_TOKEN=your-bot-token-here
 DATA_PATH=./data
 LOCALES_PATH=./locales
+MESSAGE_TIMEOUT_ENABLED=true
+MESSAGE_TIMEOUT_IN_MINUTES=2
 EOL
 ```
 

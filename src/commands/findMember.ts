@@ -18,5 +18,5 @@ export const cmdFindMember: Middleware<BotContext> = async (ctx) => {
             .join(', '),
         });
 
-  return ctx.replyWithMarkdown(message);
+  return ctx.replyWithAutoDestructiveMessage(message);
 };
