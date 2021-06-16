@@ -1,9 +1,11 @@
+import { Alpha2Code } from 'i18n-iso-countries';
 import { Middleware } from 'telegraf';
 import { runMessageRecycling } from '../autoDeleteMessages';
 import { CommandDescriptions } from '../command';
 import { Config } from '../config';
 import { BotContext } from '../context';
 import { createDatabase } from '../database';
+import { withRejected, withFulfilled } from '../extensions/promises';
 import { createMemberMention } from '../member';
 
 interface Props {
@@ -93,6 +95,42 @@ export const createContextMiddleware = ({ config }: Props) => {
       return messageSent;
     };
 
+    const fetchMembersMentionList = async (
+      countryCode: Alpha2Code
+    ) => {
+      const memberIds = ctx.database.getMembersAt(countryCode);
+      const membersFetchResult = await Promise.allSettled(
+        memberIds.map(async (userId) => {
+          try {
+            const member = await ctx.getChatMember(userId);
+            return createMemberMention(member.user, true);
+          } catch (err) {
+            if (err.code === 400) {
+              if (err.message.includes('user not found')) {
+                ctx.logger.warn(
+                  `Registered user with id "${userId}" does not exist. Removing user from country "${countryCode}".`
+                );
+                ctx.database.removeMemberFrom(userId, countryCode);
+              }
+            }
+
+            throw err;
+          }
+        })
+      );
+
+      withRejected(membersFetchResult).forEach(({ reason }) => {
+        ctx.logger.warn(reason);
+      });
+
+      const members = withFulfilled(membersFetchResult).map(
+        ({ value }) => value
+      );
+
+      return members;
+    };
+
+    ctx.fetchMembersMentionList = fetchMembersMentionList;
     ctx.replyWithAutoDestructiveMessage = replyWithAutoDestructiveMessage;
     ctx.loadDatabase = loadDatabase;
     ctx.database = await loadDatabase();
