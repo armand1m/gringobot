@@ -40,6 +40,8 @@ The bot currently replies in Portuguese by default, and parses names of countrie
     - [x] Portuguese: `/ajuda <assunto> <topico>`
  - [x] Ping all admins:
     - [x] `/ping_admins`, `/admins`, `/eita`
+ - [x] Self preservation habilities
+    - [x] Handle deleted registered users and deregister those when identified
  - [x] Message Auto Deletion:
     - [x] Configurable through the `MESSAGE_TIMEOUT_IN_MINUTES` environment variable. Default is `2`.
     - [x] Feature can be toggled through the `MESSAGE_TIMEOUT_ENABLED` environment variable. Default is `true`.
