@@ -105,13 +105,14 @@ export const createContextMiddleware = ({ config }: Props) => {
             const member = await ctx.getChatMember(userId);
             return createMemberMention(member.user, true);
           } catch (err) {
-            if (err.code === 400) {
-              if (err.message.includes('user not found')) {
-                ctx.logger.warn(
-                  `Registered user with id "${userId}" does not exist. Removing user from country "${countryCode}".`
-                );
-                ctx.database.removeMemberFrom(userId, countryCode);
-              }
+            if (
+              err.code === 400 &&
+              err.message.includes('user not found')
+            ) {
+              ctx.logger.warn(
+                `Registered user with id "${userId}" does not exist. Removing user from country "${countryCode}".`
+              );
+              ctx.database.removeMemberFrom(userId, countryCode);
             }
 
             throw err;
