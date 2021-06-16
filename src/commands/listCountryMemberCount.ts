@@ -9,25 +9,34 @@ export const cmdListCountryMemberCount: Middleware<BotContext> = async (
   const i18n = ctx.i18n;
 
   const locationIndex = ctx.database.getLocationIndex();
-  const locationCount = Object.entries(locationIndex)
-    .filter(([, value]) => {
-      return value !== undefined && value.length > 0;
-    })
-    .map(([key, value]) => {
-      const countryCode = key as Alpha2Code;
+  const locations = Object.entries(locationIndex).filter(
+    ([, userIds]) => {
+      return userIds !== undefined && userIds.length > 0;
+    }
+  ) as [Alpha2Code, number[]][];
+
+  const locationCount = locations
+    .map(([countryCode, userIds]) => {
       const countryName = getCountryNameForCountryCode(countryCode);
-      const count = value?.length || 0;
+      const count = userIds.length;
 
       return `${countryName}: ${count}`;
     })
     .sort((a, b) => a.localeCompare(b));
 
-  if (locationCount.length === 0)
+  const totalCount = locations.reduce((prev, [, userIds]) => {
+    return prev + userIds.length;
+  }, 0);
+
+  if (locationCount.length === 0) {
     return ctx.replyWithAutoDestructiveMessage(
       i18n.t('listing.noMembers', {
         mention: ctx.safeUser.mention,
       })
     );
+  }
 
-  return ctx.replyWithMarkdown(locationCount.join('\n'));
+  return ctx.replyWithMarkdown(
+    [...locationCount, `\nTotal: ${totalCount}`].join('\n')
+  );
 };

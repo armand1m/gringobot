@@ -9,14 +9,21 @@ export const cmdRankCountryMemberCount: Middleware<BotContext> = async (
   const i18n = ctx.i18n;
 
   const locationIndex = ctx.database.getLocationIndex();
-  const locationCount = Object.entries(locationIndex)
-    .filter(([, value]) => {
-      return value !== undefined && value.length > 0;
-    })
-    .map(([key, value]) => {
-      const countryCode = key as Alpha2Code;
+
+  const locations = Object.entries(locationIndex).filter(
+    ([, userIds]) => {
+      return userIds !== undefined && userIds.length > 0;
+    }
+  ) as [Alpha2Code, number[]][];
+
+  const totalCount = locations.reduce((prev, [, userIds]) => {
+    return prev + userIds.length;
+  }, 0);
+
+  const locationCount = locations
+    .map(([countryCode, userIds]) => {
       const countryName = getCountryNameForCountryCode(countryCode);
-      const count = value?.length || 0;
+      const count = userIds.length;
 
       return { countryName, count };
     })
@@ -45,5 +52,7 @@ export const cmdRankCountryMemberCount: Middleware<BotContext> = async (
     return `${rank}. ${countryName}: ${count}`;
   });
 
-  return ctx.replyWithMarkdown(locationCountRank.join('\n'));
+  return ctx.replyWithMarkdown(
+    [...locationCountRank, `\nTotal: ${totalCount}`].join('\n')
+  );
 };
