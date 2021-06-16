@@ -1,7 +1,6 @@
 import { Middleware } from 'telegraf';
 import { markdown } from 'telegram-format';
 import { BotContext } from '../context';
-import { createMemberMention } from '../member';
 import {
   getCountryCodeForText,
   getCountryNameForCountryCode,
@@ -32,14 +31,7 @@ export const cmdFindMembersAt: Middleware<BotContext> = async (
     );
   }
 
-  const memberIds = ctx.database.getMembersAt(countryCode);
-  const members = await Promise.all(
-    memberIds.map(async (userId) => {
-      const member = await ctx.getChatMember(userId);
-      return createMemberMention(member.user, true);
-    })
-  );
-
+  const members = await ctx.fetchMembersMentionList(countryCode);
   const hasNoMembers = members.length === 0;
 
   const message = hasNoMembers

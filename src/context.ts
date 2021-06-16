@@ -1,3 +1,4 @@
+import { Alpha2Code } from 'i18n-iso-countries';
 import pino from 'pino';
 import { Context } from 'telegraf';
 import TelegrafI18n from 'telegraf-i18n';
@@ -13,6 +14,9 @@ export interface BotContext extends Context {
   config: Config;
   database: DatabaseInstance;
   loadDatabase: () => Promise<DatabaseInstance>;
+  fetchMembersMentionList: (
+    countryCode: Alpha2Code
+  ) => Promise<string[]>;
   replyWithAutoDestructiveMessage: (
     markdownMessage: string,
     options?: AutoDestructiveMessageOptions
