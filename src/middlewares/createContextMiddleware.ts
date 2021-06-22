@@ -96,14 +96,15 @@ export const createContextMiddleware = ({ config }: Props) => {
     };
 
     const fetchMembersMentionList = async (
-      countryCode: Alpha2Code
+      countryCode: Alpha2Code,
+      silenced: boolean = false
     ) => {
       const memberIds = ctx.database.getMembersAt(countryCode);
       const membersFetchResult = await Promise.allSettled(
         memberIds.map(async (userId) => {
           try {
             const member = await ctx.getChatMember(userId);
-            return createMemberMention(member.user, true);
+            return createMemberMention(member.user, silenced);
           } catch (err) {
             if (
               err.code === 400 &&
