@@ -31,7 +31,10 @@ export const cmdFindMembersAt: Middleware<BotContext> = async (
     );
   }
 
-  const members = await ctx.fetchMembersMentionList(countryCode);
+  const members = await ctx.fetchMembersMentionList(
+    countryCode,
+    true
+  );
   const hasNoMembers = members.length === 0;
 
   const message = hasNoMembers

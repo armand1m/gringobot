@@ -15,7 +15,8 @@ export interface BotContext extends Context {
   database: DatabaseInstance;
   loadDatabase: () => Promise<DatabaseInstance>;
   fetchMembersMentionList: (
-    countryCode: Alpha2Code
+    countryCode: Alpha2Code,
+    silenced?: boolean
   ) => Promise<string[]>;
   replyWithAutoDestructiveMessage: (
     markdownMessage: string,
