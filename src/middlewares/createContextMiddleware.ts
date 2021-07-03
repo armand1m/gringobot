@@ -28,35 +28,31 @@ const messageDeletionIntervals: MessageDeletionIntervals = {};
 
 export const createContextMiddleware = ({ config }: Props) => {
   const middleware: Middleware<BotContext> = async (ctx, next) => {
-    /**
-     * telegraf-i18n uses the user session to determine
-     * which locale to use. This basically forces
-     * all answers to be sent in ptbr.
-     **/
-    ctx.i18n.locale('ptbr');
-
     const chatId = ctx?.chat?.id;
 
     if (!chatId) {
-      if (!ctx.reply) {
-        return;
-      }
-
-      return ctx.reply(
-        'GringoBot does not support this type of chat.'
+      ctx.logger.error(
+        'Chat ID is missing from event. This event is not repliable.'
       );
+      console.log(ctx);
+      return;
     }
 
     if (!ctx.from) {
-      if (!ctx.reply) {
-        /**
-         * This is not a message, but an event from the group
-         * For now we can ignore it.
-         */
-        return;
-      }
+      ctx.logger.error(
+        'User is missing from event. This event is not repliable.'
+      );
+      console.log(ctx);
+      return;
+    }
 
-      return ctx.reply(ctx.i18n.t('failedToIdentifyUser'));
+    if (config.chatsWithForcedPortuguese.includes(chatId)) {
+      /**
+       * telegraf-i18n uses the user session to determine
+       * which locale to use. This basically forces
+       * all answers to be sent in ptbr.
+       **/
+      ctx.i18n.locale('ptbr');
     }
 
     const logger = ctx.logger.child({ source: 'database' });

@@ -34,6 +34,13 @@ const ConfigSchema = yup.object({
   localesPath: yup.string().default('./locales'),
   messageTimeoutInMinutes: yup.number().integer().default(2),
   messageTimeoutEnabled: yup.boolean().default(true),
+  helpCommandEnabled: yup.boolean().default(false),
+  chatsWithCyrillicBlockEnabled: yup
+    .array(yup.number().integer())
+    .default([]),
+  chatsWithForcedPortuguese: yup
+    .array(yup.number().integer())
+    .default([]),
 });
 
 export const loadConfiguration = async () => {
@@ -46,6 +53,17 @@ export const loadConfiguration = async () => {
       ? process.env.MESSAGE_TIMEOUT_ENABLED === 'true'
       : undefined,
     messageTimeoutInMinutes: process.env.MESSAGE_TIMEOUT_IN_MINUTES,
+    helpCommandEnabled: process.env.HELP_COMMAND_ENABLED
+      ? process.env.HELP_COMMAND_ENABLED === 'true'
+      : undefined,
+    chatsWithCyrillicBlockEnabled: process.env
+      .CHATS_WITH_CYRILLIC_BLOCK_ENABLED
+      ? process.env.CHATS_WITH_CYRILLIC_BLOCK_ENABLED.split(',')
+      : undefined,
+    chatsWithForcedPortuguese: process.env
+      .CHATS_WITH_FORCED_PORTUGUESE
+      ? process.env.CHATS_WITH_FORCED_PORTUGUESE.split(',')
+      : undefined,
   };
 
   const config = await ConfigSchema.validate(unsafeConfig);
