@@ -10,7 +10,9 @@ export const cmdDeregisterMemberFrom: Middleware<BotContext> = async (
   ctx
 ) => {
   const i18n = ctx.i18n;
-  const unsafeCountryName = markdown.escape(ctx.command.args ?? '');
+  const unsafeCountryName = markdown
+    .escape(ctx.command.args ?? '')
+    .trim();
 
   if (!unsafeCountryName) {
     return ctx.replyWithAutoDestructiveMessage(

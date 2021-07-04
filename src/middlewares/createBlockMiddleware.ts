@@ -8,7 +8,13 @@ export const createBlockMiddleware = () => {
     const newChatMember = (ctx.message as any)
       ?.new_chat_member as User;
 
-    if (!newChatMember) {
+    const chatId = ctx?.chat?.id;
+
+    if (!newChatMember || !chatId) {
+      return next();
+    }
+
+    if (!ctx.config.chatsWithCyrillicBlockEnabled.includes(chatId)) {
       return next();
     }
 

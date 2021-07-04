@@ -40,7 +40,10 @@ const main = async () => {
     })
   );
 
-  bot.command(CommandAliases[Command.Help], cmdHelp);
+  if (config.helpCommandEnabled) {
+    bot.command(CommandAliases[Command.Help], cmdHelp);
+  }
+
   bot.command(CommandAliases[Command.FindMember], cmdFindMember);
   bot.command(CommandAliases[Command.PingAdmins], cmdPingAdmins);
   bot.command(CommandAliases[Command.PingMembersAt], cmdPingMemberAt);
