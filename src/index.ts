@@ -25,7 +25,7 @@ const main = async () => {
   const bot = new Telegraf<BotContext>(config.botToken);
 
   const i18n = new TelegrafI18n({
-    defaultLanguage: 'ptbr',
+    defaultLanguage: 'en',
     allowMissing: false,
     directory: path.resolve(process.cwd(), config.localesPath),
   });
