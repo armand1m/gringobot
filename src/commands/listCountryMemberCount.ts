@@ -1,5 +1,6 @@
 import { Alpha2Code } from 'i18n-iso-countries';
 import { Middleware } from 'telegraf';
+import { countryCodeEmoji } from 'country-code-emoji';
 import { BotContext } from '../context';
 import { getCountryNameForCountryCode } from '../countries';
 
@@ -18,9 +19,10 @@ export const cmdListCountryMemberCount: Middleware<BotContext> = async (
   const locationCount = locations
     .map(([countryCode, userIds]) => {
       const countryName = getCountryNameForCountryCode(countryCode);
+      const countryFlagEmoji = countryCodeEmoji(countryCode);
       const count = userIds.length;
 
-      return `${countryName}: ${count}`;
+      return `${countryFlagEmoji} ${countryName}: ${count}`;
     })
     .sort((a, b) => a.localeCompare(b));
 

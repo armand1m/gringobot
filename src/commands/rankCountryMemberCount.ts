@@ -1,5 +1,6 @@
 import { Alpha2Code } from 'i18n-iso-countries';
 import { Middleware } from 'telegraf';
+import { countryCodeEmoji } from 'country-code-emoji';
 import { BotContext } from '../context';
 import { getCountryNameForCountryCode } from '../countries';
 
@@ -23,9 +24,10 @@ export const cmdRankCountryMemberCount: Middleware<BotContext> = async (
   const locationCount = locations
     .map(([countryCode, userIds]) => {
       const countryName = getCountryNameForCountryCode(countryCode);
+      const countryFlagEmoji = countryCodeEmoji(countryCode);
       const count = userIds.length;
 
-      return { countryName, count };
+      return { countryName, countryFlagEmoji, count };
     })
     .sort((a, b) => {
       const c = b.count - a.count;
@@ -47,9 +49,9 @@ export const cmdRankCountryMemberCount: Middleware<BotContext> = async (
 
   // Standard competition ranking ("1224" ranking)
   const locationCountRank = locationCount.map((countryAndCounts) => {
-    const { countryName, count } = countryAndCounts;
+    const { countryName, countryFlagEmoji, count } = countryAndCounts;
     const rank = counts.indexOf(count) + 1;
-    return `${rank}. ${countryName}: ${count}`;
+    return `${rank}. ${countryFlagEmoji} ${countryName}: ${count}`;
   });
 
   return ctx.replyWithMarkdown(
