@@ -32,13 +32,13 @@ const main = async () => {
 
   bot.use(i18n.middleware());
   bot.use(createLoggerMiddleware({ logger }));
-  bot.use(createBlockMiddleware());
   bot.use(createCommandMiddleware());
   bot.use(
     createContextMiddleware({
       config,
     })
   );
+  bot.use(createBlockMiddleware());
 
   if (config.helpCommandEnabled) {
     bot.command(CommandAliases[Command.Help], cmdHelp);
