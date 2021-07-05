@@ -1,0 +1,15 @@
+location:
+  noMembersAtLocation: "${mention} There are no members registered in the location '${country}'."
+  membersAtLocation: "${mention} These members are registered in the location '${country}': ${members}"
+  memberRegisteredAtLocation: "${mention} You registered at '${country}'. You'll receive a notification when someone pings members from this location."
+  memberDeregisteredFromLocation: "${mention} You deregistered from the location '${country}'."
+  memberNotFoundAnywhere: "${mention} You're not registered anywhere."
+  foundMemberAt: "${mention} Found you registered at these locations: ${locations}"
+errors:
+  failedToIdentifyUser: "Couldn't identify the user. Command failed."
+  memberAlreadyRegistered: "${mention} You're already registered at this location."
+  noCountryProvided: "${mention} No location was specified. Specify the [country Alpha2 code](https://en.wikipedia.org/wiki/ISO_3166-2) _(like 'NL' or 'PT')_ or the name of the country in English _('The Netherlands', 'Germany')_ after the command."
+  failedToIdentifyCountry: "${mention} couldn't identify the code for the specified country '${countryName}'. Try using the [country Alpha2 code](https://en.wikipedia.org/wiki/ISO_3166-2) instead."
+  failedToFetchContent: "${mention} Failed to find the content you're looking for."
+listing:
+  noMembers: "${mention} There are no members registered."
