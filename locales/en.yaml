@@ -1,7 +1,7 @@
 location:
   noMembersAtLocation: "${mention} There are no members registered in the location '${country}'."
   membersAtLocation: "${mention} These members are registered in the location '${country}': ${members}"
-  memberRegisteredAtLocation: "${mention} You registered at '${country}'. You'll receive a notification when someone pings members from this location."
+  memberRegisteredAtLocation: "${mention} You registered at '${country}'. You'll receive a notification when someone ping members from this location."
   memberDeregisteredFromLocation: "${mention} You deregistered from the location '${country}'."
   memberNotFoundAnywhere: "${mention} You're not registered anywhere."
   foundMemberAt: "${mention} Found you registered at these locations: ${locations}"
