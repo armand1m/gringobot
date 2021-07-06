@@ -29,7 +29,6 @@ export const createBlockMiddleware = () => {
           `suspicious user with id ${newChatMember.id} was kicked`
         );
         ctx.logger.warn(newChatMember);
-        return next();
       } catch (err) {
         ctx.logger.error(
           `failed to kick user with id ${newChatMember.id}.`
