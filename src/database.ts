@@ -8,7 +8,13 @@ import { Alpha2Code } from 'i18n-iso-countries';
 
 interface DatabaseSchema {
   locationIndex: Partial<Record<Alpha2Code, number[]>>;
+  remoteIndex: Partial<Record<number, RemoteEntry>>;
   autoDeleteMessages: Record<string, number>;
+}
+
+interface RemoteEntry {
+  to: Alpha2Code;
+  from: Alpha2Code;
 }
 
 export interface DatabaseInstance {
@@ -30,10 +36,14 @@ export interface DatabaseInstance {
   addAutoDeleteMessage: (messageId: number) => Promise<void>;
   getAutoDeleteMessages: () => DatabaseSchema['autoDeleteMessages'];
   removeAutoDeleteMessage: (messageId: number) => Promise<void>;
+  addRemoteMember: (userId: number, fromCountryCode: Alpha2Code, toCountryCode: Alpha2Code) => Promise<void>;
+  hasRemoteMemberRegistered: (userId: number) => boolean;
+  getRemoteMembersFrom: (countryCode: Alpha2Code) => RemoteEntry[];
 }
 
 const emptyDatabase: DatabaseSchema = {
   locationIndex: {},
+  remoteIndex: [],
   autoDeleteMessages: {},
 };
 
@@ -90,6 +100,29 @@ export const createDatabase = async (
       } else {
         await collection.get(countryCode).push(userId).write();
       }
+    },
+    addRemoteMember: async (userId, fromCountryCode, toCountryCode) => {
+      const collection = db.get('remoteIndex');
+      const currentState = collection.value();
+
+      if (currentState[userId] === undefined){
+        await collection.assign({
+          ...currentState,
+          [userId]: {from: fromCountryCode, to: toCountryCode}
+        })
+        .write()
+      }
+    },
+    hasRemoteMemberRegistered: (userId) => {
+      const collection = db.get('remoteIndex');
+      const members = collection.keys() || [];
+      return members.includes(userId.toString()) as unknown as boolean;
+    },
+    getRemoteMembersFrom: (countryCode) => {
+      const collection = db.get('remoteIndex').find({from: countryCode});
+      const members = collection.keys() || [];
+
+      return members
     },
     getMembersAt: (code) => {
       const collection = db.get('locationIndex').get(code);
