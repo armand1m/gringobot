@@ -8,11 +8,12 @@ import { Alpha2Code } from 'i18n-iso-countries';
 
 interface DatabaseSchema {
   locationIndex: Partial<Record<Alpha2Code, number[]>>;
-  remoteIndex: Partial<Record<number, RemoteEntry>>;
+  remoteIndex: Record<number, RemoteEntry>;
   autoDeleteMessages: Record<string, number>;
 }
 
 interface RemoteEntry {
+  id: number;
   to: Alpha2Code;
   from: Alpha2Code;
 }
@@ -38,12 +39,13 @@ export interface DatabaseInstance {
   removeAutoDeleteMessage: (messageId: number) => Promise<void>;
   addRemoteMember: (userId: number, fromCountryCode: Alpha2Code, toCountryCode: Alpha2Code) => Promise<void>;
   hasRemoteMemberRegistered: (userId: number) => boolean;
-  getRemoteMembersFrom: (countryCode: Alpha2Code) => RemoteEntry[];
+  getRemoteMembersFrom: (countryCode: Alpha2Code) => Partial<Record<number, RemoteEntry>>;
+  getRemoteMembersTo: (countryCode: Alpha2Code) => Partial<Record<number, RemoteEntry>>;
 }
 
 const emptyDatabase: DatabaseSchema = {
   locationIndex: {},
-  remoteIndex: [],
+  remoteIndex: {},
   autoDeleteMessages: {},
 };
 
@@ -115,12 +117,19 @@ export const createDatabase = async (
     },
     hasRemoteMemberRegistered: (userId) => {
       const collection = db.get('remoteIndex');
-      const members = collection.keys() || [];
-      return members.includes(userId.toString()) as unknown as boolean;
+      const members = collection.value() || {};
+
+      return Object.keys(members).includes(userId.toString())
     },
     getRemoteMembersFrom: (countryCode) => {
-      const collection = db.get('remoteIndex').find({from: countryCode});
-      const members = collection.keys() || [];
+      const collection = db.get('remoteIndex')
+      const members = collection.value() || [];
+
+      return members
+    },
+    getRemoteMembersTo: (countryCode) => {
+      const collection = db.get('remoteIndex')
+      const members = collection.value() || [];
 
       return members
     },

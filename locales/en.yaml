@@ -13,3 +13,5 @@ errors:
   failedToFetchContent: "${mention} Failed to find the content you're looking for."
 listing:
   noMembers: "${mention} There are no members registered."
+remote:
+  remoteMemberRegistered: "${mention} You registered as remote from ${countryFrom} to ${countryTo}. You'll receive a notification when someone pings remote members for these two countries."

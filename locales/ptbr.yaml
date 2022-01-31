@@ -13,3 +13,5 @@ errors:
   failedToFetchContent: "${mention} nao pude buscar o conteudo que voce procura. Tente outro assunto ou topico."
 listing:
   noMembers: "${mention} Não existem pessoas registradas."
+remote:
+  remoteMemberRegistered: "${mention} Você se registrou como remoto do ${countryFom} para ${countryTo}. Você receberá uma notificação sempre que alguém procurar informações sobre esta localização."

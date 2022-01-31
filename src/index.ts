@@ -18,6 +18,7 @@ import { createContextMiddleware } from './middlewares/createContextMiddleware';
 import { createCommandMiddleware } from './middlewares/createCommandMiddleware';
 import { createBlockMiddleware } from './middlewares/createBlockMiddleware';
 import { createLoggerMiddleware } from './middlewares/createLoggerMiddleware';
+import { cmdRegisterRemoteMember } from './commands/registerRemoteMember';
 
 const main = async () => {
   const config = await loadConfiguration();
@@ -66,6 +67,10 @@ const main = async () => {
   bot.command(
     CommandAliases[Command.DeregisterMemberFrom],
     cmdDeregisterMemberFrom
+  );
+  bot.command(
+    CommandAliases[Command.RegisterRemoteMember],
+    cmdRegisterRemoteMember
   );
 
   process.once('SIGINT', () => bot.stop('SIGINT'));

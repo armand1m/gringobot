@@ -10,6 +10,9 @@ export enum Command {
   PingAdmins = 'ping_admins',
   FindMember = 'find_member',
   Help = 'help',
+  RegisterRemoteMember = 'register_remote_member',
+  FindRemoteMemberTo = 'find_remote_member_to',
+  FindRemoteMemberFrom = 'find_remote_member_from'
 }
 
 enum PortugueseCommandAlias {
@@ -50,6 +53,10 @@ const DefaultCommandDescriptions: Record<Command, string> = {
   [Command.PingAdmins]: 'Ping all admins.',
   [Command.FindMember]: 'Find all locations you are registered to.',
   [Command.Help]: 'Help about various subjects.',
+  [Command.FindRemoteMemberFrom]: 'test',
+  [Command.FindRemoteMemberTo]: 'test',
+  [Command.RegisterRemoteMember]: 'test'
+  
 };
 
 const CommandDescriptionMap: Record<string, string> = {
@@ -138,4 +145,7 @@ export const CommandAliases: Record<Command, string[]> = {
     EnglishCommandAlias.RankCountryMemberCount,
   ],
   [Command.Help]: [Command.Help, PortugueseCommandAlias.Help],
+  [Command.FindRemoteMemberFrom]: [Command.FindRemoteMemberFrom],
+  [Command.FindRemoteMemberTo]: [Command.FindRemoteMemberTo],
+  [Command.RegisterRemoteMember]: [Command.RegisterRemoteMember]
 };
