@@ -27,6 +27,9 @@ export interface DatabaseInstance {
     userId: number,
     countryCode: Alpha2Code
   ) => Promise<void>;
+  removeRemoteMember: (
+    userId: number,
+  ) => Promise<void>;
   getMembersAt: (countryCode: Alpha2Code) => number[];
   hasMemberRegistered: (
     userId: number,
@@ -41,6 +44,7 @@ export interface DatabaseInstance {
   hasRemoteMemberRegistered: (userId: number) => boolean;
   getRemoteMembersFrom: (countryCode: Alpha2Code) => Partial<Record<number, RemoteEntry>>;
   getRemoteMembersTo: (countryCode: Alpha2Code) => Partial<Record<number, RemoteEntry>>;
+  getAllRemoteMembers: () => Partial<Record<number, RemoteEntry>>;
 }
 
 const emptyDatabase: DatabaseSchema = {
@@ -82,6 +86,11 @@ export const createDatabase = async (
     removeMemberFrom: async (userId, countryCode) => {
       const collection = db.get('locationIndex').get(countryCode);
       await collection.pull(userId).write();
+    },
+    removeRemoteMember: async (userId) => {
+      const collection = db.get('remoteIndex')
+
+      collection.unset(userId).write()
     },
     hasMemberRegistered: (userId, countryCode) => {
       const collection = db.get('locationIndex').get(countryCode);
@@ -125,9 +134,28 @@ export const createDatabase = async (
       const collection = db.get('remoteIndex')
       const members = collection.value() || [];
 
-      return members
+      const filteredMembers = Object.entries(members).filter(([key, value]) => {
+        if (value["from"] !== undefined) {
+          return value["from"] === countryCode
+        }
+        return false
+      })
+
+      return Object.fromEntries(filteredMembers)
     },
     getRemoteMembersTo: (countryCode) => {
+      const collection = db.get('remoteIndex')
+      const members = collection.value() || [];
+
+      const filteredMembers = Object.entries(members).filter(([key, value]) => {
+        if (value["to"] !== undefined) {
+          return value["to"] === countryCode
+        }
+        return false
+      })
+      return Object.fromEntries(filteredMembers)
+    },
+    getAllRemoteMembers: () => {
       const collection = db.get('remoteIndex')
       const members = collection.value() || [];
 

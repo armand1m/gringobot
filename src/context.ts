@@ -18,6 +18,9 @@ export interface BotContext extends Context {
     countryCode: Alpha2Code,
     silenced?: boolean
   ) => Promise<string[]>;
+  fetchRemoteMembersMentionList: (
+    silenced?: boolean
+  ) => Promise<string[]>;
   replyWithAutoDestructiveMessage: (
     markdownMessage: string,
     options?: AutoDestructiveMessageOptions

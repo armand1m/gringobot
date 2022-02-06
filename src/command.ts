@@ -11,6 +11,8 @@ export enum Command {
   FindMember = 'find_member',
   Help = 'help',
   RegisterRemoteMember = 'register_remote_member',
+  DeregisterRemoteMember = 'deregister_remote_member',
+  PingRemote = 'ping_remote',
   FindRemoteMemberTo = 'find_remote_member_to',
   FindRemoteMemberFrom = 'find_remote_member_from'
 }
@@ -53,9 +55,11 @@ const DefaultCommandDescriptions: Record<Command, string> = {
   [Command.PingAdmins]: 'Ping all admins.',
   [Command.FindMember]: 'Find all locations you are registered to.',
   [Command.Help]: 'Help about various subjects.',
-  [Command.FindRemoteMemberFrom]: 'test',
-  [Command.FindRemoteMemberTo]: 'test',
-  [Command.RegisterRemoteMember]: 'test'
+  [Command.FindRemoteMemberFrom]: 'Find members that are remote from a country',
+  [Command.FindRemoteMemberTo]: 'Find members that are remote to a country',
+  [Command.RegisterRemoteMember]: 'Register you as a remote member',
+  [Command.DeregisterRemoteMember]: 'Deregister you from the remote members',
+  [Command.PingRemote]: 'Ping remote remembers'
   
 };
 
@@ -147,5 +151,7 @@ export const CommandAliases: Record<Command, string[]> = {
   [Command.Help]: [Command.Help, PortugueseCommandAlias.Help],
   [Command.FindRemoteMemberFrom]: [Command.FindRemoteMemberFrom],
   [Command.FindRemoteMemberTo]: [Command.FindRemoteMemberTo],
-  [Command.RegisterRemoteMember]: [Command.RegisterRemoteMember]
+  [Command.RegisterRemoteMember]: [Command.RegisterRemoteMember],
+  [Command.DeregisterRemoteMember]: [Command.DeregisterRemoteMember],
+  [Command.PingRemote]: [Command.PingRemote]
 };
