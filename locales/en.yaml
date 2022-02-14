@@ -11,10 +11,11 @@ errors:
   noCountryProvided: "${mention} No location was specified. Specify the [country Alpha2 code](https://en.wikipedia.org/wiki/ISO_3166-2) _(like 'NL' or 'PT')_ or the name of the country in English _('The Netherlands', 'Germany')_ after the command."
   failedToIdentifyCountry: "${mention} couldn't identify the code for the specified country '${countryName}'. Try using the [country Alpha2 code](https://en.wikipedia.org/wiki/ISO_3166-2) instead."
   failedToFetchContent: "${mention} Failed to find the content you're looking for."
+  unknown: "${mention} A problem occurred."
 listing:
   noMembers: "${mention} There are no members registered."
 remote:
   remoteMemberRegistered: "${mention} You registered as remote from ${countryFrom} to ${countryTo}. You'll receive a notification when someone pings remote members for these two countries."
-  memberDeregisteredFromLocation: "${mention} You deregistered yourself as remote."
+  memberDeregistered: "${mention} You deregistered yourself as remote."
   members: "${mention} These members are registered as remote: ${members}"
   noMembers: "${mention} There are no members registered as remote." 
