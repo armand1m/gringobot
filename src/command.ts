@@ -10,6 +10,11 @@ export enum Command {
   PingAdmins = 'ping_admins',
   FindMember = 'find_member',
   Help = 'help',
+  RegisterRemoteMember = 'register_remote_member',
+  DeregisterRemoteMember = 'deregister_remote_member',
+  PingRemote = 'ping_remote',
+  FindRemoteMemberTo = 'find_remote_member_to',
+  FindRemoteMemberFrom = 'find_remote_member_from',
 }
 
 enum PortugueseCommandAlias {
@@ -20,8 +25,13 @@ enum PortugueseCommandAlias {
   PingMembersAt = 'alo',
   PingAdmins = 'eita',
   DeregisterMemberFrom = 'sair',
+  DeregisterRemoteMember = 'sair_remoto',
   FindMember = 'ondeestou',
   Help = 'ajuda',
+  PingRemote = 'remoto',
+  RegisterRemoteMember = 'estou_remoto',
+  FindRemoteMemberTo = 'quem_remoto_para',
+  FindRemoteMemberFrom = 'quem_remoto_do',
 }
 
 enum EnglishCommandAlias {
@@ -50,6 +60,14 @@ const DefaultCommandDescriptions: Record<Command, string> = {
   [Command.PingAdmins]: 'Ping all admins.',
   [Command.FindMember]: 'Find all locations you are registered to.',
   [Command.Help]: 'Help about various subjects.',
+  [Command.FindRemoteMemberFrom]:
+    'Find members that are remote from a country',
+  [Command.FindRemoteMemberTo]:
+    'Find members that are remote to a country',
+  [Command.RegisterRemoteMember]: 'Register you as a remote member',
+  [Command.DeregisterRemoteMember]:
+    'Deregister you from the remote members',
+  [Command.PingRemote]: 'Ping remote members',
 };
 
 const CommandDescriptionMap: Record<string, string> = {
@@ -87,6 +105,14 @@ const CommandDescriptionMap: Record<string, string> = {
     'Classifica os países baseado no número de pessoas registradas.',
   [PortugueseCommandAlias.Help]:
     'Ajuda sobre assuntos e tópicos diversos.',
+  [PortugueseCommandAlias.DeregisterRemoteMember]:
+    'Remove você da lista de remoto',
+  [PortugueseCommandAlias.FindRemoteMemberFrom]:
+    'Encontra pessoas que estão trabalhando remoto de um país',
+  [PortugueseCommandAlias.FindRemoteMemberTo]:
+    'Encontra pessoas que estão trabalhando remoto para um país',
+  [PortugueseCommandAlias.RegisterRemoteMember]:
+    'Se registra como trabalhando remoto',
 };
 
 export const CommandDescriptions: BotCommand[] = Object.keys(
@@ -138,4 +164,24 @@ export const CommandAliases: Record<Command, string[]> = {
     EnglishCommandAlias.RankCountryMemberCount,
   ],
   [Command.Help]: [Command.Help, PortugueseCommandAlias.Help],
+  [Command.FindRemoteMemberFrom]: [
+    Command.FindRemoteMemberFrom,
+    PortugueseCommandAlias.FindRemoteMemberFrom,
+  ],
+  [Command.FindRemoteMemberTo]: [
+    Command.FindRemoteMemberTo,
+    PortugueseCommandAlias.FindRemoteMemberTo,
+  ],
+  [Command.RegisterRemoteMember]: [
+    Command.RegisterRemoteMember,
+    PortugueseCommandAlias.FindRemoteMemberFrom,
+  ],
+  [Command.DeregisterRemoteMember]: [
+    Command.DeregisterRemoteMember,
+    PortugueseCommandAlias.DeregisterRemoteMember,
+  ],
+  [Command.PingRemote]: [
+    Command.PingRemote,
+    PortugueseCommandAlias.PingRemote,
+  ],
 };

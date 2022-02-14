@@ -8,7 +8,14 @@ import { Alpha2Code } from 'i18n-iso-countries';
 
 interface DatabaseSchema {
   locationIndex: Partial<Record<Alpha2Code, number[]>>;
+  remoteIndex: Record<number, RemoteEntry>;
   autoDeleteMessages: Record<string, number>;
+}
+
+interface RemoteEntry {
+  id: number;
+  to: Alpha2Code;
+  from: Alpha2Code;
 }
 
 export interface DatabaseInstance {
@@ -20,6 +27,7 @@ export interface DatabaseInstance {
     userId: number,
     countryCode: Alpha2Code
   ) => Promise<void>;
+  removeRemoteMember: (userId: number) => Promise<void>;
   getMembersAt: (countryCode: Alpha2Code) => number[];
   hasMemberRegistered: (
     userId: number,
@@ -30,10 +38,24 @@ export interface DatabaseInstance {
   addAutoDeleteMessage: (messageId: number) => Promise<void>;
   getAutoDeleteMessages: () => DatabaseSchema['autoDeleteMessages'];
   removeAutoDeleteMessage: (messageId: number) => Promise<void>;
+  addRemoteMember: (
+    userId: number,
+    fromCountryCode: Alpha2Code,
+    toCountryCode: Alpha2Code
+  ) => Promise<void>;
+  hasRemoteMemberRegistered: (userId: number) => boolean;
+  getRemoteMembersFrom: (
+    countryCode: Alpha2Code
+  ) => Partial<Record<number, RemoteEntry>>;
+  getRemoteMembersTo: (
+    countryCode: Alpha2Code
+  ) => Partial<Record<number, RemoteEntry>>;
+  getAllRemoteMembers: () => Partial<Record<number, RemoteEntry>>;
 }
 
 const emptyDatabase: DatabaseSchema = {
   locationIndex: {},
+  remoteIndex: {},
   autoDeleteMessages: {},
 };
 
@@ -71,6 +93,11 @@ export const createDatabase = async (
       const collection = db.get('locationIndex').get(countryCode);
       await collection.pull(userId).write();
     },
+    removeRemoteMember: async (userId) => {
+      const collection = db.get('remoteIndex');
+
+      collection.unset(userId).write();
+    },
     hasMemberRegistered: (userId, countryCode) => {
       const collection = db.get('locationIndex').get(countryCode);
       const members = collection.value() || [];
@@ -90,6 +117,58 @@ export const createDatabase = async (
       } else {
         await collection.get(countryCode).push(userId).write();
       }
+    },
+    addRemoteMember: async (
+      userId,
+      fromCountryCode,
+      toCountryCode
+    ) => {
+      const collection = db.get('remoteIndex');
+      const currentState = collection.value();
+
+      if (currentState[userId] === undefined) {
+        await collection
+          .assign({
+            ...currentState,
+            [userId]: { from: fromCountryCode, to: toCountryCode },
+          })
+          .write();
+      }
+    },
+    hasRemoteMemberRegistered: (userId) => {
+      const collection = db.get('remoteIndex');
+      const members = collection.value() || {};
+
+      return Object.keys(members).includes(userId.toString());
+    },
+    getRemoteMembersFrom: (countryCode) => {
+      const collection = db.get('remoteIndex');
+      const members = collection.value() || [];
+
+      const filteredMembers = Object.entries(members).filter(
+        ([key, value]) => {
+          return value['to'] === countryCode;
+        }
+      );
+
+      return Object.fromEntries(filteredMembers);
+    },
+    getRemoteMembersTo: (countryCode) => {
+      const collection = db.get('remoteIndex');
+      const members = collection.value() || [];
+
+      const filteredMembers = Object.entries(members).filter(
+        ([key, value]) => {
+          return value['to'] === countryCode;
+        }
+      );
+      return Object.fromEntries(filteredMembers);
+    },
+    getAllRemoteMembers: () => {
+      const collection = db.get('remoteIndex');
+      const members = collection.value() || [];
+
+      return members;
     },
     getMembersAt: (code) => {
       const collection = db.get('locationIndex').get(code);

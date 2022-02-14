@@ -98,22 +98,7 @@ export const createContextMiddleware = ({ config }: Props) => {
       const memberIds = ctx.database.getMembersAt(countryCode);
       const membersFetchResult = await Promise.allSettled(
         memberIds.map(async (userId) => {
-          try {
-            const member = await ctx.getChatMember(userId);
-            return createMemberMention(member.user, silenced);
-          } catch (err) {
-            if (
-              err.code === 400 &&
-              err.message.includes('user not found')
-            ) {
-              ctx.logger.warn(
-                `Registered user with id "${userId}" does not exist. Removing user from country "${countryCode}".`
-              );
-              ctx.database.removeMemberFrom(userId, countryCode);
-            }
-
-            throw err;
-          }
+          return fetchMemberMention(userId, silenced);
         })
       );
 
@@ -128,7 +113,50 @@ export const createContextMiddleware = ({ config }: Props) => {
       return members;
     };
 
+    const fetchRemoteMembersMentionList = async (
+      silenced: boolean = false
+    ) => {
+      const allMembers = ctx.database.getAllRemoteMembers();
+
+      const membersFetchResult = await Promise.allSettled(
+        Object.keys(allMembers).map(async (userId) => {
+          return fetchMemberMention(parseInt(userId), silenced);
+        })
+      );
+
+      withRejected(membersFetchResult).forEach(({ reason }) => {
+        ctx.logger.warn(reason);
+      });
+
+      const members = withFulfilled(membersFetchResult).map(
+        ({ value }) => value
+      );
+      return members;
+    };
+
+    const fetchMemberMention = async (
+      userId: number,
+      silenced: boolean
+    ) => {
+      try {
+        const member = await ctx.getChatMember(Number(userId));
+        return createMemberMention(member.user, silenced);
+      } catch (err: any) {
+        if (
+          err.code === 400 &&
+          err.message.includes('user not found')
+        ) {
+          ctx.logger.warn(
+            `Registered user with id "${userId}" does not exist. Removing user remote.`
+          );
+          ctx.database.removeRemoteMember(Number(userId));
+        }
+        throw err;
+      }
+    };
+
     ctx.fetchMembersMentionList = fetchMembersMentionList;
+    ctx.fetchRemoteMembersMentionList = fetchRemoteMembersMentionList;
     ctx.replyWithAutoDestructiveMessage = replyWithAutoDestructiveMessage;
     ctx.loadDatabase = loadDatabase;
     ctx.database = await loadDatabase();

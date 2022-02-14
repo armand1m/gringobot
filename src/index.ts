@@ -18,6 +18,9 @@ import { createContextMiddleware } from './middlewares/createContextMiddleware';
 import { createCommandMiddleware } from './middlewares/createCommandMiddleware';
 import { createBlockMiddleware } from './middlewares/createBlockMiddleware';
 import { createLoggerMiddleware } from './middlewares/createLoggerMiddleware';
+import { cmdRegisterRemoteMember } from './commands/registerRemoteMember';
+import { cmdDeregisterRemoteMember } from './commands/deregisterRemoteMember';
+import { cmdPingRemote } from './commands/pingRemote';
 
 const main = async () => {
   const config = await loadConfiguration();
@@ -67,6 +70,15 @@ const main = async () => {
     CommandAliases[Command.DeregisterMemberFrom],
     cmdDeregisterMemberFrom
   );
+  bot.command(
+    CommandAliases[Command.RegisterRemoteMember],
+    cmdRegisterRemoteMember
+  );
+  bot.command(
+    CommandAliases[Command.DeregisterRemoteMember],
+    cmdDeregisterRemoteMember
+  );
+  bot.command(CommandAliases[Command.PingRemote], cmdPingRemote);
 
   process.once('SIGINT', () => bot.stop('SIGINT'));
   process.once('SIGTERM', () => bot.stop('SIGTERM'));
