@@ -17,12 +17,17 @@ export const cmdRegisterRemoteMember: Middleware<BotContext> = async (
   const countryCodeTo = validateCountry(countries[1], ctx);
 
   if (!countryCodeFrom.countryCode || !countryCodeTo.countryCode) {
-    const errorMessages = [countryCodeFrom.error, countryCodeTo.error]
-      .filter((value) => {
-        return value !== null;
-      })
-      .join(' ');
-    return ctx.replyWithAutoDestructiveMessage(errorMessages);
+    if (countryCodeFrom.error) {
+      return ctx.replyWithAutoDestructiveMessage(
+        countryCodeFrom.error
+      );
+    }
+    if (countryCodeTo.error) {
+      return ctx.replyWithAutoDestructiveMessage(countryCodeTo.error);
+    }
+    return ctx.replyWithAutoDestructiveMessage(
+      i18n.t('errors.unknown', { mention: ctx.safeUser.mention })
+    );
   }
 
   const database = ctx.database;

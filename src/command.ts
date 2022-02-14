@@ -174,7 +174,7 @@ export const CommandAliases: Record<Command, string[]> = {
   ],
   [Command.RegisterRemoteMember]: [
     Command.RegisterRemoteMember,
-    PortugueseCommandAlias.FindRemoteMemberFrom,
+    PortugueseCommandAlias.RegisterRemoteMember,
   ],
   [Command.DeregisterRemoteMember]: [
     Command.DeregisterRemoteMember,
