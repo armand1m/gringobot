@@ -67,7 +67,7 @@ const DefaultCommandDescriptions: Record<Command, string> = {
   [Command.RegisterRemoteMember]: 'Register you as a remote member',
   [Command.DeregisterRemoteMember]:
     'Deregister you from the remote members',
-  [Command.PingRemote]: 'Ping remote remembers',
+  [Command.PingRemote]: 'Ping remote members',
 };
 
 const CommandDescriptionMap: Record<string, string> = {

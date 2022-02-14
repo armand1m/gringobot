@@ -2,9 +2,9 @@ import { Middleware } from 'telegraf';
 import { markdown } from 'telegram-format';
 import { BotContext } from '../context';
 import {
-  getCountryCodeForText,
   getCountryNameForCountryCode,
 } from '../countries';
+import { validateCountry } from '../utils/country';
 
 export const cmdRegisterRemoteMember: Middleware<BotContext> = async (
   ctx
@@ -15,44 +15,17 @@ export const cmdRegisterRemoteMember: Middleware<BotContext> = async (
     .trim()
     .split(' ');
 
-  if (!countries[0]) {
-    return ctx.replyWithAutoDestructiveMessage(
-      i18n.t('errors.noCountryProvided', {
-        mention: ctx.safeUser.mention,
+  const countryCodeTo = validateCountry(countries[0], ctx);
+
+  const countryCodeFrom = validateCountry(countries[1], ctx);
+  if (!countryCodeFrom.countryCode || !countryCodeTo.countryCode) {
+    const errorMessages = [countryCodeFrom.error, countryCodeTo.error]
+      .filter((value) => {
+        return value !== null;
       })
-    );
+      .join(' ');
+    return ctx.replyWithAutoDestructiveMessage(errorMessages);
   }
-
-  const countryCodeTo = getCountryCodeForText(countries[0]);
-
-  if (!countryCodeTo) {
-    return ctx.replyWithAutoDestructiveMessage(
-      i18n.t('errors.failedToIdentifyCountry', {
-        mention: ctx.safeUser.mention,
-        countryName: countries[0],
-      })
-    );
-  }
-
-  if (!countries[1]) {
-    return ctx.replyWithAutoDestructiveMessage(
-      i18n.t('errors.noCountryProvided', {
-        mention: ctx.safeUser.mention,
-      })
-    );
-  }
-
-  const countryCodeFrom = getCountryCodeForText(countries[1]);
-
-  if (!countryCodeFrom) {
-    return ctx.replyWithAutoDestructiveMessage(
-      i18n.t('errors.failedToIdentifyCountry', {
-        mention: ctx.safeUser.mention,
-        countryName: countries[1],
-      })
-    );
-  }  
-
   const database = ctx.database;
   const userId = ctx.safeUser.id;
 
@@ -66,15 +39,19 @@ export const cmdRegisterRemoteMember: Middleware<BotContext> = async (
 
   await database.addRemoteMember(
     userId,
-    countryCodeFrom,
-    countryCodeTo
+    countryCodeFrom.countryCode,
+    countryCodeTo.countryCode
   );
 
   return ctx.replyWithAutoDestructiveMessage(
     i18n.t('remote.remoteMemberRegistered', {
       mention: ctx.safeUser.mention,
-      countryTo: getCountryNameForCountryCode(countryCodeTo),
-      countryFrom: getCountryNameForCountryCode(countryCodeFrom)
+      countryTo: getCountryNameForCountryCode(
+        countryCodeTo.countryCode
+      ),
+      countryFrom: getCountryNameForCountryCode(
+        countryCodeFrom.countryCode
+      ),
     })
   );
 };
