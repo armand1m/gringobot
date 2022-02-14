@@ -15,7 +15,7 @@ errors:
 listing:
   noMembers: "${mention} Não existem pessoas registradas."
 remote:
-  remoteMemberRegistered: "${mention} Você se registrou como remoto do ${countryFom} para ${countryTo}. Você receberá uma notificação sempre que alguém procurar informações sobre esta localização."
+  remoteMemberRegistered: "${mention} Você se registrou como remoto do ${countryFrom} para ${countryTo}. Você receberá uma notificação sempre que alguém procurar informações sobre esta localização."
   memberDeregistered: "${mention} Você se removeu da lista de remotos."
   members: "${mention} Estas pessoas estão registradas como remoto: ${members}"
   noMembers: "${mention} Não há pessoas registradas como remoto."
