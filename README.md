@@ -35,6 +35,18 @@ The bot currently replies in Portuguese by default, and parses names of countrie
  - [x] Rank countries by number of members
     - [x] English: `/rank_country_member_count`, `/rank`
     - [x] Portuguese: `/classificacao`
+ - [x] Register as Remote Member:
+    - [x] English: `/register_remote_member <from> <to>`
+    - [x] Portuguese: `/estou_remoto <from> <to>`
+ - [x] Deregister as Remote Member:
+    - [x] English: `/deregister_remote_member`
+    - [x] Portuguese: `/sair_remoto`
+ - [x] Find remote member working from a location:
+    - [x] English: `/find_remote_member_from BR`
+    - [x] Portuguese: `/quem_remoto_do BR`
+ - [x] Find remote member working for a location:
+    - [x] English: `/find_remote_member_to CA `
+    - [x] Portuguese: `/quem_remoto_para CA`
  - [x] Help Sections:
     - [x] English: `/help <subject> <topic>`
     - [x] Portuguese: `/ajuda <assunto> <topico>`
@@ -51,6 +63,8 @@ The bot currently replies in Portuguese by default, and parses names of countrie
       - `/leave`
       - `/find_member`
       - `/register_member_at`
+      - `/register_remote_member`
+      - `/deregister_remote_member`
       - `/find_members_at` (only if no members are found)
       - `/ping_members_at` (only if no members are found)
       - `/list_country_member_count` (only if no members are registered)

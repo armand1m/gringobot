@@ -14,8 +14,6 @@ export const cmdRegisterMemberAt: Middleware<BotContext> = async (
     .escape(ctx.command.args ?? '')
     .trim();
 
-  
-
   if (!unsafeCountryName) {
     return ctx.replyWithAutoDestructiveMessage(
       i18n.t('errors.noCountryProvided', {

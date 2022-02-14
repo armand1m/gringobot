@@ -1,9 +1,7 @@
 import { Middleware } from 'telegraf';
 import { markdown } from 'telegram-format';
 import { BotContext } from '../context';
-import {
-  getCountryNameForCountryCode,
-} from '../countries';
+import { getCountryNameForCountryCode } from '../countries';
 import { validateCountry } from '../utils/country';
 
 export const cmdRegisterRemoteMember: Middleware<BotContext> = async (
@@ -15,9 +13,9 @@ export const cmdRegisterRemoteMember: Middleware<BotContext> = async (
     .trim()
     .split(' ');
 
-  const countryCodeTo = validateCountry(countries[0], ctx);
+  const countryCodeFrom = validateCountry(countries[0], ctx);
+  const countryCodeTo = validateCountry(countries[1], ctx);
 
-  const countryCodeFrom = validateCountry(countries[1], ctx);
   if (!countryCodeFrom.countryCode || !countryCodeTo.countryCode) {
     const errorMessages = [countryCodeFrom.error, countryCodeTo.error]
       .filter((value) => {
@@ -26,6 +24,7 @@ export const cmdRegisterRemoteMember: Middleware<BotContext> = async (
       .join(' ');
     return ctx.replyWithAutoDestructiveMessage(errorMessages);
   }
+
   const database = ctx.database;
   const userId = ctx.safeUser.id;
 
