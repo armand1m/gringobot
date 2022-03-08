@@ -6,6 +6,7 @@ location:
   memberNotFoundAnywhere: "${mention} You're not registered anywhere."
   foundMemberAt: "${mention} Found you registered at these locations: ${locations}"
 errors:
+  remoteMemberRegisterSyntaxError: "${mention} I need to know where you work from and where your company is located (ex.: 'BR' 'ES')."
   failedToIdentifyUser: "Couldn't identify the user. Command failed."
   memberAlreadyRegistered: "${mention} You're already registered at this location."
   noCountryProvided: "${mention} No location was specified. Specify the [country Alpha2 code](https://en.wikipedia.org/wiki/ISO_3166-2) _(like 'NL' or 'PT')_ or the name of the country in English _('The Netherlands', 'Germany')_ after the command."
