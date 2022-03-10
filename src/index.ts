@@ -14,6 +14,7 @@ import { cmdRegisterMemberAt } from './commands/registerMemberAt';
 import { cmdDeregisterMemberFrom } from './commands/deregisterMemberFrom';
 import { cmdListCountryMemberCount } from './commands/listCountryMemberCount';
 import { cmdRankCountryMemberCount } from './commands/rankCountryMemberCount';
+import { cmdRankCountryRemoteMemberCount } from './commands/rankCountryRemoteMemberCount';
 import { createContextMiddleware } from './middlewares/createContextMiddleware';
 import { createCommandMiddleware } from './middlewares/createCommandMiddleware';
 import { createBlockMiddleware } from './middlewares/createBlockMiddleware';
@@ -57,6 +58,10 @@ const main = async () => {
   bot.command(
     CommandAliases[Command.RankCountryMemberCount],
     cmdRankCountryMemberCount
+  );
+  bot.command(
+    CommandAliases[Command.RankCountryRemoteMemberCount],
+    cmdRankCountryRemoteMemberCount
   );
   bot.command(
     CommandAliases[Command.FindMembersAt],
