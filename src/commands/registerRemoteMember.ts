@@ -13,6 +13,12 @@ export const cmdRegisterRemoteMember: Middleware<BotContext> = async (
     .trim()
     .split(' ');
 
+  if (countries.length !== 2) {
+    return ctx.replyWithAutoDestructiveMessage(
+      i18n.t('errors.remoteMemberRegisterSyntaxError', { mention: ctx.safeUser.mention })
+    );
+  }
+
   const countryCodeFrom = validateCountry(countries[0], ctx);
   const countryCodeTo = validateCountry(countries[1], ctx);
 
