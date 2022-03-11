@@ -4,6 +4,7 @@ export enum Command {
   RegisterMemberAt = 'register_member_at',
   ListCountryMemberCount = 'list_country_member_count',
   RankCountryMemberCount = 'rank_country_member_count',
+  RankCountryRemoteMemberCount = 'rank_country_remote_member_count',
   FindMembersAt = 'find_members_at',
   PingMembersAt = 'ping_members_at',
   DeregisterMemberFrom = 'deregister_member_from',
@@ -21,6 +22,7 @@ enum PortugueseCommandAlias {
   RegisterMemberAt = 'estou',
   ListCountryMemberCount = 'quantos',
   RankCountryMemberCount = 'classificacao',
+  RankCountryRemoteMemberCount = 'classificacao_remoto',
   FindMembersAt = 'quem',
   PingMembersAt = 'alo',
   PingAdmins = 'eita',
@@ -38,6 +40,7 @@ enum EnglishCommandAlias {
   RegisterMemberAt = 'imat',
   ListCountryMemberCount = 'list',
   RankCountryMemberCount = 'rank',
+  RankCountryRemoteMemberCount = 'rank_remote',
   FindMembersAt = 'whoat',
   PingMembersAt = 'ping',
   PingAdmins = 'admins',
@@ -51,6 +54,8 @@ const DefaultCommandDescriptions: Record<Command, string> = {
     'List a member count per country.',
   [Command.RankCountryMemberCount]:
     'Ranks countries based on number of members',
+  [Command.RankCountryRemoteMemberCount]:
+    'Ranks countries based on remote members given a base country.',
   [Command.FindMembersAt]:
     'Find members living in a specific location.',
   [Command.PingMembersAt]:
@@ -78,6 +83,8 @@ const CommandDescriptionMap: Record<string, string> = {
     DefaultCommandDescriptions[Command.ListCountryMemberCount],
   [EnglishCommandAlias.RankCountryMemberCount]:
     DefaultCommandDescriptions[Command.RankCountryMemberCount],
+  [EnglishCommandAlias.RankCountryRemoteMemberCount]:
+    DefaultCommandDescriptions[Command.RankCountryRemoteMemberCount],
   [EnglishCommandAlias.RegisterMemberAt]:
     DefaultCommandDescriptions[Command.RegisterMemberAt],
   [EnglishCommandAlias.DeregisterMemberFrom]:
@@ -103,6 +110,8 @@ const CommandDescriptionMap: Record<string, string> = {
     'Lista a quantidade de membros por países.',
   [PortugueseCommandAlias.RankCountryMemberCount]:
     'Classifica os países baseado no número de pessoas registradas.',
+  [PortugueseCommandAlias.RankCountryRemoteMemberCount]:
+    'Classifica os países baseado no número de pessoas remotas registradas para um determinado país base.',
   [PortugueseCommandAlias.Help]:
     'Ajuda sobre assuntos e tópicos diversos.',
   [PortugueseCommandAlias.DeregisterRemoteMember]:
@@ -162,6 +171,11 @@ export const CommandAliases: Record<Command, string[]> = {
     Command.RankCountryMemberCount,
     PortugueseCommandAlias.RankCountryMemberCount,
     EnglishCommandAlias.RankCountryMemberCount,
+  ],
+  [Command.RankCountryRemoteMemberCount]: [
+    Command.RankCountryRemoteMemberCount,
+    PortugueseCommandAlias.RankCountryRemoteMemberCount,
+    EnglishCommandAlias.RankCountryRemoteMemberCount,
   ],
   [Command.Help]: [Command.Help, PortugueseCommandAlias.Help],
   [Command.FindRemoteMemberFrom]: [

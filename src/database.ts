@@ -12,7 +12,7 @@ interface DatabaseSchema {
   autoDeleteMessages: Record<string, number>;
 }
 
-interface RemoteEntry {
+export interface RemoteEntry {
   id: number;
   to: Alpha2Code;
   from: Alpha2Code;
@@ -147,7 +147,7 @@ export const createDatabase = async (
 
       const filteredMembers = Object.entries(members).filter(
         ([key, value]) => {
-          return value['to'] === countryCode;
+          return value['from'] === countryCode;
         }
       );
 
