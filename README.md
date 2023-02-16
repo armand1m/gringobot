@@ -54,6 +54,9 @@ The bot currently replies in Portuguese by default, and parses names of countrie
     - [x] Portuguese: `/ajuda <assunto> <topico>`
  - [x] Ping all admins:
     - [x] `/ping_admins`, `/admins`, `/eita`
+ - [x] Kick user:
+    - [x] `/kick`
+      - Only works by replying a message from the user to be kicked.
  - [x] Self preservation habilities
     - [x] Handle deleted registered users and deregister those when identified
  - [x] Message Auto Deletion:

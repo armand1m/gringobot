@@ -3,12 +3,19 @@ import { markdown } from 'telegram-format';
 import { Middleware } from 'telegraf';
 import { countryCodeEmoji } from 'country-code-emoji';
 import { BotContext } from '../context';
-import { getCountryCodeForText, getCountryNameForCountryCode } from '../countries';
+import {
+  getCountryCodeForText,
+  getCountryNameForCountryCode,
+} from '../countries';
 
-export const cmdRankCountryRemoteMemberCount: Middleware<BotContext> = async (ctx) => {
+export const cmdRankCountryRemoteMemberCount: Middleware<BotContext> = async (
+  ctx
+) => {
   const i18n = ctx.i18n;
 
-  const unsafeBaseCountryCode = markdown.escape(ctx.command.args ?? '').trim();
+  const unsafeBaseCountryCode = markdown
+    .escape(ctx.command.args ?? '')
+    .trim();
 
   if (!unsafeBaseCountryCode) {
     return ctx.replyWithAutoDestructiveMessage(
@@ -29,13 +36,21 @@ export const cmdRankCountryRemoteMemberCount: Middleware<BotContext> = async (ct
     );
   }
 
-  const remoteMembersFromCountry = ctx.database.getRemoteMembersFrom(countryCode);
+  const remoteMembersFromCountry = ctx.database.getRemoteMembersFrom(
+    countryCode
+  );
   let totalCount = 0;
   const rankMap = {} as {
-    [key in Alpha2Code]: { count: number; countryName?: string; countryFlagEmoji: string };
+    [key in Alpha2Code]: {
+      count: number;
+      countryName?: string;
+      countryFlagEmoji: string;
+    };
   };
 
-  for (const [_, record] of Object.entries(remoteMembersFromCountry)) {
+  for (const [_, record] of Object.entries(
+    remoteMembersFromCountry
+  )) {
     totalCount += 1;
     if (record) {
       const { to } = record;
@@ -62,15 +77,24 @@ export const cmdRankCountryRemoteMemberCount: Middleware<BotContext> = async (ct
   const sortedRank = Object.entries(rankMap).sort(([, a], [, b]) => {
     const c = b.count - a.count;
     if (c) return c;
-    if (a.countryName && b.countryName) return a.countryName.localeCompare(b.countryName);
+    if (a.countryName && b.countryName)
+      return a.countryName.localeCompare(b.countryName);
     return 0;
   });
 
   // Standard competition ranking ("1224" ranking)
-  const sortedRankOutput = sortedRank.map(([, countryAndCounts], i) => {
-    const { countryName, countryFlagEmoji, count } = countryAndCounts;
-    return `${i + 1}. ${countryFlagEmoji} ${countryName}: ${count}`;
-  });
+  const sortedRankOutput = sortedRank.map(
+    ([, countryAndCounts], i) => {
+      const {
+        countryName,
+        countryFlagEmoji,
+        count,
+      } = countryAndCounts;
+      return `${i + 1}. ${countryFlagEmoji} ${countryName}: ${count}`;
+    }
+  );
 
-  return ctx.replyWithMarkdown([...sortedRankOutput, `\nTotal: ${totalCount}`].join('\n'));
+  return ctx.replyWithMarkdown(
+    [...sortedRankOutput, `\nTotal: ${totalCount}`].join('\n')
+  );
 };

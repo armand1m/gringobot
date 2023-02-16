@@ -15,7 +15,9 @@ export const cmdRegisterRemoteMember: Middleware<BotContext> = async (
 
   if (countries.length !== 2) {
     return ctx.replyWithAutoDestructiveMessage(
-      i18n.t('errors.remoteMemberRegisterSyntaxError', { mention: ctx.safeUser.mention })
+      i18n.t('errors.remoteMemberRegisterSyntaxError', {
+        mention: ctx.safeUser.mention,
+      })
     );
   }
 

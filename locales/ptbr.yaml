@@ -6,6 +6,10 @@ location:
   memberNotFoundAnywhere: "${mention} Você ainda há de se registrar em uma localização."
   foundMemberAt: "${mention} Lhe encontrei nestas localizações: ${locations}"
 errors:
+  failedToKickUser: "Falha ao banir usuario por razoes inesperadas."
+  kickOutOfChat: "/kick funciona somente em grupos."
+  mustBeAdminToUseCommand: "Voce deve ser um admin ou ter permissoes para executar esse comando."
+  mentionUserToKick: "Mencione um usuario respondendo a uma mensagem enviada pelo usuario com `/kick` para banir."
   remoteMemberRegisterSyntaxError: "${mention} Preciso saber o país onde voce vive e para onde voce trabalha (ex.: 'BR' 'ES')."
   failedToIdentifyUser: "Não pude identificar o usuário. O comando foi abortado."
   memberAlreadyRegistered: "${mention} Você já tem registro nesta localização."
@@ -20,3 +24,6 @@ remote:
   memberDeregistered: "${mention} Você se removeu da lista de remotos."
   members: "${mention} Estas pessoas estão registradas como remoto: ${members}"
   noMembers: "${mention} Não há pessoas registradas como remoto."
+kick:
+  userGotKicked: "Usuario ${kickedUser} foi banido."
+

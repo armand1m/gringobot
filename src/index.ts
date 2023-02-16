@@ -6,12 +6,16 @@ import { createLogger } from './logger';
 import { loadConfiguration } from './config';
 import { Command, CommandAliases } from './command';
 import { cmdHelp } from './commands/help';
-import { cmdFindMember } from './commands/findMember';
+import { cmdKick } from './commands/kick';
 import { cmdPingAdmins } from './commands/pingAdmins';
+import { cmdPingRemote } from './commands/pingRemote';
 import { cmdPingMemberAt } from './commands/pingMembersAt';
+import { cmdFindMember } from './commands/findMember';
 import { cmdFindMembersAt } from './commands/findMembersAt';
 import { cmdRegisterMemberAt } from './commands/registerMemberAt';
 import { cmdDeregisterMemberFrom } from './commands/deregisterMemberFrom';
+import { cmdRegisterRemoteMember } from './commands/registerRemoteMember';
+import { cmdDeregisterRemoteMember } from './commands/deregisterRemoteMember';
 import { cmdListCountryMemberCount } from './commands/listCountryMemberCount';
 import { cmdRankCountryMemberCount } from './commands/rankCountryMemberCount';
 import { cmdRankCountryRemoteMemberCount } from './commands/rankCountryRemoteMemberCount';
@@ -19,9 +23,6 @@ import { createContextMiddleware } from './middlewares/createContextMiddleware';
 import { createCommandMiddleware } from './middlewares/createCommandMiddleware';
 import { createBlockMiddleware } from './middlewares/createBlockMiddleware';
 import { createLoggerMiddleware } from './middlewares/createLoggerMiddleware';
-import { cmdRegisterRemoteMember } from './commands/registerRemoteMember';
-import { cmdDeregisterRemoteMember } from './commands/deregisterRemoteMember';
-import { cmdPingRemote } from './commands/pingRemote';
 
 const main = async () => {
   const config = await loadConfiguration();
@@ -84,6 +85,7 @@ const main = async () => {
     cmdDeregisterRemoteMember
   );
   bot.command(CommandAliases[Command.PingRemote], cmdPingRemote);
+  bot.command(CommandAliases[Command.Kick], cmdKick);
 
   process.once('SIGINT', () => bot.stop('SIGINT'));
   process.once('SIGTERM', () => bot.stop('SIGTERM'));
