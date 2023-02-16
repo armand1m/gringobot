@@ -12,3 +12,4 @@ scripts
 .gcloud-credentials
 .git
 .gitignore
+fly.toml

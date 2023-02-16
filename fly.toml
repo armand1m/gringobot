@@ -1,0 +1,28 @@
+# fly.toml file generated for gringobot on 2023-02-16T13:26:50Z
+
+app = "gringobot"
+kill_signal = "SIGINT"
+kill_timeout = 5
+processes = []
+
+[env]
+  NODE_ENV="production"
+  DATA_PATH="./data"
+  LOCALES_PATH="./locales"
+
+[mounts]
+  source="gringobot_data"
+  destination="/app/data"
+
+[experimental]
+  auto_rollback = true
+
+[[services]]
+  http_checks = []
+  processes = ["app"]
+  protocol = "tcp"
+  script_checks = []
+  [services.concurrency]
+    hard_limit = 25
+    soft_limit = 20
+    type = "connections"
