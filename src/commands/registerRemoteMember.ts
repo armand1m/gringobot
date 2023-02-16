@@ -28,9 +28,11 @@ export const cmdRegisterRemoteMember: Middleware<BotContext> = async (
         countryCodeFrom.error
       );
     }
+
     if (countryCodeTo.error) {
       return ctx.replyWithAutoDestructiveMessage(countryCodeTo.error);
     }
+
     return ctx.replyWithAutoDestructiveMessage(
       i18n.t('errors.unknown', { mention: ctx.safeUser.mention })
     );
