@@ -1,4 +1,5 @@
 import { Middleware } from 'telegraf';
+import { User } from 'typegram';
 import { BotContext } from '../context';
 
 export const cmdKick: Middleware<BotContext> = async (ctx) => {
@@ -25,10 +26,10 @@ export const cmdKick: Middleware<BotContext> = async (ctx) => {
     );
   }
 
-  // Check if a user was mentioned in the message
-  // @ts-ignore
-  const mentionedUser =
+  const mentionedUser: User =
+    // @ts-ignore
     ctx.message?.reply_to_message?.from ??
+    // @ts-ignore
     ctx.message?.entities?.[0]?.user;
 
   if (!mentionedUser) {
