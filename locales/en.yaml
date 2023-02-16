@@ -6,6 +6,10 @@ location:
   memberNotFoundAnywhere: "${mention} You're not registered anywhere."
   foundMemberAt: "${mention} Found you registered at these locations: ${locations}"
 errors:
+  failedToKickUser: "Failed to kick the user due to unexpected reasons."
+  kickOutOfChat: "/kick command only works in a chat."
+  mustBeAdminToUseCommand: "You must be an admin to use this command."
+  mentionUserToKick: "Please mention a user to be kicked. You can do so by replying their message."
   remoteMemberRegisterSyntaxError: "${mention} I need to know where you work from and where your company is located (ex.: 'BR' 'ES')."
   failedToIdentifyUser: "Couldn't identify the user. Command failed."
   memberAlreadyRegistered: "${mention} You're already registered at this location."
@@ -20,3 +24,6 @@ remote:
   memberDeregistered: "${mention} You deregistered yourself as remote."
   members: "${mention} These members are registered as remote: ${members}"
   noMembers: "${mention} There are no members registered as remote." 
+kick:
+  userGotKicked: "User ${kickedUser} has been kicked from the group."
+

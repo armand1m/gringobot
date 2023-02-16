@@ -1,9 +1,11 @@
 import { BotContext } from '../context';
 import { cmdRegisterRemoteMember } from './registerRemoteMember';
 
-type DeepPartial<T> = T extends object ? {
-    [P in keyof T]?: DeepPartial<T[P]>;
-} : T;
+type DeepPartial<T> = T extends object
+  ? {
+      [P in keyof T]?: DeepPartial<T[P]>;
+    }
+  : T;
 
 beforeEach(() => {
   jest.restoreAllMocks();
@@ -30,9 +32,11 @@ it('replies with syntax error when command is issued with single location', asyn
   // Then
   expect(tMock).toBeCalledWith(
     'errors.remoteMemberRegisterSyntaxError',
-    expect.objectContaining({ mention: 'oi' }),
+    expect.objectContaining({ mention: 'oi' })
   );
-  expect(replyWithAutoDestructiveMessageMock).toHaveBeenCalledWith('dummy');
+  expect(replyWithAutoDestructiveMessageMock).toHaveBeenCalledWith(
+    'dummy'
+  );
 });
 
 it('replies with syntax error when command is issued with no locations', async () => {
@@ -56,7 +60,9 @@ it('replies with syntax error when command is issued with no locations', async (
   // Then
   expect(tMock).toBeCalledWith(
     'errors.remoteMemberRegisterSyntaxError',
-    expect.objectContaining({ mention: 'oi' }),
+    expect.objectContaining({ mention: 'oi' })
   );
-  expect(replyWithAutoDestructiveMessageMock).toHaveBeenCalledWith('dummy');
+  expect(replyWithAutoDestructiveMessageMock).toHaveBeenCalledWith(
+    'dummy'
+  );
 });

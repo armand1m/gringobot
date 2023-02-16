@@ -16,6 +16,7 @@ export enum Command {
   PingRemote = 'ping_remote',
   FindRemoteMemberTo = 'find_remote_member_to',
   FindRemoteMemberFrom = 'find_remote_member_from',
+  Kick = 'kick',
 }
 
 enum PortugueseCommandAlias {
@@ -73,6 +74,7 @@ const DefaultCommandDescriptions: Record<Command, string> = {
   [Command.DeregisterRemoteMember]:
     'Deregister you from the remote members',
   [Command.PingRemote]: 'Ping remote members',
+  [Command.Kick]: 'Ban mentioned user (Admin only)',
 };
 
 const CommandDescriptionMap: Record<string, string> = {
@@ -198,4 +200,5 @@ export const CommandAliases: Record<Command, string[]> = {
     Command.PingRemote,
     PortugueseCommandAlias.PingRemote,
   ],
+  [Command.Kick]: [Command.Kick],
 };

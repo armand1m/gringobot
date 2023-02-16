@@ -40,7 +40,9 @@ const remoteMembers: Partial<Record<number, RemoteEntry>> = {
 
 it('returns rank for a list', async () => {
   // Prepare
-  const getRemoteMembersFromMock = jest.fn().mockReturnValue(remoteMembers);
+  const getRemoteMembersFromMock = jest
+    .fn()
+    .mockReturnValue(remoteMembers);
   const replyWithMarkdownMock = jest.fn();
   const ctx = {
     database: { getRemoteMembersFrom: getRemoteMembersFromMock },
@@ -55,6 +57,10 @@ it('returns rank for a list', async () => {
   await (cmdRankCountryRemoteMemberCount as any)(ctx);
 
   // Then
-  expect(replyWithMarkdownMock).toHaveBeenCalledWith(expect.stringMatching(/^1\. 🇪🇸 Espanha \(ES\): 2(.|\n)*$/));
-  expect(replyWithMarkdownMock).toHaveBeenCalledWith(expect.stringMatching(/.*Total: 6/));
+  expect(replyWithMarkdownMock).toHaveBeenCalledWith(
+    expect.stringMatching(/^1\. 🇪🇸 Espanha \(ES\): 2(.|\n)*$/)
+  );
+  expect(replyWithMarkdownMock).toHaveBeenCalledWith(
+    expect.stringMatching(/.*Total: 6/)
+  );
 });
