@@ -9,7 +9,6 @@ FROM node:16-alpine
 WORKDIR /app
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/build ./build 
-COPY --from=builder /app/locales ./locales
 
 ENTRYPOINT ["node"]
 CMD ["/app/build/index.js"] 

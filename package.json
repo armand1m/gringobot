@@ -14,7 +14,9 @@
     "country-code-emoji": "^2.3.0",
     "dotenv": "^8.2.0",
     "got": "^11.8.2",
+    "handlebars": "^4.7.7",
     "i18n-iso-countries": "^6.5.0",
+    "js-yaml": "^4.1.0",
     "lowdb": "^1.0.0",
     "mkdirp": "^1.0.4",
     "pino": "^6.11.1",
@@ -29,6 +31,7 @@
   "devDependencies": {
     "@types/async-retry": "^1.4.2",
     "@types/jest": "^26.0.22",
+    "@types/js-yaml": "^4.0.5",
     "@types/lowdb": "^1.0.9",
     "@types/mkdirp": "^1.0.1",
     "@types/node": "^14.14.32",
@@ -37,7 +40,7 @@
     "nodemon": "^2.0.7",
     "prettier": "^2.2.1",
     "ts-jest": "^26.5.4",
-    "ts-node": "^9.1.1",
+    "ts-node": "^10.9.1",
     "typescript": "^4.2.3"
   },
   "scripts": {

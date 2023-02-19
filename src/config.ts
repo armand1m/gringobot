@@ -31,7 +31,6 @@ const ConfigSchema = yup.object({
   dataPath: yup
     .string()
     .required(createRequiredErrMessage('DATA_PATH')),
-  localesPath: yup.string().default('./locales'),
   messageTimeoutInMinutes: yup.number().integer().default(2),
   messageTimeoutEnabled: yup.boolean().default(true),
   helpCommandEnabled: yup.boolean().default(false),
@@ -48,7 +47,6 @@ export const loadConfiguration = async () => {
     environment: process.env.NODE_ENV,
     botToken: process.env.BOT_TOKEN,
     dataPath: process.env.DATA_PATH,
-    localesPath: process.env.LOCALES_PATH,
     messageTimeoutEnabled: process.env.MESSAGE_TIMEOUT_ENABLED
       ? process.env.MESSAGE_TIMEOUT_ENABLED === 'true'
       : undefined,

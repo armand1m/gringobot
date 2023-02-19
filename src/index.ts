@@ -1,6 +1,4 @@
-import path from 'path';
 import { Telegraf } from 'telegraf';
-import TelegrafI18n from 'telegraf-i18n';
 import { BotContext } from './context';
 import { createLogger } from './logger';
 import { loadConfiguration } from './config';
@@ -23,19 +21,14 @@ import { createContextMiddleware } from './middlewares/createContextMiddleware';
 import { createCommandMiddleware } from './middlewares/createCommandMiddleware';
 import { createBlockMiddleware } from './middlewares/createBlockMiddleware';
 import { createLoggerMiddleware } from './middlewares/createLoggerMiddleware';
+import { createTranslateMiddleware } from './middlewares/createTranslateMiddleware';
 
 const main = async () => {
   const config = await loadConfiguration();
   const logger = createLogger(config.environment);
   const bot = new Telegraf<BotContext>(config.botToken);
 
-  const i18n = new TelegrafI18n({
-    defaultLanguage: 'en',
-    allowMissing: false,
-    directory: path.resolve(process.cwd(), config.localesPath),
-  });
-
-  bot.use(i18n.middleware());
+  bot.use(createTranslateMiddleware());
   bot.use(createLoggerMiddleware({ logger }));
   bot.use(createCommandMiddleware());
   bot.use(

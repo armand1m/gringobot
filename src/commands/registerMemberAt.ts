@@ -16,7 +16,7 @@ export const cmdRegisterMemberAt: Middleware<BotContext> = async (
 
   if (!unsafeCountryName) {
     return ctx.replyWithAutoDestructiveMessage(
-      i18n.t('errors.noCountryProvided', {
+      i18n.t('errors', 'noCountryProvided', {
         mention: ctx.safeUser.mention,
       })
     );
@@ -26,7 +26,7 @@ export const cmdRegisterMemberAt: Middleware<BotContext> = async (
 
   if (!countryCode) {
     return ctx.replyWithAutoDestructiveMessage(
-      i18n.t('errors.failedToIdentifyCountry', {
+      i18n.t('errors', 'failedToIdentifyCountry', {
         mention: ctx.safeUser.mention,
         countryName: unsafeCountryName,
       })
@@ -38,7 +38,7 @@ export const cmdRegisterMemberAt: Middleware<BotContext> = async (
 
   if (database.hasMemberRegistered(userId, countryCode)) {
     return ctx.replyWithAutoDestructiveMessage(
-      i18n.t('errors.memberAlreadyRegistered', {
+      i18n.t('errors', 'memberAlreadyRegistered', {
         mention: ctx.safeUser.mention,
       })
     );
@@ -47,9 +47,9 @@ export const cmdRegisterMemberAt: Middleware<BotContext> = async (
   await database.addMemberLocation(userId, countryCode);
 
   return ctx.replyWithAutoDestructiveMessage(
-    i18n.t('location.memberRegisteredAtLocation', {
+    i18n.t('location', 'memberRegisteredAtLocation', {
       mention: ctx.safeUser.mention,
-      country: getCountryNameForCountryCode(countryCode),
+      countryName: getCountryNameForCountryCode(countryCode),
     })
   );
 };

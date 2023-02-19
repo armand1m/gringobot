@@ -9,7 +9,7 @@ export const cmdDeregisterRemoteMember: Middleware<BotContext> = async (
   await ctx.database.removeRemoteMember(ctx.safeUser.id);
 
   return ctx.replyWithAutoDestructiveMessage(
-    i18n.t('remote.memberDeregistered', {
+    i18n.t('remote', 'memberDeregistered', {
       mention: ctx.safeUser.mention,
     })
   );

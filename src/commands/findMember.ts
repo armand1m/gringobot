@@ -8,10 +8,10 @@ export const cmdFindMember: Middleware<BotContext> = async (ctx) => {
 
   const message =
     locations.length === 0
-      ? i18n.t('location.memberNotFoundAnywhere', {
+      ? i18n.t('location', 'memberNotFoundAnywhere', {
           mention: ctx.safeUser.mention,
         })
-      : i18n.t('location.foundMemberAt', {
+      : i18n.t('location', 'foundMemberAt', {
           mention: ctx.safeUser.mention,
           locations: locations
             .map(getCountryNameForCountryCode)

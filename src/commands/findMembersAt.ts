@@ -16,7 +16,7 @@ export const cmdFindMembersAt: Middleware<BotContext> = async (
 
   if (!unsafeCountryName) {
     return ctx.replyWithAutoDestructiveMessage(
-      i18n.t('errors.noCountryProvided', {
+      i18n.t('errors', 'noCountryProvided', {
         mention: ctx.safeUser.mention,
       })
     );
@@ -26,7 +26,7 @@ export const cmdFindMembersAt: Middleware<BotContext> = async (
 
   if (!countryCode) {
     return ctx.replyWithAutoDestructiveMessage(
-      i18n.t('errors.failedToIdentifyCountry', {
+      i18n.t('errors', 'failedToIdentifyCountry', {
         mention: ctx.safeUser.mention,
         countryName: unsafeCountryName,
       })
@@ -40,14 +40,14 @@ export const cmdFindMembersAt: Middleware<BotContext> = async (
   const hasNoMembers = members.length === 0;
 
   const message = hasNoMembers
-    ? i18n.t('location.noMembersAtLocation', {
+    ? i18n.t('location', 'noMembersAtLocation', {
         mention: ctx.safeUser.mention,
-        country: getCountryNameForCountryCode(countryCode),
+        countryName: getCountryNameForCountryCode(countryCode),
       })
-    : i18n.t('location.membersAtLocation', {
+    : i18n.t('location', 'membersAtLocation', {
         mention: ctx.safeUser.mention,
         members: members.join(', '),
-        country: getCountryNameForCountryCode(countryCode),
+        countryName: getCountryNameForCountryCode(countryCode),
       });
 
   return ctx.replyWithAutoDestructiveMessage(message, {

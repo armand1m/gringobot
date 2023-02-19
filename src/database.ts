@@ -95,12 +95,11 @@ export const createDatabase = async (
     },
     removeRemoteMember: async (userId) => {
       const collection = db.get('remoteIndex');
-
       collection.unset(userId).write();
     },
     hasMemberRegistered: (userId, countryCode) => {
       const collection = db.get('locationIndex').get(countryCode);
-      const members = collection.value() || [];
+      const members = collection.value() ?? [];
       return members.includes(userId);
     },
     addMemberLocation: async (userId, countryCode) => {
@@ -114,9 +113,10 @@ export const createDatabase = async (
             [countryCode]: [userId],
           })
           .write();
-      } else {
-        await collection.get(countryCode).push(userId).write();
+        return;
       }
+
+      await collection.get(countryCode).push(userId).write();
     },
     addRemoteMember: async (
       userId,
@@ -137,16 +137,16 @@ export const createDatabase = async (
     },
     hasRemoteMemberRegistered: (userId) => {
       const collection = db.get('remoteIndex');
-      const members = collection.value() || {};
+      const members = collection.value() ?? {};
 
       return Object.keys(members).includes(userId.toString());
     },
     getRemoteMembersFrom: (countryCode) => {
       const collection = db.get('remoteIndex');
-      const members = collection.value() || [];
+      const members = collection.value() ?? [];
 
       const filteredMembers = Object.entries(members).filter(
-        ([key, value]) => {
+        ([_key, value]) => {
           return value['from'] === countryCode;
         }
       );
@@ -155,10 +155,10 @@ export const createDatabase = async (
     },
     getRemoteMembersTo: (countryCode) => {
       const collection = db.get('remoteIndex');
-      const members = collection.value() || [];
+      const members = collection.value() ?? [];
 
       const filteredMembers = Object.entries(members).filter(
-        ([key, value]) => {
+        ([_key, value]) => {
           return value['to'] === countryCode;
         }
       );
@@ -166,13 +166,13 @@ export const createDatabase = async (
     },
     getAllRemoteMembers: () => {
       const collection = db.get('remoteIndex');
-      const members = collection.value() || [];
+      const members = collection.value() ?? [];
 
       return members;
     },
     getMembersAt: (code) => {
       const collection = db.get('locationIndex').get(code);
-      const members = collection.value() || [];
+      const members = collection.value() ?? [];
       return members;
     },
     findMember: async (userId) => {

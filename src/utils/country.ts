@@ -13,7 +13,7 @@ export const validateCountry = (
 ): CountryValidation => {
   const i18n = ctx.i18n;
   if (!countryName) {
-    const errorMessage = i18n.t('errors.noCountryProvided', {
+    const errorMessage = i18n.t('errors', 'noCountryProvided', {
       mention: ctx.safeUser.mention,
     });
     return { countryCode: null, error: errorMessage };
@@ -22,7 +22,7 @@ export const validateCountry = (
   const countryCode = getCountryCodeForText(countryName);
 
   if (!countryCode) {
-    const errorMessage = i18n.t('errors.failedToIdentifyCountry', {
+    const errorMessage = i18n.t('errors', 'failedToIdentifyCountry', {
       mention: ctx.safeUser.mention,
       countryName: countryName,
     });

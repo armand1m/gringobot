@@ -8,7 +8,7 @@ processes = []
 [env]
   NODE_ENV="production"
   DATA_PATH="./data"
-  LOCALES_PATH="./locales"
+  HELP_COMMAND_ENABLED=false
 
 [mounts]
   source="gringobot_data"

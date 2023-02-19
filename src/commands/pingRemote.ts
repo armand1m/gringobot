@@ -7,10 +7,10 @@ export const cmdPingRemote: Middleware<BotContext> = async (ctx) => {
   const hasNoMembers = remoteMembers.length === 0;
 
   const message = hasNoMembers
-    ? i18n.t('remote.noMembers', {
+    ? i18n.t('remote', 'noMembers', {
         mention: ctx.safeUser.mention,
       })
-    : i18n.t('remote.members', {
+    : i18n.t('remote', 'members', {
         mention: ctx.safeUser.mention,
         members: remoteMembers.join(', '),
       });
