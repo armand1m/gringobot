@@ -31,14 +31,10 @@ const ConfigSchema = yup.object({
   dataPath: yup
     .string()
     .required(createRequiredErrMessage('DATA_PATH')),
-  localesPath: yup.string().default('./locales'),
   messageTimeoutInMinutes: yup.number().integer().default(2),
   messageTimeoutEnabled: yup.boolean().default(true),
   helpCommandEnabled: yup.boolean().default(false),
   chatsWithCyrillicBlockEnabled: yup
-    .array(yup.number().integer())
-    .default([]),
-  chatsWithForcedPortuguese: yup
     .array(yup.number().integer())
     .default([]),
 });
@@ -48,7 +44,6 @@ export const loadConfiguration = async () => {
     environment: process.env.NODE_ENV,
     botToken: process.env.BOT_TOKEN,
     dataPath: process.env.DATA_PATH,
-    localesPath: process.env.LOCALES_PATH,
     messageTimeoutEnabled: process.env.MESSAGE_TIMEOUT_ENABLED
       ? process.env.MESSAGE_TIMEOUT_ENABLED === 'true'
       : undefined,
@@ -59,10 +54,6 @@ export const loadConfiguration = async () => {
     chatsWithCyrillicBlockEnabled: process.env
       .CHATS_WITH_CYRILLIC_BLOCK_ENABLED
       ? process.env.CHATS_WITH_CYRILLIC_BLOCK_ENABLED.split(',')
-      : undefined,
-    chatsWithForcedPortuguese: process.env
-      .CHATS_WITH_FORCED_PORTUGUESE
-      ? process.env.CHATS_WITH_FORCED_PORTUGUESE.split(',')
       : undefined,
   };
 

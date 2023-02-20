@@ -5,6 +5,7 @@ import {
   getCountryCodeForText,
   getCountryNameForCountryCode,
 } from '../countries';
+import { getRandomValues } from '../utils/getRandomCollection';
 
 export const cmdPingMemberAt: Middleware<BotContext> = async (
   ctx
@@ -16,7 +17,7 @@ export const cmdPingMemberAt: Middleware<BotContext> = async (
 
   if (!unsafeCountryName) {
     return ctx.replyWithAutoDestructiveMessage(
-      i18n.t('errors.noCountryProvided', {
+      i18n.t('errors', 'noCountryProvided', {
         mention: ctx.safeUser.mention,
       })
     );
@@ -26,7 +27,7 @@ export const cmdPingMemberAt: Middleware<BotContext> = async (
 
   if (!countryCode) {
     return ctx.replyWithAutoDestructiveMessage(
-      i18n.t('errors.failedToIdentifyCountry', {
+      i18n.t('errors', 'failedToIdentifyCountry', {
         mention: ctx.safeUser.mention,
         countryName: unsafeCountryName,
       })
@@ -34,20 +35,38 @@ export const cmdPingMemberAt: Middleware<BotContext> = async (
   }
 
   const members = await ctx.fetchMembersMentionList(countryCode);
+  const silencedMembers = await ctx.fetchMembersMentionList(
+    countryCode,
+    true
+  );
   const hasNoMembers = members.length === 0;
+  const hasLessThanFiveMembers = members.length < 5;
 
-  const message = hasNoMembers
-    ? i18n.t('location.noMembersAtLocation', {
+  const getMessage = () => {
+    if (hasNoMembers) {
+      return i18n.t('location', 'noMembersAtLocation', {
         mention: ctx.safeUser.mention,
-        country: getCountryNameForCountryCode(countryCode),
-      })
-    : i18n.t('location.membersAtLocation', {
+        countryName: getCountryNameForCountryCode(countryCode),
+      });
+    }
+
+    if (hasLessThanFiveMembers) {
+      return i18n.t('location', 'membersAtLocation', {
         mention: ctx.safeUser.mention,
         members: members.join(', '),
-        country: getCountryNameForCountryCode(countryCode),
+        countryName: getCountryNameForCountryCode(countryCode),
       });
+    }
 
-  return ctx.replyWithAutoDestructiveMessage(message, {
+    return i18n.t('location', 'randomFiveMembersAtLocation', {
+      mention: ctx.safeUser.mention,
+      members: getRandomValues(members, 5).join(', '),
+      silencedMembers: silencedMembers.join(', '),
+      countryName: getCountryNameForCountryCode(countryCode),
+    });
+  };
+
+  return ctx.replyWithAutoDestructiveMessage(getMessage(), {
     deleteReplyMessage: hasNoMembers,
     deleteCommandMessage: hasNoMembers,
   });

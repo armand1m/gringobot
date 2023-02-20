@@ -33,7 +33,7 @@ export const createBlockMiddleware = () => {
         ctx.logger.error(
           `failed to kick user with id ${newChatMember.id}.`
         );
-        ctx.logger.error(err);
+        ctx.logger.error(err as string);
         ctx.logger.error(newChatMember);
       }
     }

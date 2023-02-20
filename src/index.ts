@@ -1,12 +1,11 @@
-import path from 'path';
 import { Telegraf } from 'telegraf';
-import TelegrafI18n from 'telegraf-i18n';
 import { BotContext } from './context';
 import { createLogger } from './logger';
 import { loadConfiguration } from './config';
 import { Command, CommandAliases } from './command';
 import { cmdHelp } from './commands/help';
 import { cmdKick } from './commands/kick';
+import { cmdSetLanguage } from './commands/setLanguage';
 import { cmdPingAdmins } from './commands/pingAdmins';
 import { cmdPingRemote } from './commands/pingRemote';
 import { cmdPingMemberAt } from './commands/pingMembersAt';
@@ -23,19 +22,13 @@ import { createContextMiddleware } from './middlewares/createContextMiddleware';
 import { createCommandMiddleware } from './middlewares/createCommandMiddleware';
 import { createBlockMiddleware } from './middlewares/createBlockMiddleware';
 import { createLoggerMiddleware } from './middlewares/createLoggerMiddleware';
+import { createTranslateMiddleware } from './middlewares/createTranslateMiddleware';
 
 const main = async () => {
   const config = await loadConfiguration();
   const logger = createLogger(config.environment);
   const bot = new Telegraf<BotContext>(config.botToken);
 
-  const i18n = new TelegrafI18n({
-    defaultLanguage: 'en',
-    allowMissing: false,
-    directory: path.resolve(process.cwd(), config.localesPath),
-  });
-
-  bot.use(i18n.middleware());
   bot.use(createLoggerMiddleware({ logger }));
   bot.use(createCommandMiddleware());
   bot.use(
@@ -43,6 +36,7 @@ const main = async () => {
       config,
     })
   );
+  bot.use(createTranslateMiddleware());
   bot.use(createBlockMiddleware());
 
   if (config.helpCommandEnabled) {
@@ -86,6 +80,7 @@ const main = async () => {
   );
   bot.command(CommandAliases[Command.PingRemote], cmdPingRemote);
   bot.command(CommandAliases[Command.Kick], cmdKick);
+  bot.command(CommandAliases[Command.SetLanguage], cmdSetLanguage);
 
   process.once('SIGINT', () => bot.stop('SIGINT'));
   process.once('SIGTERM', () => bot.stop('SIGTERM'));

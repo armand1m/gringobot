@@ -16,7 +16,7 @@ export const cmdDeregisterMemberFrom: Middleware<BotContext> = async (
 
   if (!unsafeCountryName) {
     return ctx.replyWithAutoDestructiveMessage(
-      i18n.t('errors.noCountryProvided', {
+      i18n.t('errors', 'noCountryProvided', {
         mention: ctx.safeUser.mention,
       })
     );
@@ -26,7 +26,7 @@ export const cmdDeregisterMemberFrom: Middleware<BotContext> = async (
 
   if (!countryCode) {
     return ctx.replyWithAutoDestructiveMessage(
-      i18n.t('errors.failedToIdentifyCountry', {
+      i18n.t('errors', 'failedToIdentifyCountry', {
         mention: ctx.safeUser.mention,
         countryName: unsafeCountryName,
       })
@@ -36,9 +36,9 @@ export const cmdDeregisterMemberFrom: Middleware<BotContext> = async (
   await ctx.database.removeMemberFrom(ctx.safeUser.id, countryCode);
 
   return ctx.replyWithAutoDestructiveMessage(
-    i18n.t('location.memberDeregisteredFromLocation', {
+    i18n.t('location', 'memberDeregisteredFromLocation', {
       mention: ctx.safeUser.mention,
-      country: getCountryNameForCountryCode(countryCode),
+      countryName: getCountryNameForCountryCode(countryCode),
     })
   );
 };

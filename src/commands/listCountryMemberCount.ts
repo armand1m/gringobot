@@ -32,7 +32,7 @@ export const cmdListCountryMemberCount: Middleware<BotContext> = async (
 
   if (locationCount.length === 0) {
     return ctx.replyWithAutoDestructiveMessage(
-      i18n.t('listing.noMembers', {
+      i18n.t('listing', 'noMembers', {
         mention: ctx.safeUser.mention,
       })
     );

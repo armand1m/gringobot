@@ -25,6 +25,10 @@ export const cmdHelp: Middleware<BotContext> = async (ctx) => {
     const { body } = await got(getContentUrl(section, topic));
     return ctx.replyWithMarkdown(body);
   } catch (err) {
-    return ctx.reply(ctx.i18n.t('errors.failedToFetchContent'));
+    return ctx.replyWithMarkdown(
+      ctx.i18n.t('errors', 'failedToFetchContent', {
+        mention: ctx.safeUser.mention,
+      })
+    );
   }
 };

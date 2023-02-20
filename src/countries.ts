@@ -18,7 +18,7 @@ export const getCountryNameForCountryCode = (
   countryCode: Alpha2Code
 ) => {
   if (!Countries.isValid(countryCode)) {
-    return undefined;
+    return countryCode;
   }
 
   const name = Countries.getName(countryCode, 'pt');

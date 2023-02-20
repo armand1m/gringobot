@@ -17,6 +17,7 @@ export enum Command {
   FindRemoteMemberTo = 'find_remote_member_to',
   FindRemoteMemberFrom = 'find_remote_member_from',
   Kick = 'kick',
+  SetLanguage = 'set_language',
 }
 
 enum PortugueseCommandAlias {
@@ -47,6 +48,7 @@ enum EnglishCommandAlias {
   PingAdmins = 'admins',
   DeregisterMemberFrom = 'leave',
   FindMember = 'whereami',
+  SetLanguage = 'set_lang',
 }
 
 const DefaultCommandDescriptions: Record<Command, string> = {
@@ -75,6 +77,8 @@ const DefaultCommandDescriptions: Record<Command, string> = {
     'Deregister you from the remote members',
   [Command.PingRemote]: 'Ping remote members',
   [Command.Kick]: 'Ban mentioned user (Admin only)',
+  [Command.SetLanguage]:
+    'Sets the language that GringoBot should use in this (Admin only)',
 };
 
 const CommandDescriptionMap: Record<string, string> = {
@@ -201,4 +205,8 @@ export const CommandAliases: Record<Command, string[]> = {
     PortugueseCommandAlias.PingRemote,
   ],
   [Command.Kick]: [Command.Kick],
+  [Command.SetLanguage]: [
+    Command.SetLanguage,
+    EnglishCommandAlias.SetLanguage,
+  ],
 };

@@ -1,9 +1,9 @@
 import { Alpha2Code } from 'i18n-iso-countries';
 import pino from 'pino';
 import { Context } from 'telegraf';
-import TelegrafI18n from 'telegraf-i18n';
 import { Config } from './config';
 import { DatabaseInstance } from './database';
+import { Translation } from './middlewares/createTranslateMiddleware/translate';
 
 interface AutoDestructiveMessageOptions {
   deleteCommandMessage: boolean;
@@ -14,6 +14,7 @@ export interface BotContext extends Context {
   config: Config;
   database: DatabaseInstance;
   loadDatabase: () => Promise<DatabaseInstance>;
+  checkAdminAccess: () => Promise<boolean>;
   fetchMembersMentionList: (
     countryCode: Alpha2Code,
     silenced?: boolean
@@ -26,7 +27,7 @@ export interface BotContext extends Context {
     options?: AutoDestructiveMessageOptions
   ) => ReturnType<Context['replyWithMarkdown']>;
   logger: pino.Logger;
-  i18n: TelegrafI18n;
+  i18n: Translation;
   safeUser: {
     mention: string;
     id: number;

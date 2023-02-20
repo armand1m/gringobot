@@ -19,7 +19,7 @@ export const cmdRankCountryRemoteMemberCount: Middleware<BotContext> = async (
 
   if (!unsafeBaseCountryCode) {
     return ctx.replyWithAutoDestructiveMessage(
-      i18n.t('errors.noCountryProvided', {
+      i18n.t('errors', 'noCountryProvided', {
         mention: ctx.safeUser.mention,
       })
     );
@@ -29,7 +29,7 @@ export const cmdRankCountryRemoteMemberCount: Middleware<BotContext> = async (
 
   if (!countryCode) {
     return ctx.replyWithAutoDestructiveMessage(
-      i18n.t('errors.failedToIdentifyCountry', {
+      i18n.t('errors', 'failedToIdentifyCountry', {
         mention: ctx.safeUser.mention,
         countryName: unsafeBaseCountryCode,
       })
@@ -68,7 +68,7 @@ export const cmdRankCountryRemoteMemberCount: Middleware<BotContext> = async (
 
   if (totalCount == 0) {
     return ctx.replyWithAutoDestructiveMessage(
-      i18n.t('listing.noMembers', {
+      i18n.t('listing', 'noMembers', {
         mention: ctx.safeUser.mention,
       })
     );

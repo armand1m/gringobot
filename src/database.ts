@@ -5,6 +5,7 @@ import pino from 'pino';
 import low from 'lowdb';
 import FileAsync from 'lowdb/adapters/FileAsync';
 import { Alpha2Code } from 'i18n-iso-countries';
+import { AvailableLocales } from './middlewares/createTranslateMiddleware/translate';
 
 interface DatabaseSchema {
   locationIndex: Partial<Record<Alpha2Code, number[]>>;
@@ -51,6 +52,8 @@ export interface DatabaseInstance {
     countryCode: Alpha2Code
   ) => Partial<Record<number, RemoteEntry>>;
   getAllRemoteMembers: () => Partial<Record<number, RemoteEntry>>;
+  getGroupLanguage: () => Promise<AvailableLocales>;
+  setGroupLanguage: (locale: AvailableLocales) => Promise<void>;
 }
 
 const emptyDatabase: DatabaseSchema = {
@@ -95,12 +98,11 @@ export const createDatabase = async (
     },
     removeRemoteMember: async (userId) => {
       const collection = db.get('remoteIndex');
-
       collection.unset(userId).write();
     },
     hasMemberRegistered: (userId, countryCode) => {
       const collection = db.get('locationIndex').get(countryCode);
-      const members = collection.value() || [];
+      const members = collection.value() ?? [];
       return members.includes(userId);
     },
     addMemberLocation: async (userId, countryCode) => {
@@ -114,9 +116,10 @@ export const createDatabase = async (
             [countryCode]: [userId],
           })
           .write();
-      } else {
-        await collection.get(countryCode).push(userId).write();
+        return;
       }
+
+      await collection.get(countryCode).push(userId).write();
     },
     addRemoteMember: async (
       userId,
@@ -137,16 +140,16 @@ export const createDatabase = async (
     },
     hasRemoteMemberRegistered: (userId) => {
       const collection = db.get('remoteIndex');
-      const members = collection.value() || {};
+      const members = collection.value() ?? {};
 
       return Object.keys(members).includes(userId.toString());
     },
     getRemoteMembersFrom: (countryCode) => {
       const collection = db.get('remoteIndex');
-      const members = collection.value() || [];
+      const members = collection.value() ?? [];
 
       const filteredMembers = Object.entries(members).filter(
-        ([key, value]) => {
+        ([_key, value]) => {
           return value['from'] === countryCode;
         }
       );
@@ -155,10 +158,10 @@ export const createDatabase = async (
     },
     getRemoteMembersTo: (countryCode) => {
       const collection = db.get('remoteIndex');
-      const members = collection.value() || [];
+      const members = collection.value() ?? [];
 
       const filteredMembers = Object.entries(members).filter(
-        ([key, value]) => {
+        ([_key, value]) => {
           return value['to'] === countryCode;
         }
       );
@@ -166,13 +169,13 @@ export const createDatabase = async (
     },
     getAllRemoteMembers: () => {
       const collection = db.get('remoteIndex');
-      const members = collection.value() || [];
+      const members = collection.value() ?? [];
 
       return members;
     },
     getMembersAt: (code) => {
       const collection = db.get('locationIndex').get(code);
-      const members = collection.value() || [];
+      const members = collection.value() ?? [];
       return members;
     },
     findMember: async (userId) => {
@@ -195,8 +198,13 @@ export const createDatabase = async (
     },
     removeAutoDeleteMessage: async (messageId: number) => {
       const messages = db.get('autoDeleteMessages');
-
       await messages.unset(messageId).write();
+    },
+    getGroupLanguage: async () => {
+      return db.get('language').value() ?? 'en';
+    },
+    setGroupLanguage: async (language) => {
+      return db.set('language', language).write();
     },
   };
 

@@ -5,7 +5,7 @@ import { CommandDescriptions } from '../command';
 import { Config } from '../config';
 import { BotContext } from '../context';
 import { createDatabase } from '../database';
-import { withRejected, withFulfilled } from '../extensions/promises';
+import { withRejected, withFulfilled } from '../utils/promises';
 import { createMemberMention } from '../member';
 
 interface Props {
@@ -46,19 +46,31 @@ export const createContextMiddleware = ({ config }: Props) => {
       return;
     }
 
-    if (config.chatsWithForcedPortuguese.includes(chatId)) {
-      /**
-       * telegraf-i18n uses the user session to determine
-       * which locale to use. This basically forces
-       * all answers to be sent in ptbr.
-       **/
-      ctx.i18n.locale('ptbr');
-    }
-
     const logger = ctx.logger.child({ source: 'database' });
 
     const loadDatabase = () => {
       return createDatabase(chatId, config.dataPath, logger);
+    };
+
+    const checkAdminAccess = async () => {
+      if (ctx.chat !== undefined) {
+        const chatId = ctx.chat.id;
+        const userId = ctx.safeUser.id;
+
+        const member = await ctx.telegram.getChatMember(
+          chatId,
+          userId
+        );
+
+        const isGroupCreator = member.status === 'creator';
+        const canRestrictMembers =
+          member.can_restrict_members === true;
+        const canKickUsers = isGroupCreator || canRestrictMembers;
+
+        return member !== undefined && canKickUsers;
+      }
+
+      return true;
     };
 
     const replyWithAutoDestructiveMessage: BotContext['replyWithAutoDestructiveMessage'] = async (
@@ -155,6 +167,7 @@ export const createContextMiddleware = ({ config }: Props) => {
       }
     };
 
+    ctx.checkAdminAccess = checkAdminAccess;
     ctx.fetchMembersMentionList = fetchMembersMentionList;
     ctx.fetchRemoteMembersMentionList = fetchRemoteMembersMentionList;
     ctx.replyWithAutoDestructiveMessage = replyWithAutoDestructiveMessage;
