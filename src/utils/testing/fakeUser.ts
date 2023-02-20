@@ -27,4 +27,4 @@ export const createFakeUser = (id: number): User => {
   };
 };
 
-export const fakeUser: User = createFakeUser(128256);
+export const mainFakeTestUser: User = createFakeUser(128256);

@@ -35,7 +35,7 @@ it('renders rank for all countries', async () => {
     "1. 🇧🇷 Brazil (BR): 148
     2. 🇵🇹 Portugal (PT): 54
     3. 🇩🇪 Germany (DE): 34
-    4. 🇳🇱 Netherlands (NL): 26
+    4. 🇳🇱 Netherlands (NL): 27
     5. 🇨🇦 Canada (CA): 16
     6. 🇮🇪 Ireland (IE): 13
     6. 🇬🇧 United Kingdom (GB): 13
@@ -60,6 +60,6 @@ it('renders rank for all countries', async () => {
     18. 🇸🇬 Singapore (SG): 1
     18. 🇦🇪 United Arab Emirates (AE): 1
 
-    Total: 352"
+    Total: 353"
   `);
 });

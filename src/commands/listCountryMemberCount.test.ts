@@ -52,7 +52,7 @@ it('renders list for all countries', async () => {
     🇮🇹 Italy (IT): 2
     🇰🇾 Cayman Islands (KY): 1
     🇱🇺 Luxembourg (LU): 1
-    🇳🇱 Netherlands (NL): 26
+    🇳🇱 Netherlands (NL): 27
     🇳🇿 New Zealand (NZ): 1
     🇵🇹 Portugal (PT): 54
     🇷🇴 Romania (RO): 3
@@ -60,6 +60,6 @@ it('renders list for all countries', async () => {
     🇸🇬 Singapore (SG): 1
     🇺🇸 United States of America (US): 2
 
-    Total: 352"
+    Total: 353"
   `);
 });

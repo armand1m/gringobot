@@ -23,9 +23,6 @@ it('returns message if member is not registered', async () => {
 
 it('returns member location if found', async () => {
   const { ctx, next, reply } = await createTestBotContext({
-    database: {
-      findMember: (_userId) => ['BR', 'NL', 'PT'],
-    },
     command: {
       command: Command.FindMember,
       args: '',
@@ -35,6 +32,6 @@ it('returns member location if found', async () => {
   await cmdFindMember(ctx, next);
 
   expect(reply()).toMatchInlineSnapshot(
-    '"[@testuser_128256](tg://user?id=128256) Found you registered at these locations: Brazil (BR), Netherlands (NL), Portugal (PT)"'
+    '"[@testuser_128256](tg://user?id=128256) Found you registered at these locations: Netherlands (NL)"'
   );
 });

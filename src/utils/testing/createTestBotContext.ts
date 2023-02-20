@@ -3,11 +3,15 @@ import { fileURLToPath } from 'node:url';
 import { ChatMemberAdministrator } from 'telegraf/types';
 import { vi } from 'vitest';
 import { BotContext } from '../../context.js';
-import { createTestDatabase } from '../../database.js';
 import { createMemberMention } from '../../member.js';
 import { createTranslation } from '../../middlewares/createTranslateMiddleware/translate.js';
 import { RecursivePartial } from '../types.js';
-import { createFakeUser, fakeUser, fakeUserIds } from './fakeUser.js';
+import { createTestDatabase } from './createTestDatabase.js';
+import {
+  createFakeUser,
+  mainFakeTestUser,
+  fakeUserIds,
+} from './fakeUser.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -32,8 +36,8 @@ export const createTestBotContext = async (
 
   const baseContext: RecursivePartial<BotContext> = {
     safeUser: {
-      id: fakeUser.id,
-      mention: createMemberMention(fakeUser),
+      id: mainFakeTestUser.id,
+      mention: createMemberMention(mainFakeTestUser),
     },
     database: database,
     command: {

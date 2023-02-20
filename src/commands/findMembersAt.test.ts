@@ -81,6 +81,6 @@ it('lists all members of NL', async () => {
   await cmdFindMembersAt(ctx, next);
 
   expect(reply()).toMatchInlineSnapshot(
-    '"[@testuser_128256](tg://user?id=128256) These members are registered in the location \'Netherlands (NL)\': `testuser_391726249`, `testuser_547232356`, `testuser_382886414`, `testuser_53544518`, `testuser_89953375`, `testuser_227208025`, `testuser_441608247`, `testuser_564462765`, `testuser_593669410`, `testuser_979704468`, `testuser_621964405`, `testuser_412155185`, `testuser_5651918477`, `testuser_524946948`, `testuser_3799053227`, `testuser_5588120983`, `testuser_209241418`, `testuser_218912918`, `testuser_846488799`, `testuser_370491844`, `testuser_383946132`, `testuser_95491730`, `testuser_362252440`, `testuser_796613400`, `testuser_267521831`, `testuser_293638954`"'
+    '"[@testuser_128256](tg://user?id=128256) These members are registered in the location \'Netherlands (NL)\': `testuser_391726249`, `testuser_547232356`, `testuser_382886414`, `testuser_53544518`, `testuser_89953375`, `testuser_227208025`, `testuser_441608247`, `testuser_564462765`, `testuser_593669410`, `testuser_979704468`, `testuser_621964405`, `testuser_412155185`, `testuser_5651918477`, `testuser_524946948`, `testuser_3799053227`, `testuser_5588120983`, `testuser_209241418`, `testuser_218912918`, `testuser_846488799`, `testuser_370491844`, `testuser_383946132`, `testuser_95491730`, `testuser_362252440`, `testuser_796613400`, `testuser_267521831`, `testuser_293638954`, `testuser_128256`"'
   );
 });
