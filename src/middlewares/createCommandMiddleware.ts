@@ -1,5 +1,5 @@
 import { Middleware } from 'telegraf';
-import { BotContext } from '../context';
+import { BotContext } from '../context.js';
 
 const commandPartsRegex = /^\/([^@\s]+)@?(?:(\S+)|)\s?([\s\S]+)?$/i;
 

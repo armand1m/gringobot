@@ -1,4 +1,4 @@
-import { BotCommand } from 'typegram';
+import { BotCommand } from 'telegraf/types';
 
 export enum Command {
   RegisterMemberAt = 'register_member_at',

@@ -1,6 +1,6 @@
 import pino from 'pino';
 import { Middleware } from 'telegraf';
-import { BotContext } from '../context';
+import { BotContext } from '../context.js';
 
 interface Props {
   logger: pino.Logger;

@@ -1,66 +1,78 @@
-import type { RemoteEntry } from '../database';
+import { it, expect } from 'vitest';
+import { Command } from '../command';
+import { createTestBotContext } from '../utils/testing/createTestBotContext';
 import { cmdRankCountryRemoteMemberCount } from './rankCountryRemoteMemberCount';
 
-beforeEach(() => {
-  jest.restoreAllMocks();
+it('returns error message when country code is not given', async () => {
+  const { ctx, next, reply } = await createTestBotContext({
+    command: {
+      command: Command.RankCountryRemoteMemberCount,
+      text: '',
+      args: '',
+    },
+  });
+
+  await cmdRankCountryRemoteMemberCount(ctx, next);
+
+  expect(reply()).toMatchInlineSnapshot(
+    `"[@testuser](tg://user?id=128256) No location was specified. Specify the [country Alpha2 code](https://en.wikipedia.org/wiki/ISO_3166-2) _(like 'NL' or 'PT')_ or the name of the country in English _('The Netherlands', 'Germany')_ after the command."`
+  );
 });
 
-const remoteMembers: Partial<Record<number, RemoteEntry>> = {
-  0: {
-    id: 0,
-    from: 'BR',
-    to: 'ES',
-  },
-  1: {
-    id: 0,
-    from: 'BR',
-    to: 'ES',
-  },
-  2: {
-    id: 0,
-    from: 'BR',
-    to: 'US',
-  },
-  3: {
-    id: 0,
-    from: 'BR',
-    to: 'US',
-  },
-  4: {
-    id: 0,
-    from: 'BR',
-    to: 'FR',
-  },
-  5: {
-    id: 0,
-    from: 'BR',
-    to: 'GB',
-  },
-};
+it('returns error message when country code is invalid', async () => {
+  const { ctx, next, reply } = await createTestBotContext({
+    command: {
+      command: Command.RankCountryRemoteMemberCount,
+      text: 'foobar',
+      args: 'foobar',
+    },
+  });
+
+  await cmdRankCountryRemoteMemberCount(ctx, next);
+
+  expect(reply()).toMatchInlineSnapshot(
+    `"[@testuser](tg://user?id=128256) couldn't identify the code for the specified country 'foobar'. Try using the [country Alpha2 code](https://en.wikipedia.org/wiki/ISO_3166-2) instead."`
+  );
+});
+
+it('returns no member count when empty', async () => {
+  const { ctx, next, reply } = await createTestBotContext({
+    database: {
+      getRemoteMembersFrom: () => ({}),
+    },
+    command: {
+      command: Command.RankCountryRemoteMemberCount,
+      text: 'BR',
+      args: 'BR',
+    },
+  });
+
+  await cmdRankCountryRemoteMemberCount(ctx, next);
+
+  expect(reply()).toMatchInlineSnapshot(
+    `"[@testuser](tg://user?id=128256) There are no members registered."`
+  );
+});
 
 it('returns rank for a list', async () => {
-  // Prepare
-  const getRemoteMembersFromMock = jest
-    .fn()
-    .mockReturnValue(remoteMembers);
-  const replyWithMarkdownMock = jest.fn();
-  const ctx = {
-    database: { getRemoteMembersFrom: getRemoteMembersFromMock },
-    command: {},
-    replyWithMarkdown: replyWithMarkdownMock,
-  };
+  const { ctx, next, reply } = await createTestBotContext({
+    command: {
+      command: Command.RankCountryRemoteMemberCount,
+      text: 'BR',
+      args: 'BR',
+    },
+  });
 
-  // Given
-  ctx.command = { args: 'BR' };
+  await cmdRankCountryRemoteMemberCount(ctx, next);
 
-  // When
-  await (cmdRankCountryRemoteMemberCount as any)(ctx);
+  expect(reply()).toMatchInlineSnapshot(`
+    "1. 🇺🇸 United States of America (US): 20
+    2. 🇧🇷 Brazil (BR): 1
+    3. 🇳🇱 Netherlands (NL): 1
+    4. 🇵🇹 Portugal (PT): 1
+    5. 🇸🇮 Slovenia (SI): 1
+    6. 🇪🇸 Spain (ES): 1
 
-  // Then
-  expect(replyWithMarkdownMock).toHaveBeenCalledWith(
-    expect.stringMatching(/^1\. 🇪🇸 Espanha \(ES\): 2(.|\n)*$/)
-  );
-  expect(replyWithMarkdownMock).toHaveBeenCalledWith(
-    expect.stringMatching(/.*Total: 6/)
-  );
+    Total: 25"
+  `);
 });

@@ -4,12 +4,12 @@ export type AvailableLocales = 'en' | 'ptbr';
 
 const getTranslations = async (locale: AvailableLocales) => {
   if (locale === 'ptbr') {
-    const { translations } = await import(`./locales/ptbr`);
+    const { translations } = await import(`./locales/ptbr.js`);
     return translations;
   }
 
   if (locale === 'en') {
-    const { translations } = await import(`./locales/base`);
+    const { translations } = await import(`./locales/base.js`);
     return translations;
   }
 

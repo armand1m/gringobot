@@ -1,6 +1,6 @@
-import to from 'await-to-js';
+import { to } from 'await-to-js';
 import retry, { RetryFunction } from 'async-retry';
-import { BotContext } from './context';
+import { BotContext } from './context.js';
 
 const expired = (createdAt: number, timeout: number) => {
   const minute = 60000;

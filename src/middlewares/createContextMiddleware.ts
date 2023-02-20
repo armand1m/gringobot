@@ -1,12 +1,13 @@
 import { Alpha2Code } from 'i18n-iso-countries';
 import { Middleware } from 'telegraf';
-import { runMessageRecycling } from '../autoDeleteMessages';
-import { CommandDescriptions } from '../command';
-import { Config } from '../config';
-import { BotContext } from '../context';
-import { createDatabase } from '../database';
-import { withRejected, withFulfilled } from '../utils/promises';
-import { createMemberMention } from '../member';
+import { runMessageRecycling } from '../autoDeleteMessages.js';
+import { CommandDescriptions } from '../command.js';
+import { Config } from '../config.js';
+import { BotContext } from '../context.js';
+import { createDatabase } from '../database.js';
+import { withRejected, withFulfilled } from '../utils/promises.js';
+import { createMemberMention } from '../member.js';
+import { getRandomValues } from '../utils/getRandomCollection.js';
 
 interface Props {
   config: Config;
@@ -63,9 +64,9 @@ export const createContextMiddleware = ({ config }: Props) => {
         );
 
         const isGroupCreator = member.status === 'creator';
-        const canRestrictMembers =
-          member.can_restrict_members === true;
-        const canKickUsers = isGroupCreator || canRestrictMembers;
+        const isAdmin = member.status === 'administrator';
+
+        const canKickUsers = isGroupCreator || isAdmin;
 
         return member !== undefined && canKickUsers;
       }
@@ -179,6 +180,7 @@ export const createContextMiddleware = ({ config }: Props) => {
       mention: createMemberMention(ctx.from),
     };
     ctx.groupLanguage = await ctx.database.getGroupLanguage();
+    ctx.getRandomValues = getRandomValues;
 
     ctx.setMyCommands(CommandDescriptions);
 

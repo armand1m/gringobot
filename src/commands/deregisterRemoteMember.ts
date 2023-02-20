@@ -1,5 +1,5 @@
 import { Middleware } from 'telegraf';
-import { BotContext } from '../context';
+import { BotContext } from '../context.js';
 
 export const cmdDeregisterRemoteMember: Middleware<BotContext> = async (
   ctx

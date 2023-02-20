@@ -1,16 +1,18 @@
-import fs from 'fs';
-import path from 'path';
-import mkdirp from 'mkdirp';
+import fs from 'node:fs';
+import path from 'node:path';
 import pino from 'pino';
-import low from 'lowdb';
-import FileAsync from 'lowdb/adapters/FileAsync';
+import lodash from 'lodash';
+import mkdirp from 'mkdirp';
+import { Low, Memory } from 'lowdb';
+import { JSONFile } from 'lowdb/node';
 import { Alpha2Code } from 'i18n-iso-countries';
-import { AvailableLocales } from './middlewares/createTranslateMiddleware/translate';
+import { AvailableLocales } from './middlewares/createTranslateMiddleware/translate.js';
 
-interface DatabaseSchema {
+export interface DatabaseSchema {
   locationIndex: Partial<Record<Alpha2Code, number[]>>;
   remoteIndex: Record<number, RemoteEntry>;
   autoDeleteMessages: Record<string, number>;
+  language: AvailableLocales;
 }
 
 export interface RemoteEntry {
@@ -60,13 +62,14 @@ const emptyDatabase: DatabaseSchema = {
   locationIndex: {},
   remoteIndex: {},
   autoDeleteMessages: {},
+  language: 'en',
 };
 
-export const createDatabase = async (
+const getChatDatabasePath = async (
   chatId: number,
   dataPath: string,
   logger: pino.Logger
-): Promise<DatabaseInstance> => {
+) => {
   const chatDatabasePath = path.resolve(dataPath, `chat_${chatId}`);
 
   try {
@@ -82,71 +85,124 @@ export const createDatabase = async (
     'database.json'
   );
 
-  const adapter = new FileAsync(databaseFilePath);
-  const db = await low<low.AdapterAsync<DatabaseSchema>>(adapter);
+  return databaseFilePath;
+};
 
-  await db.defaults(emptyDatabase).write();
+class LowWithLodash<T> extends Low<T> {
+  chain: lodash.ExpChain<this['data']> = lodash
+    .chain(this)
+    .get('data');
+}
 
+export const createDatabase = async (
+  chatId: number,
+  dataPath: string,
+  logger: pino.Logger
+) => {
+  const databaseFilePath = await getChatDatabasePath(
+    chatId,
+    dataPath,
+    logger
+  );
+
+  const db = new LowWithLodash<DatabaseSchema>(
+    new JSONFile(databaseFilePath)
+  );
+
+  // initialize database with empty data if needed
+  await db.read();
+  db.data ||= emptyDatabase;
+  await db.write();
+
+  return createDatabaseMethods(db);
+};
+
+export const createTestDatabase = async (
+  databaseFilePath: string
+) => {
+  const db = new LowWithLodash<DatabaseSchema>(new Memory());
+
+  const testDatabaseContent = await fs.promises.readFile(
+    databaseFilePath,
+    'utf-8'
+  );
+  const testDatabaseInitialData = JSON.parse(testDatabaseContent);
+
+  db.data = testDatabaseInitialData;
+
+  await db.write();
+
+  return createDatabaseMethods(db);
+};
+
+const createDatabaseMethods = async (
+  db: LowWithLodash<DatabaseSchema>
+): Promise<DatabaseInstance> => {
   const instance: DatabaseInstance = {
     getLocationIndex: () => {
-      const collection = db.get('locationIndex').value();
-      return collection;
+      return db.chain.get('locationIndex').value();
     },
     removeMemberFrom: async (userId, countryCode) => {
-      const collection = db.get('locationIndex').get(countryCode);
-      await collection.pull(userId).write();
+      db.chain
+        .get('locationIndex')
+        .get(countryCode)
+        .pull(userId)
+        .value();
+      return db.write();
     },
     removeRemoteMember: async (userId) => {
-      const collection = db.get('remoteIndex');
-      collection.unset(userId).write();
+      db.chain.get('remoteIndex').unset(userId).value();
+      return db.write();
     },
     hasMemberRegistered: (userId, countryCode) => {
-      const collection = db.get('locationIndex').get(countryCode);
-      const members = collection.value() ?? [];
+      const members =
+        db.chain.get('locationIndex').get(countryCode).value() ?? [];
+
       return members.includes(userId);
     },
     addMemberLocation: async (userId, countryCode) => {
-      const collection = db.get('locationIndex');
+      const collection = db.chain.get('locationIndex');
       const currentState = collection.value();
 
       if (currentState[countryCode] === undefined) {
-        await collection
+        collection
           .assign({
             ...currentState,
             [countryCode]: [userId],
           })
-          .write();
-        return;
+          .value();
+      } else {
+        collection.get(countryCode).push(userId).value();
       }
 
-      await collection.get(countryCode).push(userId).write();
+      return db.write();
     },
     addRemoteMember: async (
       userId,
       fromCountryCode,
       toCountryCode
     ) => {
-      const collection = db.get('remoteIndex');
+      const collection = db.chain.get('remoteIndex');
       const currentState = collection.value();
 
       if (currentState[userId] === undefined) {
-        await collection
+        collection
           .assign({
             ...currentState,
             [userId]: { from: fromCountryCode, to: toCountryCode },
           })
-          .write();
+          .value();
+
+        return db.write();
       }
     },
     hasRemoteMemberRegistered: (userId) => {
-      const collection = db.get('remoteIndex');
-      const members = collection.value() ?? {};
+      const members = db.chain.get('remoteIndex').value() ?? [];
 
       return Object.keys(members).includes(userId.toString());
     },
     getRemoteMembersFrom: (countryCode) => {
-      const collection = db.get('remoteIndex');
-      const members = collection.value() ?? [];
+      const members = db.chain.get('remoteIndex').value() ?? [];
 
       const filteredMembers = Object.entries(members).filter(
         ([_key, value]) => {
@@ -157,8 +213,7 @@ export const createDatabase = async (
       return Object.fromEntries(filteredMembers);
     },
     getRemoteMembersTo: (countryCode) => {
-      const collection = db.get('remoteIndex');
-      const members = collection.value() ?? [];
+      const members = db.chain.get('remoteIndex').value() ?? [];
 
       const filteredMembers = Object.entries(members).filter(
         ([_key, value]) => {
@@ -168,43 +223,42 @@ export const createDatabase = async (
       return Object.fromEntries(filteredMembers);
     },
     getAllRemoteMembers: () => {
-      const collection = db.get('remoteIndex');
-      const members = collection.value() ?? [];
-
-      return members;
+      return db.chain.get('remoteIndex').value() ?? [];
     },
     getMembersAt: (code) => {
-      const collection = db.get('locationIndex').get(code);
-      const members = collection.value() ?? [];
-      return members;
+      return db.chain.get('locationIndex').get(code).value() ?? [];
     },
     findMember: async (userId) => {
-      return db
+      return db.chain
         .get('locationIndex')
         .pickBy((value) => value?.includes(userId))
         .keys()
         .value() as Alpha2Code[];
     },
     addAutoDeleteMessage: async (messageId: number) => {
-      const messages = db.get('autoDeleteMessages');
+      const messages = db.chain.get('autoDeleteMessages');
       const currentState = messages.value();
 
-      await messages
+      messages
         .assign(currentState, { [messageId]: Date.now() })
-        .write();
+        .value();
+
+      return db.write();
     },
     getAutoDeleteMessages: () => {
-      return db.get('autoDeleteMessages').value();
+      return db.chain.get('autoDeleteMessages').value();
     },
     removeAutoDeleteMessage: async (messageId: number) => {
-      const messages = db.get('autoDeleteMessages');
-      messages.unset(messageId).write();
+      db.chain.get('autoDeleteMessages').unset(messageId).value();
+      return db.write();
     },
     getGroupLanguage: async () => {
-      return db.get('language').value() ?? 'en';
+      return (db.chain.get('language').value() ??
+        'en') as AvailableLocales;
     },
     setGroupLanguage: async (language) => {
-      return db.set('language', language).write();
+      db.chain.set('language', language).value();
+      return db.write();
     },
   };
 

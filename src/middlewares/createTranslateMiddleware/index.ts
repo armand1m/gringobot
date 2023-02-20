@@ -1,6 +1,6 @@
 import { Middleware } from 'telegraf';
-import { BotContext } from '../../context';
-import { createTranslation } from './translate';
+import { BotContext } from '../../context.js';
+import { createTranslation } from './translate.js';
 
 export const createTranslateMiddleware = () => {
   const middleware: Middleware<BotContext> = async (ctx, next) => {

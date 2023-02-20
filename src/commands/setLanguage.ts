@@ -1,7 +1,7 @@
 import { Middleware } from 'telegraf';
 import { markdown } from 'telegram-format';
-import { BotContext } from '../context';
-import { AvailableLocales } from '../middlewares/createTranslateMiddleware/translate';
+import { BotContext } from '../context.js';
+import { AvailableLocales } from '../middlewares/createTranslateMiddleware/translate.js';
 
 const validLocales: string[] = ['ptbr', 'en'];
 

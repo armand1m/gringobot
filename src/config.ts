@@ -1,5 +1,6 @@
-require('dotenv').config();
 import * as yup from 'yup';
+import { config } from 'dotenv';
+config();
 
 const createRequiredErrMessage = (
   envVar: string,

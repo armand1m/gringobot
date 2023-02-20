@@ -1,14 +1,14 @@
 import { Alpha2Code } from 'i18n-iso-countries';
 import { markdown } from 'telegram-format';
-import { Middleware } from 'telegraf';
+import { MiddlewareFn } from 'telegraf';
 import { countryCodeEmoji } from 'country-code-emoji';
-import { BotContext } from '../context';
+import { BotContext } from '../context.js';
 import {
   getCountryCodeForText,
   getCountryNameForCountryCode,
-} from '../countries';
+} from '../countries.js';
 
-export const cmdRankCountryRemoteMemberCount: Middleware<BotContext> = async (
+export const cmdRankCountryRemoteMemberCount: MiddlewareFn<BotContext> = async (
   ctx
 ) => {
   const i18n = ctx.i18n;
