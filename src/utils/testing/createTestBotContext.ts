@@ -1,41 +1,20 @@
-import path from 'path';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { vi } from 'vitest';
-import { User } from 'telegraf/types';
 import { BotContext } from '../../context.js';
-import {
-  createTestDatabase,
-  DatabaseSchema,
-} from '../../database.js';
+import { createTestDatabase } from '../../database.js';
 import { createMemberMention } from '../../member.js';
 import { createTranslation } from '../../middlewares/createTranslateMiddleware/translate.js';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
+import { RecursivePartial } from '../types.js';
+import { fakeUser } from './fakeUser.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-type RecursivePartial<T> = {
-  [P in keyof T]?: T[P] extends (infer U)[]
-    ? RecursivePartial<U>[]
-    : T[P] extends object
-    ? RecursivePartial<T[P]>
-    : T[P];
-};
-
-const fakeUser: User = {
-  first_name: 'test',
-  id: 128256,
-  is_bot: false,
-  language_code: 'en',
-  last_name: 'user',
-  username: 'testuser',
-};
-
 export const createTestBotContext = async (
-  contextOverrides: RecursivePartial<BotContext> = {},
-  _dataOverrides: RecursivePartial<DatabaseSchema> = {}
+  contextOverrides: RecursivePartial<BotContext> = {}
 ) => {
-  const databasePath = path.resolve(
+  const databasePath = resolve(
     __dirname,
     './anonymizedDatabase.json'
   );
