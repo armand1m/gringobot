@@ -17,8 +17,9 @@ export const translations = {
   },
   errors: {
     failedToKickUser:
-      '{{mention}} Failed to kick user {{kickedUser}} due to unexpected reasons.',
-    kickOutOfChat: '{{mention}} /kick command only works in a chat.',
+      '{{mention}} Failed to kick user {{kickedUser}} due to unexpected reasons. Try manually through Telegram UI if urgent.',
+    kickOutOfChat:
+      '{{mention}} /kick command only works in a group chat.',
     mustBeAdminToUseCommand:
       '{{mention}} You must be an admin to use this command.',
     mentionUserToKick:
@@ -61,5 +62,3 @@ export const translations = {
       '{{mention}} Failed to change the bot language. The language "{{attemptLanguage}}" is not supported. Try one of the supported languages: {{validLanguages}}',
   },
 } as const;
-
-export type TranslationTypes = typeof translations;

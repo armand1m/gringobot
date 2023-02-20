@@ -59,5 +59,3 @@ export const translations = {
       '{{mention}} Não foi possivel mudar a linguagem do bot. A lingua {{attemptLanguage}} não é suportada. Tente alguma das seguintes: {{validLanguages}}',
   },
 } as const;
-
-export type TranslationTypes = typeof translations;
