@@ -68,6 +68,27 @@ export const createTestBotContext = async (
     return membersFetchResult;
   };
 
+  ctx.fetchRemoteMembersMentionList = async (
+    silenced: boolean = false
+  ) => {
+    const allMembers = ctx.database.getAllRemoteMembers();
+
+    const membersFetchResult = Object.keys(allMembers).map(
+      (userId) => {
+        return createMemberMention(
+          {
+            id: Number(userId),
+            first_name: `testuser_${userId}`,
+            is_bot: false,
+          },
+          silenced
+        );
+      }
+    );
+
+    return membersFetchResult;
+  };
+
   /**
    * We override the random values function here to always
    * return the first items of the list given the amount.
