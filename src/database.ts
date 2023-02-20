@@ -7,10 +7,11 @@ import FileAsync from 'lowdb/adapters/FileAsync';
 import { Alpha2Code } from 'i18n-iso-countries';
 import { AvailableLocales } from './middlewares/createTranslateMiddleware/translate';
 
-interface DatabaseSchema {
+export interface DatabaseSchema {
   locationIndex: Partial<Record<Alpha2Code, number[]>>;
   remoteIndex: Record<number, RemoteEntry>;
   autoDeleteMessages: Record<string, number>;
+  language: AvailableLocales;
 }
 
 export interface RemoteEntry {
@@ -60,13 +61,14 @@ const emptyDatabase: DatabaseSchema = {
   locationIndex: {},
   remoteIndex: {},
   autoDeleteMessages: {},
+  language: 'en',
 };
 
-export const createDatabase = async (
+const getChatDatabasePath = async (
   chatId: number,
   dataPath: string,
   logger: pino.Logger
-): Promise<DatabaseInstance> => {
+) => {
   const chatDatabasePath = path.resolve(dataPath, `chat_${chatId}`);
 
   try {
@@ -82,6 +84,26 @@ export const createDatabase = async (
     'database.json'
   );
 
+  return databaseFilePath;
+};
+
+export const createDatabase = async (
+  chatId: number,
+  dataPath: string,
+  logger: pino.Logger
+) => {
+  const databasePath = await getChatDatabasePath(
+    chatId,
+    dataPath,
+    logger
+  );
+
+  return createDatabaseInstance(databasePath);
+};
+
+export const createDatabaseInstance = async (
+  databaseFilePath: string
+): Promise<DatabaseInstance> => {
   const adapter = new FileAsync(databaseFilePath);
   const db = await low<low.AdapterAsync<DatabaseSchema>>(adapter);
 
@@ -201,7 +223,7 @@ export const createDatabase = async (
       messages.unset(messageId).write();
     },
     getGroupLanguage: async () => {
-      return db.get('language').value() ?? 'en';
+      return (db.get('language').value() ?? 'en') as AvailableLocales;
     },
     setGroupLanguage: async (language) => {
       return db.set('language', language).write();

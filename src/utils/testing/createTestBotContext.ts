@@ -1,5 +1,7 @@
+import path from 'path';
 import { User } from 'telegraf/typings/telegram-types';
 import { BotContext } from '../../context';
+import { createDatabaseInstance } from '../../database';
 import { createMemberMention } from '../../member';
 import { createTranslation } from '../../middlewares/createTranslateMiddleware/translate';
 
@@ -23,12 +25,18 @@ const fakeUser: User = {
 export const createTestBotContext = async (
   overrides: RecursivePartial<BotContext> = {}
 ) => {
+  const databasePath = path.resolve(
+    __dirname,
+    './anonymizedDatabase.json'
+  );
+  const database = await createDatabaseInstance(databasePath);
+
   const baseContext: RecursivePartial<BotContext> = {
     safeUser: {
       id: fakeUser.id,
       mention: createMemberMention(fakeUser),
     },
-    database: {},
+    database: database,
     command: {
       bot: 'GringoBot',
     },

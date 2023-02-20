@@ -1,46 +1,9 @@
 import { Command } from '../command';
 import { createTestBotContext } from '../utils/testing/createTestBotContext';
-import type { RemoteEntry } from '../database';
 import { cmdRankCountryRemoteMemberCount } from './rankCountryRemoteMemberCount';
-
-const remoteMembers: Partial<Record<number, RemoteEntry>> = {
-  0: {
-    id: 0,
-    from: 'BR',
-    to: 'ES',
-  },
-  1: {
-    id: 0,
-    from: 'BR',
-    to: 'ES',
-  },
-  2: {
-    id: 0,
-    from: 'BR',
-    to: 'US',
-  },
-  3: {
-    id: 0,
-    from: 'BR',
-    to: 'US',
-  },
-  4: {
-    id: 0,
-    from: 'BR',
-    to: 'FR',
-  },
-  5: {
-    id: 0,
-    from: 'BR',
-    to: 'GB',
-  },
-};
 
 it('returns rank for a list', async () => {
   const { ctx, next } = await createTestBotContext({
-    database: {
-      getRemoteMembersFrom: jest.fn().mockReturnValue(remoteMembers),
-    },
     command: {
       command: Command.RankCountryRemoteMemberCount,
       text: 'BR',
@@ -54,12 +17,14 @@ it('returns rank for a list', async () => {
     [MockFunction] {
       "calls": Array [
         Array [
-          "1. 🇪🇸 Spain (ES): 2
-    2. 🇺🇸 United States of America (US): 2
-    3. 🇫🇷 France (FR): 1
-    4. 🇬🇧 United Kingdom (GB): 1
+          "1. 🇺🇸 United States of America (US): 20
+    2. 🇧🇷 Brazil (BR): 1
+    3. 🇳🇱 Netherlands (NL): 1
+    4. 🇵🇹 Portugal (PT): 1
+    5. 🇸🇮 Slovenia (SI): 1
+    6. 🇪🇸 Spain (ES): 1
 
-    Total: 6",
+    Total: 25",
         ],
       ],
       "results": Array [
