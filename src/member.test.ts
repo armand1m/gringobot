@@ -1,3 +1,4 @@
+import { test, expect } from 'vitest';
 import { hasCyrillicName } from './member';
 
 test('should identify if name has cyrillic characters', () => {

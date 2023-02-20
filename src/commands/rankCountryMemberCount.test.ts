@@ -1,3 +1,4 @@
+import { it, expect } from 'vitest';
 import { Command } from '../command';
 import { createTestBotContext } from '../utils/testing/createTestBotContext';
 import { cmdRankCountryMemberCount } from './rankCountryMemberCount';

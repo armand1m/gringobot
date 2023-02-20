@@ -1,9 +1,9 @@
 import path from 'path';
-import { jest } from '@jest/globals';
+import { vi } from 'vitest';
 import { User } from 'telegraf/types';
 import { BotContext } from '../../context.js';
 import {
-  createDatabaseInstance,
+  createTestDatabase,
   DatabaseSchema,
 } from '../../database.js';
 import { createMemberMention } from '../../member.js';
@@ -39,13 +39,15 @@ export const createTestBotContext = async (
     __dirname,
     './anonymizedDatabase.json'
   );
-  const database = await createDatabaseInstance(databasePath);
+  const database = await createTestDatabase(databasePath);
 
-  const replyWithMarkdown = jest.fn<
-    BotContext['replyWithMarkdown']
+  const replyWithMarkdown = vi.fn<
+    Parameters<BotContext['replyWithMarkdown']>,
+    ReturnType<BotContext['replyWithMarkdown']>
   >();
-  const replyWithAutoDestructiveMessage = jest.fn<
-    BotContext['replyWithAutoDestructiveMessage']
+  const replyWithAutoDestructiveMessage = vi.fn<
+    Parameters<BotContext['replyWithAutoDestructiveMessage']>,
+    ReturnType<BotContext['replyWithAutoDestructiveMessage']>
   >();
 
   const baseContext: RecursivePartial<BotContext> = {
@@ -68,7 +70,7 @@ export const createTestBotContext = async (
     ...contextOverrides,
   } as BotContext;
 
-  const next = jest.fn<() => Promise<void>>();
+  const next = vi.fn<[], Promise<void>>();
 
   const reply = () => {
     if (replyWithAutoDestructiveMessage.mock.calls.length > 0) {
