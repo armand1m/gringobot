@@ -37,9 +37,6 @@ const ConfigSchema = yup.object({
   chatsWithCyrillicBlockEnabled: yup
     .array(yup.number().integer())
     .default([]),
-  chatsWithForcedPortuguese: yup
-    .array(yup.number().integer())
-    .default([]),
 });
 
 export const loadConfiguration = async () => {
@@ -57,10 +54,6 @@ export const loadConfiguration = async () => {
     chatsWithCyrillicBlockEnabled: process.env
       .CHATS_WITH_CYRILLIC_BLOCK_ENABLED
       ? process.env.CHATS_WITH_CYRILLIC_BLOCK_ENABLED.split(',')
-      : undefined,
-    chatsWithForcedPortuguese: process.env
-      .CHATS_WITH_FORCED_PORTUGUESE
-      ? process.env.CHATS_WITH_FORCED_PORTUGUESE.split(',')
       : undefined,
   };
 
