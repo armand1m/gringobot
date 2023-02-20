@@ -45,10 +45,10 @@ The bot currently replies in Portuguese by default, and parses names of countrie
  - [x] Deregister as Remote Member:
     - [x] English: `/deregister_remote_member`
     - [x] Portuguese: `/sair_remoto`
- - [ ] Find remote member working from a location:
+ - [x] Find remote member working from a location:
     - [x] English: `/find_remote_member_from BR`
     - [x] Portuguese: `/quem_remoto_do BR`
- - [ ] Find remote member working for a location:
+ - [x] Find remote member working for a location:
     - [x] English: `/find_remote_member_to CA `
     - [x] Portuguese: `/quem_remoto_para CA`
  - [x] Help Sections:
