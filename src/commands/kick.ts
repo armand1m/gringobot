@@ -1,7 +1,7 @@
 import { Middleware } from 'telegraf';
-import { User } from 'typegram';
-import { BotContext } from '../context';
-import { createMemberMention } from '../member';
+import { User } from 'telegraf/types';
+import { BotContext } from '../context.js';
+import { createMemberMention } from '../member.js';
 
 export const cmdKick: Middleware<BotContext> = async (ctx) => {
   const i18n = ctx.i18n;
@@ -39,7 +39,14 @@ export const cmdKick: Middleware<BotContext> = async (ctx) => {
   }
 
   try {
-    await ctx.telegram.kickChatMember(ctx.chat.id, mentionedUser.id);
+    await ctx.telegram.banChatMember(
+      ctx.chat.id,
+      mentionedUser.id,
+      undefined,
+      {
+        revoke_messages: true,
+      }
+    );
 
     const userGotKickedMessage = `User ${mentionedUser.username} has been kicked from the group.`;
 

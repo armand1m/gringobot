@@ -1,28 +1,28 @@
 import { Telegraf } from 'telegraf';
-import { BotContext } from './context';
-import { createLogger } from './logger';
-import { loadConfiguration } from './config';
-import { Command, CommandAliases } from './command';
-import { cmdHelp } from './commands/help';
-import { cmdKick } from './commands/kick';
-import { cmdSetLanguage } from './commands/setLanguage';
-import { cmdPingAdmins } from './commands/pingAdmins';
-import { cmdPingRemote } from './commands/pingRemote';
-import { cmdPingMemberAt } from './commands/pingMembersAt';
-import { cmdFindMember } from './commands/findMember';
-import { cmdFindMembersAt } from './commands/findMembersAt';
-import { cmdRegisterMemberAt } from './commands/registerMemberAt';
-import { cmdDeregisterMemberFrom } from './commands/deregisterMemberFrom';
-import { cmdRegisterRemoteMember } from './commands/registerRemoteMember';
-import { cmdDeregisterRemoteMember } from './commands/deregisterRemoteMember';
-import { cmdListCountryMemberCount } from './commands/listCountryMemberCount';
-import { cmdRankCountryMemberCount } from './commands/rankCountryMemberCount';
-import { cmdRankCountryRemoteMemberCount } from './commands/rankCountryRemoteMemberCount';
-import { createContextMiddleware } from './middlewares/createContextMiddleware';
-import { createCommandMiddleware } from './middlewares/createCommandMiddleware';
-import { createBlockMiddleware } from './middlewares/createBlockMiddleware';
-import { createLoggerMiddleware } from './middlewares/createLoggerMiddleware';
-import { createTranslateMiddleware } from './middlewares/createTranslateMiddleware';
+import { BotContext } from './context.js';
+import { createLogger } from './logger.js';
+import { loadConfiguration } from './config.js';
+import { Command, CommandAliases } from './command.js';
+import { cmdHelp } from './commands/help.js';
+import { cmdKick } from './commands/kick.js';
+import { cmdSetLanguage } from './commands/setLanguage.js';
+import { cmdPingAdmins } from './commands/pingAdmins.js';
+import { cmdPingRemote } from './commands/pingRemote.js';
+import { cmdPingMemberAt } from './commands/pingMembersAt.js';
+import { cmdFindMember } from './commands/findMember.js';
+import { cmdFindMembersAt } from './commands/findMembersAt.js';
+import { cmdRegisterMemberAt } from './commands/registerMemberAt.js';
+import { cmdDeregisterMemberFrom } from './commands/deregisterMemberFrom.js';
+import { cmdRegisterRemoteMember } from './commands/registerRemoteMember.js';
+import { cmdDeregisterRemoteMember } from './commands/deregisterRemoteMember.js';
+import { cmdListCountryMemberCount } from './commands/listCountryMemberCount.js';
+import { cmdRankCountryMemberCount } from './commands/rankCountryMemberCount.js';
+import { cmdRankCountryRemoteMemberCount } from './commands/rankCountryRemoteMemberCount.js';
+import { createContextMiddleware } from './middlewares/createContextMiddleware.js';
+import { createCommandMiddleware } from './middlewares/createCommandMiddleware.js';
+import { createBlockMiddleware } from './middlewares/createBlockMiddleware.js';
+import { createLoggerMiddleware } from './middlewares/createLoggerMiddleware.js';
+import { createTranslateMiddleware } from './middlewares/createTranslateMiddleware/index.js';
 
 const main = async () => {
   const config = await loadConfiguration();
@@ -85,9 +85,9 @@ const main = async () => {
   process.once('SIGINT', () => bot.stop('SIGINT'));
   process.once('SIGTERM', () => bot.stop('SIGTERM'));
 
-  await bot.launch();
+  logger.info('Starting bot.');
 
-  logger.info('Bot is running.');
+  await bot.launch();
 };
 
 main();

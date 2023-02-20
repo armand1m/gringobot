@@ -1,12 +1,12 @@
 import { Alpha2Code } from 'i18n-iso-countries';
 import pino from 'pino';
 import { Context } from 'telegraf';
-import { Config } from './config';
-import { DatabaseInstance } from './database';
+import { Config } from './config.js';
+import { DatabaseInstance } from './database.js';
 import {
   AvailableLocales,
   Translation,
-} from './middlewares/createTranslateMiddleware/translate';
+} from './middlewares/createTranslateMiddleware/translate.js';
 
 interface AutoDestructiveMessageOptions {
   deleteCommandMessage: boolean;

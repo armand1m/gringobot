@@ -1,10 +1,17 @@
-import pino from 'pino';
-import { Config } from './config';
+import { LoggerOptions, pino } from 'pino';
+import { Config } from './config.js';
 
 export const createLogger = (environment: Config['environment']) => {
-  const logger = pino({
-    prettyPrint: environment === 'development',
-  });
+  const loggerOptions: LoggerOptions =
+    environment === 'development'
+      ? {
+          transport: {
+            target: 'pino-pretty',
+          },
+        }
+      : {};
+
+  const logger = pino(loggerOptions);
 
   return logger;
 };

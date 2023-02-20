@@ -1,5 +1,5 @@
 import Countries, { Alpha2Code } from 'i18n-iso-countries';
-import { AvailableLocales } from './middlewares/createTranslateMiddleware/translate';
+import { AvailableLocales } from './middlewares/createTranslateMiddleware/translate.js';
 
 const localeToLang: Record<AvailableLocales, string> = {
   en: 'en',

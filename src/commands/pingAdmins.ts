@@ -1,7 +1,7 @@
 import { Middleware } from 'telegraf';
-import { BotContext } from '../context';
-import { createMemberMention } from '../member';
-import { getRandomValues } from '../utils/getRandomCollection';
+import { BotContext } from '../context.js';
+import { createMemberMention } from '../member.js';
+import { getRandomValues } from '../utils/getRandomCollection.js';
 
 export const cmdPingAdmins: Middleware<BotContext> = async (ctx) => {
   const admins = await ctx.getChatAdministrators();

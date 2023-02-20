@@ -1,7 +1,7 @@
 import { Middleware } from 'telegraf';
-import { User } from 'typegram';
-import { BotContext } from '../context';
-import { hasCyrillicName } from '../member';
+import { User } from 'telegraf/types';
+import { BotContext } from '../context.js';
+import { hasCyrillicName } from '../member.js';
 
 export const createBlockMiddleware = () => {
   const middleware: Middleware<BotContext> = async (ctx, next) => {
@@ -24,7 +24,10 @@ export const createBlockMiddleware = () => {
       );
 
       try {
-        await ctx.kickChatMember(newChatMember.id);
+        await ctx.banChatMember(newChatMember.id, undefined, {
+          revoke_messages: true,
+        });
+
         ctx.logger.warn(
           `suspicious user with id ${newChatMember.id} was kicked`
         );

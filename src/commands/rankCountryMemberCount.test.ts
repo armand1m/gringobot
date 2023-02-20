@@ -3,7 +3,7 @@ import { createTestBotContext } from '../utils/testing/createTestBotContext';
 import { cmdRankCountryMemberCount } from './rankCountryMemberCount';
 
 it('renders no members message count when there are no members registered', async () => {
-  const { ctx, next } = await createTestBotContext({
+  const { ctx, next, reply } = await createTestBotContext({
     database: {
       getLocationIndex: () => ({}),
     },
@@ -16,25 +16,13 @@ it('renders no members message count when there are no members registered', asyn
 
   await cmdRankCountryMemberCount(ctx, next);
 
-  expect(ctx.replyWithAutoDestructiveMessage).toMatchInlineSnapshot(`
-    [MockFunction] {
-      "calls": Array [
-        Array [
-          "[@testuser](tg://user?id=128256) There are no members registered.",
-        ],
-      ],
-      "results": Array [
-        Object {
-          "type": "return",
-          "value": undefined,
-        },
-      ],
-    }
-  `);
+  expect(reply()).toMatchInlineSnapshot(
+    `"[@testuser](tg://user?id=128256) There are no members registered."`
+  );
 });
 
 it('renders country member count for NL', async () => {
-  const { ctx, next } = await createTestBotContext({
+  const { ctx, next, reply } = await createTestBotContext({
     command: {
       command: Command.RankCountryRemoteMemberCount,
       text: 'NL',
@@ -44,11 +32,8 @@ it('renders country member count for NL', async () => {
 
   await cmdRankCountryMemberCount(ctx, next);
 
-  expect(ctx.replyWithMarkdown).toMatchInlineSnapshot(`
-    [MockFunction] {
-      "calls": Array [
-        Array [
-          "1. 🇧🇷 Brazil (BR): 148
+  expect(reply()).toMatchInlineSnapshot(`
+    "1. 🇧🇷 Brazil (BR): 148
     2. 🇵🇹 Portugal (PT): 54
     3. 🇩🇪 Germany (DE): 34
     4. 🇳🇱 Netherlands (NL): 26
@@ -76,15 +61,6 @@ it('renders country member count for NL', async () => {
     18. 🇸🇬 Singapore (SG): 1
     18. 🇦🇪 United Arab Emirates (AE): 1
 
-    Total: 352",
-        ],
-      ],
-      "results": Array [
-        Object {
-          "type": "return",
-          "value": undefined,
-        },
-      ],
-    }
+    Total: 352"
   `);
 });

@@ -1,6 +1,6 @@
 import { Alpha2Code } from 'i18n-iso-countries';
-import { BotContext } from '../context';
-import { getCountryCodeForText } from '../countries';
+import { BotContext } from '../context.js';
+import { getCountryCodeForText } from '../countries.js';
 
 interface CountryValidation {
   countryCode: Alpha2Code | null;

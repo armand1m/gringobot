@@ -1,9 +1,18 @@
 import path from 'path';
-import { User } from 'telegraf/typings/telegram-types';
-import { BotContext } from '../../context';
-import { createDatabaseInstance } from '../../database';
-import { createMemberMention } from '../../member';
-import { createTranslation } from '../../middlewares/createTranslateMiddleware/translate';
+import { jest } from '@jest/globals';
+import { User } from 'telegraf/types';
+import { BotContext } from '../../context.js';
+import {
+  createDatabaseInstance,
+  DatabaseSchema,
+} from '../../database.js';
+import { createMemberMention } from '../../member.js';
+import { createTranslation } from '../../middlewares/createTranslateMiddleware/translate.js';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 type RecursivePartial<T> = {
   [P in keyof T]?: T[P] extends (infer U)[]
@@ -23,13 +32,21 @@ const fakeUser: User = {
 };
 
 export const createTestBotContext = async (
-  overrides: RecursivePartial<BotContext> = {}
+  contextOverrides: RecursivePartial<BotContext> = {},
+  _dataOverrides: RecursivePartial<DatabaseSchema> = {}
 ) => {
   const databasePath = path.resolve(
     __dirname,
     './anonymizedDatabase.json'
   );
   const database = await createDatabaseInstance(databasePath);
+
+  const replyWithMarkdown = jest.fn<
+    BotContext['replyWithMarkdown']
+  >();
+  const replyWithAutoDestructiveMessage = jest.fn<
+    BotContext['replyWithAutoDestructiveMessage']
+  >();
 
   const baseContext: RecursivePartial<BotContext> = {
     safeUser: {
@@ -40,21 +57,34 @@ export const createTestBotContext = async (
     command: {
       bot: 'GringoBot',
     },
-    replyWithMarkdown: jest.fn(),
-    replyWithAutoDestructiveMessage: jest.fn(),
+    replyWithMarkdown,
+    replyWithAutoDestructiveMessage,
     groupLanguage: 'en',
     i18n: await createTranslation('en'),
   };
 
   const ctx = {
     ...baseContext,
-    ...overrides,
+    ...contextOverrides,
   } as BotContext;
 
-  const next = jest.fn();
+  const next = jest.fn<() => Promise<void>>();
+
+  const reply = () => {
+    if (replyWithAutoDestructiveMessage.mock.calls.length > 0) {
+      return replyWithAutoDestructiveMessage.mock.calls[0][0];
+    }
+
+    if (replyWithMarkdown.mock.calls.length > 0) {
+      return replyWithMarkdown.mock.calls[0][0];
+    }
+
+    return replyWithMarkdown.mock.calls;
+  };
 
   return {
     ctx,
     next,
+    reply,
   };
 };

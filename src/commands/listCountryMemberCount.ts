@@ -1,8 +1,8 @@
 import { Alpha2Code } from 'i18n-iso-countries';
 import { Middleware } from 'telegraf';
 import { countryCodeEmoji } from 'country-code-emoji';
-import { BotContext } from '../context';
-import { getCountryNameForCountryCode } from '../countries';
+import { BotContext } from '../context.js';
+import { getCountryNameForCountryCode } from '../countries.js';
 
 export const cmdListCountryMemberCount: Middleware<BotContext> = async (
   ctx

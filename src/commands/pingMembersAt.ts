@@ -1,11 +1,11 @@
 import { Middleware } from 'telegraf';
 import { markdown } from 'telegram-format';
-import { BotContext } from '../context';
+import { BotContext } from '../context.js';
 import {
   getCountryCodeForText,
   getCountryNameForCountryCode,
-} from '../countries';
-import { getRandomValues } from '../utils/getRandomCollection';
+} from '../countries.js';
+import { getRandomValues } from '../utils/getRandomCollection.js';
 
 export const cmdPingMemberAt: Middleware<BotContext> = async (
   ctx

@@ -1,4 +1,4 @@
-import { User } from 'telegraf/typings/telegram-types';
+import { User } from 'telegraf/types';
 import { markdown } from 'telegram-format';
 
 export const createMemberMention = (
