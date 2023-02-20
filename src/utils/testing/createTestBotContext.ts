@@ -1,4 +1,3 @@
-import { Alpha2Code } from 'i18n-iso-countries';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { vi } from 'vitest';
