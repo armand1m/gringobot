@@ -15,7 +15,7 @@ it('returns error message when country code is not given', async () => {
   await cmdRankCountryRemoteMemberCount(ctx, next);
 
   expect(reply()).toMatchInlineSnapshot(
-    `"[@testuser](tg://user?id=128256) No location was specified. Specify the [country Alpha2 code](https://en.wikipedia.org/wiki/ISO_3166-2) _(like 'NL' or 'PT')_ or the name of the country in English _('The Netherlands', 'Germany')_ after the command."`
+    "\"[@testuser_128256](tg://user?id=128256) No location was specified. Specify the [country Alpha2 code](https://en.wikipedia.org/wiki/ISO_3166-2) _(like 'NL' or 'PT')_ or the name of the country in English _('The Netherlands', 'Germany')_ after the command.\""
   );
 });
 
@@ -31,7 +31,7 @@ it('returns error message when country code is invalid', async () => {
   await cmdRankCountryRemoteMemberCount(ctx, next);
 
   expect(reply()).toMatchInlineSnapshot(
-    `"[@testuser](tg://user?id=128256) couldn't identify the code for the specified country 'foobar'. Try using the [country Alpha2 code](https://en.wikipedia.org/wiki/ISO_3166-2) instead."`
+    "\"[@testuser_128256](tg://user?id=128256) couldn't identify the code for the specified country 'foobar'. Try using the [country Alpha2 code](https://en.wikipedia.org/wiki/ISO_3166-2) instead.\""
   );
 });
 
@@ -50,7 +50,7 @@ it('returns no member count when empty', async () => {
   await cmdRankCountryRemoteMemberCount(ctx, next);
 
   expect(reply()).toMatchInlineSnapshot(
-    `"[@testuser](tg://user?id=128256) There are no members registered."`
+    '"[@testuser_128256](tg://user?id=128256) There are no members registered."'
   );
 });
 

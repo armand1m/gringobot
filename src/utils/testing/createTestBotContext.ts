@@ -1,12 +1,13 @@
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { ChatMemberAdministrator } from 'telegraf/types';
 import { vi } from 'vitest';
 import { BotContext } from '../../context.js';
 import { createTestDatabase } from '../../database.js';
 import { createMemberMention } from '../../member.js';
 import { createTranslation } from '../../middlewares/createTranslateMiddleware/translate.js';
 import { RecursivePartial } from '../types.js';
-import { fakeUser } from './fakeUser.js';
+import { createFakeUser, fakeUser, fakeUserIds } from './fakeUser.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -87,6 +88,17 @@ export const createTestBotContext = async (
     );
 
     return membersFetchResult;
+  };
+
+  ctx.getChatAdministrators = async () => {
+    return fakeUserIds.map(
+      (id) =>
+        ({
+          user: createFakeUser(id),
+          status: 'administrator',
+          is_anonymous: false,
+        } as ChatMemberAdministrator)
+    );
   };
 
   /**

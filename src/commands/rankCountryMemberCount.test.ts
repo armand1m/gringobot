@@ -17,7 +17,7 @@ it('renders no members message count when there are no members registered', asyn
   await cmdRankCountryMemberCount(ctx, next);
 
   expect(reply()).toMatchInlineSnapshot(
-    `"[@testuser](tg://user?id=128256) There are no members registered."`
+    '"[@testuser_128256](tg://user?id=128256) There are no members registered."'
   );
 });
 

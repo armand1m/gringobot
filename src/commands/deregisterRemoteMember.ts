@@ -1,7 +1,7 @@
-import { Middleware } from 'telegraf';
+import { MiddlewareFn } from 'telegraf';
 import { BotContext } from '../context.js';
 
-export const cmdDeregisterRemoteMember: Middleware<BotContext> = async (
+export const cmdDeregisterRemoteMember: MiddlewareFn<BotContext> = async (
   ctx
 ) => {
   const i18n = ctx.i18n;
