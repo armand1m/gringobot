@@ -131,7 +131,9 @@ export const createTestBotContext = async (
       return replyWithMarkdown.mock.calls[0][0];
     }
 
-    return replyWithMarkdown.mock.calls;
+    throw new Error(
+      'replyWithAutoDestructiveMessage nor replyWithMarkdown were invoked.'
+    );
   };
 
   return {
