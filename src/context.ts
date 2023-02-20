@@ -7,6 +7,7 @@ import {
   AvailableLocales,
   Translation,
 } from './middlewares/createTranslateMiddleware/translate.js';
+import { getRandomValues } from './utils/getRandomCollection.js';
 
 interface AutoDestructiveMessageOptions {
   deleteCommandMessage: boolean;
@@ -30,6 +31,7 @@ export interface BotContext extends Context {
     markdownMessage: string,
     options?: AutoDestructiveMessageOptions
   ) => ReturnType<Context['replyWithMarkdown']>;
+  getRandomValues: typeof getRandomValues;
   logger: pino.Logger;
   i18n: Translation;
   safeUser: {

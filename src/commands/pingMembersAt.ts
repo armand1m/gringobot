@@ -1,13 +1,12 @@
-import { Middleware } from 'telegraf';
+import { MiddlewareFn } from 'telegraf';
 import { markdown } from 'telegram-format';
 import { BotContext } from '../context.js';
 import {
   getCountryCodeForText,
   getCountryNameForCountryCode,
 } from '../countries.js';
-import { getRandomValues } from '../utils/getRandomCollection.js';
 
-export const cmdPingMemberAt: Middleware<BotContext> = async (
+export const cmdPingMembersAt: MiddlewareFn<BotContext> = async (
   ctx
 ) => {
   const i18n = ctx.i18n;
@@ -69,7 +68,7 @@ export const cmdPingMemberAt: Middleware<BotContext> = async (
 
     return i18n.t('location', 'randomFiveMembersAtLocation', {
       mention: ctx.safeUser.mention,
-      members: getRandomValues(members, 5).join(', '),
+      members: ctx.getRandomValues(members, 5).join(', '),
       silencedMembers: silencedMembers.join(', '),
       countryName: getCountryNameForCountryCode(
         countryCode,

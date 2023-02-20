@@ -23,7 +23,7 @@
     "pino": "^8.10.0",
     "pino-pretty": "^9.3.0",
     "telegraf": "^4.11.2",
-    "telegram-format": "^2.0.1",
+    "telegram-format": "^2.1.0",
     "tslib": "^2.1.0",
     "yup": "^0.32.9"
   },

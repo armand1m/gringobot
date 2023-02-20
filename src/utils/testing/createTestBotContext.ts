@@ -1,3 +1,4 @@
+import { Alpha2Code } from 'i18n-iso-countries';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { vi } from 'vitest';
@@ -44,8 +45,42 @@ export const createTestBotContext = async (
     i18n: await createTranslation('en'),
   };
 
-  const ctx = {
+  let ctx = {
     ...baseContext,
+  } as BotContext;
+
+  /**
+   * We override the fetch members mention list function
+   * so we can have test user mentions in a consistent way
+   */
+  ctx.fetchMembersMentionList = async (countryCode, silenced) => {
+    const memberIds = ctx.database.getMembersAt(countryCode);
+    const membersFetchResult = memberIds.map((userId) => {
+      return createMemberMention(
+        {
+          id: userId,
+          first_name: `testuser_${userId}`,
+          is_bot: false,
+        },
+        silenced
+      );
+    });
+
+    return membersFetchResult;
+  };
+
+  /**
+   * We override the random values function here to always
+   * return the first items of the list given the amount.
+   *
+   * This only happens in test so we can have deterministics results.
+   */
+  ctx.getRandomValues = (list, amount) => {
+    return list.slice(0, amount);
+  };
+
+  ctx = {
+    ...ctx,
     ...contextOverrides,
   } as BotContext;
 

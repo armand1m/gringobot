@@ -2097,10 +2097,10 @@ telegraf@^4.11.2:
     sandwich-stream "^2.0.2"
     typegram "^4.1.0"
 
-telegram-format@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/telegram-format/-/telegram-format-2.0.1.tgz#0f29ebdbf98a63da03487efae1b4cb4b79195252"
-  integrity sha512-U0pJ7mV+6Nq0EcvrUU/dtluM0BX0bhUOIG4+vaIcyy4w1e2/+0424SEfsMx0ecn8IwKHbGN/Gj4LDU+CbsFovg==
+telegram-format@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/telegram-format/-/telegram-format-2.1.0.tgz#11ab7e4e86955ba2d98fd865f75347bac1d995b2"
+  integrity sha512-V2thkhKzcNVL26h/ANeat/Z+AXBaDGoizs4cab6Kpq/w+d+Ai6M/AFFkuBwvCkZXqb+7UW2vt3Dko5+kKcOIHg==
 
 term-size@^2.1.0:
   version "2.2.1"

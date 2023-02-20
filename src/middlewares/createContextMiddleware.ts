@@ -7,6 +7,7 @@ import { BotContext } from '../context.js';
 import { createDatabase } from '../database.js';
 import { withRejected, withFulfilled } from '../utils/promises.js';
 import { createMemberMention } from '../member.js';
+import { getRandomValues } from '../utils/getRandomCollection.js';
 
 interface Props {
   config: Config;
@@ -179,6 +180,7 @@ export const createContextMiddleware = ({ config }: Props) => {
       mention: createMemberMention(ctx.from),
     };
     ctx.groupLanguage = await ctx.database.getGroupLanguage();
+    ctx.getRandomValues = getRandomValues;
 
     ctx.setMyCommands(CommandDescriptions);
 

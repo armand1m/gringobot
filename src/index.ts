@@ -8,7 +8,7 @@ import { cmdKick } from './commands/kick.js';
 import { cmdSetLanguage } from './commands/setLanguage.js';
 import { cmdPingAdmins } from './commands/pingAdmins.js';
 import { cmdPingRemote } from './commands/pingRemote.js';
-import { cmdPingMemberAt } from './commands/pingMembersAt.js';
+import { cmdPingMembersAt } from './commands/pingMembersAt.js';
 import { cmdFindMember } from './commands/findMember.js';
 import { cmdFindMembersAt } from './commands/findMembersAt.js';
 import { cmdRegisterMemberAt } from './commands/registerMemberAt.js';
@@ -45,7 +45,10 @@ const main = async () => {
 
   bot.command(CommandAliases[Command.FindMember], cmdFindMember);
   bot.command(CommandAliases[Command.PingAdmins], cmdPingAdmins);
-  bot.command(CommandAliases[Command.PingMembersAt], cmdPingMemberAt);
+  bot.command(
+    CommandAliases[Command.PingMembersAt],
+    cmdPingMembersAt
+  );
   bot.command(
     CommandAliases[Command.ListCountryMemberCount],
     cmdListCountryMemberCount
