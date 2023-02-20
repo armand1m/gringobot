@@ -9,9 +9,8 @@ it('renders no members message count when there are no members registered', asyn
       getLocationIndex: () => ({}),
     },
     command: {
-      command: Command.RankCountryRemoteMemberCount,
-      text: 'NL',
-      args: 'NL',
+      command: Command.RankCountryMemberCount,
+      text: '',
     },
   });
 
@@ -22,12 +21,11 @@ it('renders no members message count when there are no members registered', asyn
   );
 });
 
-it('renders country member count for NL', async () => {
+it('renders rank for all countries', async () => {
   const { ctx, next, reply } = await createTestBotContext({
     command: {
-      command: Command.RankCountryRemoteMemberCount,
-      text: 'NL',
-      args: 'NL',
+      command: Command.RankCountryMemberCount,
+      text: '',
     },
   });
 
