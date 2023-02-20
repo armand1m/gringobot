@@ -3,7 +3,7 @@ import path from 'node:path';
 import pino from 'pino';
 import lodash from 'lodash';
 import mkdirp from 'mkdirp';
-import { Low, Memory } from 'lowdb';
+import { Low } from 'lowdb';
 import { JSONFile } from 'lowdb/node';
 import { Alpha2Code } from 'i18n-iso-countries';
 import { AvailableLocales } from './middlewares/createTranslateMiddleware/translate.js';
@@ -50,9 +50,6 @@ export interface DatabaseInstance {
   getRemoteMembersFrom: (
     countryCode: Alpha2Code
   ) => Partial<Record<number, RemoteEntry>>;
-  getRemoteMembersTo: (
-    countryCode: Alpha2Code
-  ) => Partial<Record<number, RemoteEntry>>;
   getAllRemoteMembers: () => Partial<Record<number, RemoteEntry>>;
   getGroupLanguage: () => Promise<AvailableLocales>;
   setGroupLanguage: (locale: AvailableLocales) => Promise<void>;
@@ -88,7 +85,7 @@ const getChatDatabasePath = async (
   return databaseFilePath;
 };
 
-class LowWithLodash<T> extends Low<T> {
+export class LowWithLodash<T> extends Low<T> {
   chain: lodash.ExpChain<this['data']> = lodash
     .chain(this)
     .get('data');
@@ -117,25 +114,7 @@ export const createDatabase = async (
   return createDatabaseMethods(db);
 };
 
-export const createTestDatabase = async (
-  databaseFilePath: string
-) => {
-  const db = new LowWithLodash<DatabaseSchema>(new Memory());
-
-  const testDatabaseContent = await fs.promises.readFile(
-    databaseFilePath,
-    'utf-8'
-  );
-  const testDatabaseInitialData = JSON.parse(testDatabaseContent);
-
-  db.data = testDatabaseInitialData;
-
-  await db.write();
-
-  return createDatabaseMethods(db);
-};
-
-const createDatabaseMethods = async (
+export const createDatabaseMethods = async (
   db: LowWithLodash<DatabaseSchema>
 ): Promise<DatabaseInstance> => {
   const instance: DatabaseInstance = {
@@ -210,16 +189,6 @@ const createDatabaseMethods = async (
         }
       );
 
-      return Object.fromEntries(filteredMembers);
-    },
-    getRemoteMembersTo: (countryCode) => {
-      const members = db.chain.get('remoteIndex').value() ?? [];
-
-      const filteredMembers = Object.entries(members).filter(
-        ([_key, value]) => {
-          return value['to'] === countryCode;
-        }
-      );
       return Object.fromEntries(filteredMembers);
     },
     getAllRemoteMembers: () => {

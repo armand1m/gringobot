@@ -1,4 +1,4 @@
-import { Middleware } from 'telegraf';
+import { MiddlewareFn } from 'telegraf';
 import { markdown } from 'telegram-format';
 import { BotContext } from '../context.js';
 import {
@@ -6,7 +6,7 @@ import {
   getCountryNameForCountryCode,
 } from '../countries.js';
 
-export const cmdDeregisterMemberFrom: Middleware<BotContext> = async (
+export const cmdDeregisterMemberFrom: MiddlewareFn<BotContext> = async (
   ctx
 ) => {
   const i18n = ctx.i18n;

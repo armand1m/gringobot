@@ -1,8 +1,10 @@
-import { Middleware } from 'telegraf';
+import { MiddlewareFn } from 'telegraf';
 import { BotContext } from '../context.js';
 import { getCountryNameForCountryCode } from '../countries.js';
 
-export const cmdFindMember: Middleware<BotContext> = async (ctx) => {
+export const cmdFindMember: MiddlewareFn<BotContext> = async (
+  ctx
+) => {
   const i18n = ctx.i18n;
   const locations = await ctx.database.findMember(ctx.safeUser.id);
 

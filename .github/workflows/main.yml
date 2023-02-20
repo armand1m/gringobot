@@ -1,4 +1,4 @@
-name: Fly Deploy
+name: Build, Test, Coverage, Docker and Fly Deploy
 on:
   push:
     branches:
@@ -12,6 +12,36 @@ jobs:
     name: Deploy app
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: flyctl deploy --remote-only
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Use Node 19 
+        uses: actions/setup-node@v1
+        with:
+          node-version: 19 
+
+      - name: Install dependencies 
+        run: yarn 
+
+      - name: Build
+        run: yarn build
+
+      - name: Lint
+        run: yarn lint
+
+      - name: Test
+        run: yarn test:coverage
+
+      - name: Coverage 
+        run: npx codecov -f coverage/*.json 
+
+      - name: Docker Build
+        uses: docker/build-push-action@v4
+        with:
+          push: false 
+
+      - name: Setup Fly
+        uses: superfly/flyctl-actions/setup-flyctl@master
+
+      - name: Deploy
+        run: flyctl deploy --remote-only
