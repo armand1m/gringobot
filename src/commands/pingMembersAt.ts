@@ -23,7 +23,10 @@ export const cmdPingMemberAt: Middleware<BotContext> = async (
     );
   }
 
-  const countryCode = getCountryCodeForText(unsafeCountryName);
+  const countryCode = getCountryCodeForText(
+    unsafeCountryName,
+    ctx.groupLanguage
+  );
 
   if (!countryCode) {
     return ctx.replyWithAutoDestructiveMessage(
@@ -46,7 +49,10 @@ export const cmdPingMemberAt: Middleware<BotContext> = async (
     if (hasNoMembers) {
       return i18n.t('location', 'noMembersAtLocation', {
         mention: ctx.safeUser.mention,
-        countryName: getCountryNameForCountryCode(countryCode),
+        countryName: getCountryNameForCountryCode(
+          countryCode,
+          ctx.groupLanguage
+        ),
       });
     }
 
@@ -54,7 +60,10 @@ export const cmdPingMemberAt: Middleware<BotContext> = async (
       return i18n.t('location', 'membersAtLocation', {
         mention: ctx.safeUser.mention,
         members: members.join(', '),
-        countryName: getCountryNameForCountryCode(countryCode),
+        countryName: getCountryNameForCountryCode(
+          countryCode,
+          ctx.groupLanguage
+        ),
       });
     }
 
@@ -62,7 +71,10 @@ export const cmdPingMemberAt: Middleware<BotContext> = async (
       mention: ctx.safeUser.mention,
       members: getRandomValues(members, 5).join(', '),
       silencedMembers: silencedMembers.join(', '),
-      countryName: getCountryNameForCountryCode(countryCode),
+      countryName: getCountryNameForCountryCode(
+        countryCode,
+        ctx.groupLanguage
+      ),
     });
   };
 

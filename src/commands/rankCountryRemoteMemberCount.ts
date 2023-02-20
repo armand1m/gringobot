@@ -25,7 +25,10 @@ export const cmdRankCountryRemoteMemberCount: Middleware<BotContext> = async (
     );
   }
 
-  const countryCode = getCountryCodeForText(unsafeBaseCountryCode);
+  const countryCode = getCountryCodeForText(
+    unsafeBaseCountryCode,
+    ctx.groupLanguage
+  );
 
   if (!countryCode) {
     return ctx.replyWithAutoDestructiveMessage(
@@ -59,7 +62,10 @@ export const cmdRankCountryRemoteMemberCount: Middleware<BotContext> = async (
       } else {
         rankMap[to] = {
           count: 1,
-          countryName: getCountryNameForCountryCode(to),
+          countryName: getCountryNameForCountryCode(
+            to,
+            ctx.groupLanguage
+          ),
           countryFlagEmoji: countryCodeEmoji(to),
         };
       }

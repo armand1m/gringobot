@@ -14,7 +14,12 @@ export const cmdFindMember: Middleware<BotContext> = async (ctx) => {
       : i18n.t('location', 'foundMemberAt', {
           mention: ctx.safeUser.mention,
           locations: locations
-            .map(getCountryNameForCountryCode)
+            .map((location) =>
+              getCountryNameForCountryCode(
+                location,
+                ctx.groupLanguage
+              )
+            )
             .join(', '),
         });
 

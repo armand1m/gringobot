@@ -23,7 +23,10 @@ export const cmdRankCountryMemberCount: Middleware<BotContext> = async (
 
   const locationCount = locations
     .map(([countryCode, userIds]) => {
-      const countryName = getCountryNameForCountryCode(countryCode);
+      const countryName = getCountryNameForCountryCode(
+        countryCode,
+        ctx.groupLanguage
+      );
       const countryFlagEmoji = countryCodeEmoji(countryCode);
       const count = userIds.length;
 

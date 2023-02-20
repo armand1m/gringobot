@@ -19,7 +19,10 @@ export const validateCountry = (
     return { countryCode: null, error: errorMessage };
   }
 
-  const countryCode = getCountryCodeForText(countryName);
+  const countryCode = getCountryCodeForText(
+    countryName,
+    ctx.groupLanguage
+  );
 
   if (!countryCode) {
     const errorMessage = i18n.t('errors', 'failedToIdentifyCountry', {

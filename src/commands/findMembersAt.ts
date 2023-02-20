@@ -22,7 +22,10 @@ export const cmdFindMembersAt: Middleware<BotContext> = async (
     );
   }
 
-  const countryCode = getCountryCodeForText(unsafeCountryName);
+  const countryCode = getCountryCodeForText(
+    unsafeCountryName,
+    ctx.groupLanguage
+  );
 
   if (!countryCode) {
     return ctx.replyWithAutoDestructiveMessage(
@@ -42,12 +45,18 @@ export const cmdFindMembersAt: Middleware<BotContext> = async (
   const message = hasNoMembers
     ? i18n.t('location', 'noMembersAtLocation', {
         mention: ctx.safeUser.mention,
-        countryName: getCountryNameForCountryCode(countryCode),
+        countryName: getCountryNameForCountryCode(
+          countryCode,
+          ctx.groupLanguage
+        ),
       })
     : i18n.t('location', 'membersAtLocation', {
         mention: ctx.safeUser.mention,
         members: members.join(', '),
-        countryName: getCountryNameForCountryCode(countryCode),
+        countryName: getCountryNameForCountryCode(
+          countryCode,
+          ctx.groupLanguage
+        ),
       });
 
   return ctx.replyWithAutoDestructiveMessage(message, {
