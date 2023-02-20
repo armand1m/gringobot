@@ -1,9 +1,7 @@
+import { Command } from '../command';
+import { createTestBotContext } from '../utils/testing/createTestBotContext';
 import type { RemoteEntry } from '../database';
 import { cmdRankCountryRemoteMemberCount } from './rankCountryRemoteMemberCount';
-
-beforeEach(() => {
-  jest.restoreAllMocks();
-});
 
 const remoteMembers: Partial<Record<number, RemoteEntry>> = {
   0: {
@@ -39,28 +37,37 @@ const remoteMembers: Partial<Record<number, RemoteEntry>> = {
 };
 
 it('returns rank for a list', async () => {
-  // Prepare
-  const getRemoteMembersFromMock = jest
-    .fn()
-    .mockReturnValue(remoteMembers);
-  const replyWithMarkdownMock = jest.fn();
-  const ctx = {
-    database: { getRemoteMembersFrom: getRemoteMembersFromMock },
-    command: {},
-    replyWithMarkdown: replyWithMarkdownMock,
-  };
+  const { ctx, next } = await createTestBotContext({
+    database: {
+      getRemoteMembersFrom: jest.fn().mockReturnValue(remoteMembers),
+    },
+    command: {
+      command: Command.RankCountryRemoteMemberCount,
+      text: 'BR',
+      args: 'BR',
+    },
+  });
 
-  // Given
-  ctx.command = { args: 'BR' };
+  await cmdRankCountryRemoteMemberCount(ctx, next);
 
-  // When
-  await (cmdRankCountryRemoteMemberCount as any)(ctx);
+  expect(ctx.replyWithMarkdown).toMatchInlineSnapshot(`
+    [MockFunction] {
+      "calls": Array [
+        Array [
+          "1. 🇪🇸 Spain (ES): 2
+    2. 🇺🇸 United States of America (US): 2
+    3. 🇫🇷 France (FR): 1
+    4. 🇬🇧 United Kingdom (GB): 1
 
-  // Then
-  expect(replyWithMarkdownMock).toHaveBeenCalledWith(
-    expect.stringMatching(/^1\. 🇪🇸 Espanha \(ES\): 2(.|\n)*$/)
-  );
-  expect(replyWithMarkdownMock).toHaveBeenCalledWith(
-    expect.stringMatching(/.*Total: 6/)
-  );
+    Total: 6",
+        ],
+      ],
+      "results": Array [
+        Object {
+          "type": "return",
+          "value": undefined,
+        },
+      ],
+    }
+  `);
 });
