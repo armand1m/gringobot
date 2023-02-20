@@ -5,6 +5,7 @@ import { loadConfiguration } from './config';
 import { Command, CommandAliases } from './command';
 import { cmdHelp } from './commands/help';
 import { cmdKick } from './commands/kick';
+import { cmdSetLanguage } from './commands/setLanguage';
 import { cmdPingAdmins } from './commands/pingAdmins';
 import { cmdPingRemote } from './commands/pingRemote';
 import { cmdPingMemberAt } from './commands/pingMembersAt';
@@ -28,7 +29,6 @@ const main = async () => {
   const logger = createLogger(config.environment);
   const bot = new Telegraf<BotContext>(config.botToken);
 
-  bot.use(createTranslateMiddleware());
   bot.use(createLoggerMiddleware({ logger }));
   bot.use(createCommandMiddleware());
   bot.use(
@@ -36,6 +36,7 @@ const main = async () => {
       config,
     })
   );
+  bot.use(createTranslateMiddleware());
   bot.use(createBlockMiddleware());
 
   if (config.helpCommandEnabled) {
@@ -79,6 +80,7 @@ const main = async () => {
   );
   bot.command(CommandAliases[Command.PingRemote], cmdPingRemote);
   bot.command(CommandAliases[Command.Kick], cmdKick);
+  bot.command(CommandAliases[Command.SetLanguage], cmdSetLanguage);
 
   process.once('SIGINT', () => bot.stop('SIGINT'));
   process.once('SIGTERM', () => bot.stop('SIGTERM'));

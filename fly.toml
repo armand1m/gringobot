@@ -8,7 +8,9 @@ processes = []
 [env]
   NODE_ENV="production"
   DATA_PATH="./data"
-  HELP_COMMAND_ENABLED=false
+  HELP_COMMAND_ENABLED="false"
+  # TODO: add PNG prod
+  CHATS_WITH_FORCED_PORTUGUESE="-1001406908646"
 
 [mounts]
   source="gringobot_data"

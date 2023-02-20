@@ -1,14 +1,14 @@
 import handlebars from 'handlebars';
 
-type AvailableLocales = 'en' | 'ptbr';
+export type AvailableLocales = 'en' | 'ptbr';
 
-const getTranslations = async (_locale: AvailableLocales) => {
-  if (_locale === 'ptbr') {
+const getTranslations = async (locale: AvailableLocales) => {
+  if (locale === 'ptbr') {
     const { translations } = await import(`./locales/ptbr`);
     return translations;
   }
 
-  if (_locale === 'en') {
+  if (locale === 'en') {
     const { translations } = await import(`./locales/base`);
     return translations;
   }
@@ -17,7 +17,6 @@ const getTranslations = async (_locale: AvailableLocales) => {
 };
 
 type TranslationsObject = Awaited<ReturnType<typeof getTranslations>>;
-type TranslationNamespaces = keyof TranslationsObject;
 
 type InterpolateInner<
   S extends string,
@@ -27,11 +26,18 @@ type InterpolateInner<
   : U;
 
 type Interpolate<
-  N extends keyof TranslationsObject,
-  S extends keyof TranslationsObject[N]
+  K1 extends keyof TranslationsObject,
+  K2 extends keyof TranslationsObject[K1]
 > = InterpolateInner<
+  // for some reason, although the type below does returns correctly the selected string
+  // in the translation dictionary, typescript complains that this doesn't satisfy a string.
+  //
+  // ignoring it feels safe, although suboptimal.
+  //
+  // at least, it still works on an interface level.
+  //
   // @ts-ignore
-  TranslationsObject[N][S]
+  TranslationsObject[K1][K2]
 >;
 
 export const createTranslation = async (
@@ -40,7 +46,7 @@ export const createTranslation = async (
   let translations = await getTranslations(initialLocale);
 
   const t = <
-    N extends TranslationNamespaces,
+    N extends keyof TranslationsObject,
     T extends keyof TranslationsObject[N],
     Payload = Interpolate<N, T>
   >(

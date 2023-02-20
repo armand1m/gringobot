@@ -5,6 +5,7 @@ import pino from 'pino';
 import low from 'lowdb';
 import FileAsync from 'lowdb/adapters/FileAsync';
 import { Alpha2Code } from 'i18n-iso-countries';
+import { AvailableLocales } from './middlewares/createTranslateMiddleware/translate';
 
 interface DatabaseSchema {
   locationIndex: Partial<Record<Alpha2Code, number[]>>;
@@ -51,6 +52,8 @@ export interface DatabaseInstance {
     countryCode: Alpha2Code
   ) => Partial<Record<number, RemoteEntry>>;
   getAllRemoteMembers: () => Partial<Record<number, RemoteEntry>>;
+  getGroupLanguage: () => Promise<AvailableLocales>;
+  setGroupLanguage: (locale: AvailableLocales) => Promise<void>;
 }
 
 const emptyDatabase: DatabaseSchema = {
@@ -195,8 +198,13 @@ export const createDatabase = async (
     },
     removeAutoDeleteMessage: async (messageId: number) => {
       const messages = db.get('autoDeleteMessages');
-
       await messages.unset(messageId).write();
+    },
+    getGroupLanguage: async () => {
+      return db.get('language').value() ?? 'en';
+    },
+    setGroupLanguage: async (language) => {
+      return db.set('language', language).write();
     },
   };
 

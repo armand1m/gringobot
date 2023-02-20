@@ -2,6 +2,8 @@ export const translations = {
   location: {
     noMembersAtLocation:
       "{{mention}} There are no members registered in the location '{{countryName}}'.",
+    randomFiveMembersAtLocation:
+      "{{mention}} We selected 5 members registered in the location '{{countryName}}': {{members}} \n\n But there are more people registered in the location '{{countryName}}': {{silencedMembers}}",
     membersAtLocation:
       "{{mention}} These members are registered in the location '{{countryName}}': {{members}}",
     memberRegisteredAtLocation:
@@ -51,6 +53,12 @@ export const translations = {
   kick: {
     userGotKicked:
       '{{mention}} User {{kickedUser}} has been kicked from the group.',
+  },
+  locale: {
+    changeSuccess:
+      '{{mention}} The bot language is now set to "{{groupLocale}}"',
+    invalidLanguageParam:
+      '{{mention}} Failed to change the bot language. The language "{{attemptLanguage}}" is not supported. Try one of the supported languages: {{validLanguages}}',
   },
 } as const;
 

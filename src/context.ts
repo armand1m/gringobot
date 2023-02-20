@@ -14,6 +14,7 @@ export interface BotContext extends Context {
   config: Config;
   database: DatabaseInstance;
   loadDatabase: () => Promise<DatabaseInstance>;
+  checkAdminAccess: () => Promise<boolean>;
   fetchMembersMentionList: (
     countryCode: Alpha2Code,
     silenced?: boolean

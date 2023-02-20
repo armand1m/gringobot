@@ -14,16 +14,9 @@ export const cmdKick: Middleware<BotContext> = async (ctx) => {
     );
   }
 
-  const chatId = ctx.chat.id;
-  const userId = ctx.safeUser.id;
+  const hasAdminAccess = await ctx.checkAdminAccess();
 
-  const member = await ctx.telegram.getChatMember(chatId, userId);
-
-  const isGroupCreator = member.status === 'creator';
-  const canRestrictMembers = member.can_restrict_members;
-  const canKickUsers = isGroupCreator || canRestrictMembers;
-
-  if (!member || !canKickUsers) {
+  if (!hasAdminAccess) {
     return ctx.replyWithAutoDestructiveMessage(
       i18n.t('errors', 'mustBeAdminToUseCommand', {
         mention: ctx.safeUser.mention,
