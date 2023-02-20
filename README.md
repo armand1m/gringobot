@@ -23,6 +23,8 @@ The bot currently replies in Portuguese by default, and parses names of countrie
  - [x] Ping folks from a location:
     - [x] English: `/ping_members_at NL`, `/ping NL`
     - [x] Portuguese: `/alo NL`, `/alo Holanda`
+    - **Note on this feature**:
+      - Telegram imposes limits on actually pinging more than 5 mentions in the same message. When trying to ping people registered in a location, this bot will randomly select 5 of those folks and mention them. The rest will still be mentioned, but with silent mentions.
  - [x] Deregister member location:
     - [x] English: `/leave NL`
     - [x] Portuguese: `/sair NL`, `/sair Holanda`
@@ -57,8 +59,12 @@ The bot currently replies in Portuguese by default, and parses names of countrie
  - [x] Kick user:
     - [x] `/kick`
       - Only works by replying a message from the user to be kicked.
+ - [x] Set Group Language:
+    - [x] `/set_language en`
+    - [x] `/set_language ptbr`
  - [x] Self preservation habilities
     - [x] Handle deleted registered users and deregister those when identified
+    - [x] Auto bans accounts with Cyrillic Characters _(huge sorry to all the eastern europeans for this, russians made me do it)_
  - [x] Message Auto Deletion:
     - [x] Configurable through the `MESSAGE_TIMEOUT_IN_MINUTES` environment variable. Default is `2`.
     - [x] Feature can be toggled through the `MESSAGE_TIMEOUT_ENABLED` environment variable. Default is `true`.
@@ -130,22 +136,27 @@ docker run -e BOT_TOKEN="your-bot-token-here" armand1m/gringobot
 
 ### Kubernetes
 
-Kubernetes manifests are available at the `./kubernetes` folder.
+[Kubernetes manifests were* available at the `./kubernetes` folder.](https://github.com/armand1m/gringobot/blob/d8bd8a2c8c6e9806a9041aa138e6e956cc3ac2b8/kubernetes/deployment.yml)
 
-Create a secret named `gringobot-secret` with the `bot_token`:
+As of 2023, this application is now deployed on https://fly.io. I've kept it for historical reasons.
+
+[Docs are here](https://github.com/armand1m/gringobot/blob/d8bd8a2c8c6e9806a9041aa138e6e956cc3ac2b8/README.md#kubernetes)
+
+### Fly
+
+This bot is published in https://fly.io 
+
+The CI will take care of publishing the last main branch state into the official bot release.
+
+Publishing it in your instance should be easy:
 
 ```sh
-kubectl create secret generic gringobot-secrets \
-    --from-literal=bot_token='<token-goes-here>'
+fly auth login
+fly secrets set BOT_TOKEN=123123123:32132132131312
+fly deploy
 ```
 
-Then apply the manifest:
-
-```sh
-kubectl apply -f ./kubernetes/deployment.yml
-```
-
-You might have to adjust the PersistentVolumeClaim if you're not using a CSI driver.
+Refer to https://fly.io docs for more details on other commons ops
 
 ## Credits
 
