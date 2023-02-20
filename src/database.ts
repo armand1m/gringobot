@@ -198,7 +198,7 @@ export const createDatabase = async (
     },
     removeAutoDeleteMessage: async (messageId: number) => {
       const messages = db.get('autoDeleteMessages');
-      await messages.unset(messageId).write();
+      messages.unset(messageId).write();
     },
     getGroupLanguage: async () => {
       return db.get('language').value() ?? 'en';

@@ -1,4 +1,4 @@
-import handlebars from 'handlebars';
+import mustache from 'mustache';
 
 export type AvailableLocales = 'en' | 'ptbr';
 
@@ -55,15 +55,14 @@ export const createTranslation = async (
       : [namespace: N, translation: T, payload: Interpolate<N, T>]
   ) => {
     const [namespace, key, payload] = args;
-    const template = handlebars.compile(
-      translations[namespace][key],
-      {
-        noEscape: true,
-        strict: true,
-      }
-    );
+    const names = translations[namespace];
+    const template = names[key];
 
-    return template(payload);
+    // @ts-ignore
+    return mustache.render(template, payload, undefined, {
+      escape: (value) => value,
+      tags: false,
+    });
   };
 
   const locale = async (newLocale: AvailableLocales) => {

@@ -22,7 +22,10 @@ export const cmdRegisterMemberAt: Middleware<BotContext> = async (
     );
   }
 
-  const countryCode = getCountryCodeForText(unsafeCountryName);
+  const countryCode = getCountryCodeForText(
+    unsafeCountryName,
+    ctx.groupLanguage
+  );
 
   if (!countryCode) {
     return ctx.replyWithAutoDestructiveMessage(
@@ -49,7 +52,10 @@ export const cmdRegisterMemberAt: Middleware<BotContext> = async (
   return ctx.replyWithAutoDestructiveMessage(
     i18n.t('location', 'memberRegisteredAtLocation', {
       mention: ctx.safeUser.mention,
-      countryName: getCountryNameForCountryCode(countryCode),
+      countryName: getCountryNameForCountryCode(
+        countryCode,
+        ctx.groupLanguage
+      ),
     })
   );
 };

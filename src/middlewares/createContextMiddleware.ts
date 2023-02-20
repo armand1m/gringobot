@@ -178,6 +178,7 @@ export const createContextMiddleware = ({ config }: Props) => {
       id: ctx.from.id,
       mention: createMemberMention(ctx.from),
     };
+    ctx.groupLanguage = await ctx.database.getGroupLanguage();
 
     ctx.setMyCommands(CommandDescriptions);
 

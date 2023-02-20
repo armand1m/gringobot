@@ -3,7 +3,10 @@ import pino from 'pino';
 import { Context } from 'telegraf';
 import { Config } from './config';
 import { DatabaseInstance } from './database';
-import { Translation } from './middlewares/createTranslateMiddleware/translate';
+import {
+  AvailableLocales,
+  Translation,
+} from './middlewares/createTranslateMiddleware/translate';
 
 interface AutoDestructiveMessageOptions {
   deleteCommandMessage: boolean;
@@ -14,6 +17,7 @@ export interface BotContext extends Context {
   config: Config;
   database: DatabaseInstance;
   loadDatabase: () => Promise<DatabaseInstance>;
+  groupLanguage: AvailableLocales;
   checkAdminAccess: () => Promise<boolean>;
   fetchMembersMentionList: (
     countryCode: Alpha2Code,

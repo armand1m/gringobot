@@ -61,10 +61,12 @@ export const cmdRegisterRemoteMember: Middleware<BotContext> = async (
     i18n.t('remote', 'remoteMemberRegistered', {
       mention: ctx.safeUser.mention,
       countryTo: getCountryNameForCountryCode(
-        countryCodeTo.countryCode
+        countryCodeTo.countryCode,
+        ctx.groupLanguage
       ),
       countryFrom: getCountryNameForCountryCode(
-        countryCodeFrom.countryCode
+        countryCodeFrom.countryCode,
+        ctx.groupLanguage
       ),
     })
   );
