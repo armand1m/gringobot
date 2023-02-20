@@ -47,6 +47,8 @@ export const translations = {
       '{{mention}} Você se removeu da lista de remotos.',
     members:
       '{{mention}} Estas pessoas estão registradas como remoto: {{members}}',
+    randomFiveMembersAtLocation:
+      '{{mention}} Selecionamos 5 pessoas registradas como remoto: {{members}} \n\n Mais pessoas registradas como remoto: {{silencedMembers}}',
     noMembers: '{{mention}} Não há pessoas registradas como remoto.',
   },
   kick: {

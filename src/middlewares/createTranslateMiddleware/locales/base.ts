@@ -48,6 +48,8 @@ export const translations = {
       '{{mention}} You deregistered yourself as remote.',
     members:
       '{{mention}} These members are registered as remote: {{members}}',
+    randomFiveMembersAtLocation:
+      '{{mention}} We selected 5 members registered as remote: {{members}} \n\n But there are more people registered as remote as well: {{silencedMembers}}',
     noMembers:
       '{{mention}} There are no members registered as remote.',
   },
