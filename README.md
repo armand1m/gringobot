@@ -21,7 +21,7 @@ The bot currently replies in Portuguese by default, and parses names of countrie
     - [x] English: `/find_members_at NL`, `/whoat NL`
     - [x] Portuguese: `/quem NL`, `/quem Holanda`
  - [x] Ping folks from a location:
-    - [x] English: `/ping_members_at NL`, `/ping NL`
+    - [x] English: `/ping_members_at NL`, `/ping NL`, `/ping remote`
     - [x] Portuguese: `/alo NL`, `/alo Holanda`
     - **Note on this feature**:
       - Telegram imposes limits on actually pinging more than 5 mentions in the same message. When trying to ping people registered in a location, this bot will randomly select 5 of those folks and mention them. The rest will still be mentioned, but with silent mentions.
@@ -51,6 +51,8 @@ The bot currently replies in Portuguese by default, and parses names of countrie
  - [x] Find remote member working for a location:
     - [x] English: `/find_remote_member_to CA `
     - [x] Portuguese: `/quem_remoto_para CA`
+ - [x] Ping all remote members:
+    - [x] `/ping_remote`, `/ping remote` _(case insensitive)_
  - [x] Help Sections:
     - [x] English: `/help <subject> <topic>`
     - [x] Portuguese: `/ajuda <assunto> <topico>`

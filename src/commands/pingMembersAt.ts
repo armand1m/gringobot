@@ -5,14 +5,20 @@ import {
   getCountryCodeForText,
   getCountryNameForCountryCode,
 } from '../countries.js';
+import { cmdPingRemote } from './pingRemote.js';
 
 export const cmdPingMembersAt: MiddlewareFn<BotContext> = async (
-  ctx
+  ctx,
+  next
 ) => {
   const i18n = ctx.i18n;
   const unsafeCountryName = markdown
     .escape(ctx.command.args ?? '')
     .trim();
+
+  if (unsafeCountryName.toLowerCase() === 'remote') {
+    return cmdPingRemote(ctx, next);
+  }
 
   if (!unsafeCountryName) {
     return ctx.replyWithAutoDestructiveMessage(
