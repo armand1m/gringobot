@@ -83,7 +83,7 @@ The bot currently replies in Portuguese by default, and parses names of countrie
 
 ## Developing
 
-Make sure you have Git, Node and Yarn available in your local environment.
+Make sure you have Git and Node 19+ (installed through `nvm` is recommended) available in your local environment.
 
 ```sh
 # clone repository
@@ -92,7 +92,14 @@ git clone https://github.com/armand1m/gringobot.git
 # cd into it
 cd ./gringobot
 
-# install dependencies
+# (optional) in case you have nvm instead of node19 directly installed
+nvm install 19
+nvm use 19
+
+# install yarn package manager
+npm install -g yarn
+
+# download project dependencies
 yarn
 ```
 
@@ -109,13 +116,26 @@ HELP_COMMAND_ENABLED=true
 EOL
 ```
 
-Now run `yarn dev` and your bot should be working. Changes will restart the process.
+Now run `yarn dev` and your bot should be up with live reloading.
 
 ## Deploying
 
 ### Host
 
-Follow the same configuration step for development, but run the following to start the process:
+Follow the same configuration step for development, but first override your .env with this: 
+
+```sh
+cat > ./.env <<EOL
+NODE_ENV=production
+BOT_TOKEN=your-bot-token-here
+DATA_PATH=./data
+MESSAGE_TIMEOUT_ENABLED=true
+MESSAGE_TIMEOUT_IN_MINUTES=2
+HELP_COMMAND_ENABLED=true
+EOL
+```
+
+then build the application and start the process:
 
 ```sh
 yarn build
@@ -131,14 +151,24 @@ This bot is published publicly as a Docker Image, so you should be able to run i
 To run it locally, just run the following:
 
 ```sh
-docker run -e BOT_TOKEN="your-bot-token-here" armand1m/gringobot
+# create a volume to persist data
+docker volume create gringobot_data
+
+# (optional) build image from source
+docker build . -t armand1m/gringobot
+
+# run the container
+docker run \
+  -e BOT_TOKEN="your-bot-token-here" \
+  --mount source=gringobot_data,target=/app/data \
+  armand1m/gringobot
 ```
 
 ### Kubernetes
 
-[Kubernetes manifests were* available at the `./kubernetes` folder.](https://github.com/armand1m/gringobot/blob/d8bd8a2c8c6e9806a9041aa138e6e956cc3ac2b8/kubernetes/deployment.yml)
+[Kubernetes manifests were available at the `./kubernetes` folder.](https://github.com/armand1m/gringobot/blob/d8bd8a2c8c6e9806a9041aa138e6e956cc3ac2b8/kubernetes/deployment.yml)
 
-As of 2023, this application is now deployed on https://fly.io. I've kept it for historical reasons.
+As of 2023, this application is now deployed on https://fly.io. I've kept this note for historical reasons.
 
 [Docs are here](https://github.com/armand1m/gringobot/blob/d8bd8a2c8c6e9806a9041aa138e6e956cc3ac2b8/README.md#kubernetes)
 
@@ -151,12 +181,24 @@ The CI will take care of publishing the last main branch state into the official
 Publishing it in your instance should be easy:
 
 ```sh
+# get credentials
 fly auth login
+
+# set bot token from @BotFather as a secret
+#
+# secrets in fly are automatically added to
+# the instance as env vars with the same name
 fly secrets set BOT_TOKEN=123123123:32132132131312
+
+# create a volume to hold persistent group data
+# 1gb is more than enough.
+fly vol create gringobot_data -s 1
+
+# ship it
 fly deploy
 ```
 
-Refer to https://fly.io docs for more details on other commons ops
+Refer to https://fly.io docs for more details on other commons operations.
 
 ## Credits
 
