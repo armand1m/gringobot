@@ -1,4 +1,4 @@
-import { Telegraf } from 'telegraf';
+import { Telegraf, TelegramError } from 'telegraf';
 import { BotContext } from './context.js';
 import { createLogger } from './logger.js';
 import { loadConfiguration } from './config.js';
@@ -23,6 +23,7 @@ import { createCommandMiddleware } from './middlewares/createCommandMiddleware.j
 import { createBlockMiddleware } from './middlewares/createBlockMiddleware.js';
 import { createLoggerMiddleware } from './middlewares/createLoggerMiddleware.js';
 import { createTranslateMiddleware } from './middlewares/createTranslateMiddleware/index.js';
+import { HTTPError } from 'got';
 
 const main = async () => {
   const config = await loadConfiguration();
@@ -84,6 +85,21 @@ const main = async () => {
   bot.command(CommandAliases[Command.PingRemote], cmdPingRemote);
   bot.command(CommandAliases[Command.Kick], cmdKick);
   bot.command(CommandAliases[Command.SetLanguage], cmdSetLanguage);
+
+  bot.catch((err, ctx) => {
+    logger.error(
+      `Error while handling update ${ctx.update.update_id}:`
+    );
+    logger.debug({ ctx });
+
+    if (err instanceof TelegramError) {
+      console.error('Error in request:', err.description);
+    } else if (err instanceof HTTPError) {
+      console.error('Could not contact Telegram:', err);
+    } else {
+      console.error('Unknown error:', err);
+    }
+  });
 
   process.once('SIGINT', () => bot.stop('SIGINT'));
   process.once('SIGTERM', () => bot.stop('SIGTERM'));
