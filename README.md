@@ -12,7 +12,7 @@ This bot is available in Telegram as [@PNGGringoBot](https://t.me/PNGGringoBot) 
 
 ## Features
 
-The bot currently replies in Portuguese by default, and parses names of countries in Portuguese only. This will change in the future.
+The bot replies in English by default. You can change the language using the `/set_language <locale>`. Currently, only `en` and `ptbr` are available locales. Please feel free to open a PR adding more locales.
 
  - [x] Register member location:
     - [x] English: `/register_member_at NL`, `/imat NL`
