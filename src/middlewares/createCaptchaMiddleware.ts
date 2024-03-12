@@ -39,14 +39,14 @@ export const createCaptchaMiddleware = () => {
       })
     );
 
-    ctx.logger.info(
-      `User ${ctx.from?.id} has been added to the captcha waitlist.`
-    );
-
     await ctx.database.addUserToCaptchaWaitlist(
       newChatMember,
       captcha,
       captchaMessage
+    );
+
+    ctx.logger.info(
+      `User ${ctx.from?.id} has been added to the captcha waitlist.`
     );
 
     return next();

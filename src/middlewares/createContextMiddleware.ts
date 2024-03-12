@@ -206,23 +206,24 @@ export const createContextMiddleware = ({ config }: Props) => {
     }
 
     const isCaptchaEnabled = await ctx.database.isCaptchaEnabled();
+    const captchaRecyclingInterval = captchaIntervals[chatId];
 
-    if (isCaptchaEnabled) {
-      const captchaRecyclingInterval = captchaIntervals[chatId];
+    if (isCaptchaEnabled && !captchaRecyclingInterval) {
+      ctx.logger.info(
+        `Creating captcha interval for chat "${chatId}".`
+      );
 
-      if (!captchaRecyclingInterval) {
-        ctx.logger.info(
-          `Creating captcha interval for chat "${chatId}".`
-        );
+      captchaIntervals[chatId] = setInterval(() => {
+        runCaptchaRecycling(ctx);
+      }, 5000);
 
-        captchaIntervals[chatId] = setInterval(() => {
-          runCaptchaRecycling(ctx);
-        }, 5000);
+      process.on('SIGINT', () =>
+        clearInterval(captchaIntervals[chatId])
+      );
+    }
 
-        process.on('SIGINT', () =>
-          clearInterval(captchaIntervals[chatId])
-        );
-      }
+    if (!isCaptchaEnabled && captchaRecyclingInterval) {
+      clearInterval(captchaIntervals[chatId]);
     }
 
     return next();
