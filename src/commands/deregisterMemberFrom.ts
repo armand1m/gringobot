@@ -6,9 +6,9 @@ import {
   getCountryNameForCountryCode,
 } from '../countries.js';
 
-export const cmdDeregisterMemberFrom: MiddlewareFn<BotContext> = async (
-  ctx
-) => {
+export const cmdDeregisterMemberFrom: MiddlewareFn<
+  BotContext
+> = async (ctx) => {
   const i18n = ctx.i18n;
   const unsafeCountryName = markdown
     .escape(ctx.command.args ?? '')

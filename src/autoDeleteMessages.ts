@@ -1,11 +1,7 @@
 import { to } from 'await-to-js';
 import retry, { RetryFunction } from 'async-retry';
 import { BotContext } from './context.js';
-
-const expired = (createdAt: number, timeout: number) => {
-  const minute = 60000;
-  return Math.floor((Date.now() - createdAt) / minute) >= timeout;
-};
+import { expired } from './utils/expired.js';
 
 export const runMessageRecycling = async (
   ctx: BotContext

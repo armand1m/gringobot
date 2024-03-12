@@ -4,13 +4,17 @@ import {
   createDatabaseMethods,
   DatabaseSchema,
   LowWithLodash,
+  emptyDatabase,
 } from '../../database.js';
 import { mainFakeTestUser } from './fakeUser.js';
 
 export const createTestDatabase = async (
   databaseFilePath: string
 ) => {
-  const db = new LowWithLodash<DatabaseSchema>(new Memory());
+  const db = new LowWithLodash<DatabaseSchema>(
+    new Memory(),
+    emptyDatabase
+  );
 
   const testDatabaseContent = await fs.promises.readFile(
     databaseFilePath,

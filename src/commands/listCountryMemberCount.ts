@@ -4,9 +4,9 @@ import { countryCodeEmoji } from 'country-code-emoji';
 import { BotContext } from '../context.js';
 import { getCountryNameForCountryCode } from '../countries.js';
 
-export const cmdListCountryMemberCount: MiddlewareFn<BotContext> = async (
-  ctx
-) => {
+export const cmdListCountryMemberCount: MiddlewareFn<
+  BotContext
+> = async (ctx) => {
   const i18n = ctx.i18n;
 
   const locationIndex = ctx.database.getLocationIndex();

@@ -8,6 +8,7 @@ import { createDatabase } from '../database.js';
 import { withRejected, withFulfilled } from '../utils/promises.js';
 import { createMemberMention } from '../member.js';
 import { getRandomValues } from '../utils/getRandomCollection.js';
+import { runCaptchaRecycling } from '../autoKickCaptcha.js';
 
 interface Props {
   config: Config;
@@ -26,6 +27,7 @@ type MessageDeletionIntervals = Record<string, NodeJS.Timeout>;
  * and the value will be an instance of NodeJS.Timeout.
  */
 const messageDeletionIntervals: MessageDeletionIntervals = {};
+const captchaIntervals: MessageDeletionIntervals = {};
 
 export const createContextMiddleware = ({ config }: Props) => {
   const middleware: Middleware<BotContext> = async (ctx, next) => {
@@ -74,35 +76,36 @@ export const createContextMiddleware = ({ config }: Props) => {
       return true;
     };
 
-    const replyWithAutoDestructiveMessage: BotContext['replyWithAutoDestructiveMessage'] = async (
-      markdownMessage,
-      options = {
-        deleteReplyMessage: true,
-        deleteCommandMessage: true,
-      }
-    ) => {
-      const messageSent = await ctx.replyWithMarkdown(
-        markdownMessage
-      );
+    const replyWithAutoDestructiveMessage: BotContext['replyWithAutoDestructiveMessage'] =
+      async (
+        markdownMessage,
+        options = {
+          deleteReplyMessage: true,
+          deleteCommandMessage: true,
+        }
+      ) => {
+        const messageSent = await ctx.replyWithMarkdown(
+          markdownMessage
+        );
 
-      if (!config.messageTimeoutEnabled) {
+        if (!config.messageTimeoutEnabled) {
+          return messageSent;
+        }
+
+        if (options.deleteCommandMessage && ctx.message?.message_id) {
+          await ctx.database.addAutoDeleteMessage(
+            ctx.message?.message_id
+          );
+        }
+
+        if (options.deleteReplyMessage) {
+          await ctx.database.addAutoDeleteMessage(
+            messageSent.message_id
+          );
+        }
+
         return messageSent;
-      }
-
-      if (options.deleteCommandMessage && ctx.message?.message_id) {
-        await ctx.database.addAutoDeleteMessage(
-          ctx.message?.message_id
-        );
-      }
-
-      if (options.deleteReplyMessage) {
-        await ctx.database.addAutoDeleteMessage(
-          messageSent.message_id
-        );
-      }
-
-      return messageSent;
-    };
+      };
 
     const fetchMembersMentionList = async (
       countryCode: Alpha2Code,
@@ -171,7 +174,8 @@ export const createContextMiddleware = ({ config }: Props) => {
     ctx.checkAdminAccess = checkAdminAccess;
     ctx.fetchMembersMentionList = fetchMembersMentionList;
     ctx.fetchRemoteMembersMentionList = fetchRemoteMembersMentionList;
-    ctx.replyWithAutoDestructiveMessage = replyWithAutoDestructiveMessage;
+    ctx.replyWithAutoDestructiveMessage =
+      replyWithAutoDestructiveMessage;
     ctx.loadDatabase = loadDatabase;
     ctx.database = await loadDatabase();
     ctx.config = config;
@@ -201,6 +205,27 @@ export const createContextMiddleware = ({ config }: Props) => {
           clearInterval(messageDeletionIntervals[chatId])
         );
       }
+    }
+
+    const isCaptchaEnabled = await ctx.database.isCaptchaEnabled();
+    const captchaRecyclingInterval = captchaIntervals[chatId];
+
+    if (isCaptchaEnabled && !captchaRecyclingInterval) {
+      ctx.logger.info(
+        `Creating captcha interval for chat "${chatId}".`
+      );
+
+      captchaIntervals[chatId] = setInterval(() => {
+        runCaptchaRecycling(ctx);
+      }, 5000);
+
+      process.on('SIGINT', () =>
+        clearInterval(captchaIntervals[chatId])
+      );
+    }
+
+    if (!isCaptchaEnabled && captchaRecyclingInterval) {
+      clearInterval(captchaIntervals[chatId]);
     }
 
     return next();

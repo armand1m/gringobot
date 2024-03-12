@@ -19,6 +19,8 @@ export const translations = {
     failedToKickUser:
       '{{mention}} Não consegui banir {{kickedUser}} por algum motivo. Mais informacoes nos logs. Tente manualmente pela UI do Telegram se for urgente.',
     kickOutOfChat: '{{mention}} /kick funciona somente em grupos.',
+    captchaOutOfChat:
+      '{{mention}} Captcha funciona somente em grupos.',
     mustBeAdminToUseCommand:
       '{{mention}} Voce deve ser um admin ou ter permissoes para executar esse comando.',
     mentionUserToKick:
@@ -36,6 +38,10 @@ export const translations = {
     failedToFetchContent:
       '{{mention}} nao pude buscar o conteudo que voce procura. Tente outro assunto ou topico.',
     unknown: '{{mention}} Ocorreu um problema.',
+    failedToDisableCaptcha:
+      '{{mention}} Falha ao desabilitar o captcha.',
+    failedToEnableCaptcha:
+      '{{mention}} Falha ao habilitar o captcha.',
   },
   listing: {
     noMembers: '{{mention}} Não existem pessoas registradas.',
@@ -53,6 +59,15 @@ export const translations = {
   },
   kick: {
     userGotKicked: '{{mention}} Usuario {{kickedUser}} foi banido.',
+    userGotKickedCaptcha:
+      'Usuario {{kickedUser}} foi banido por não resolver o captcha.',
+  },
+  captcha: {
+    enabled: '{{mention}} Captcha habilitado.',
+    disabled: '{{mention}} Captcha desabilitado.',
+    noMatch: `{{mention}} Captcha não confere. Tente novamente.`,
+    solveCaptcha: `{{mention}} Resolva o captcha para continuar. Você tem {{seconds}} seconds.`,
+    captchaSolved: `{{mention}} Captcha resolvido com sucesso.`,
   },
   locale: {
     changeSuccess:

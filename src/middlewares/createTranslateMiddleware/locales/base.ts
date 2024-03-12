@@ -20,6 +20,8 @@ export const translations = {
       '{{mention}} Failed to kick user {{kickedUser}} due to unexpected reasons. Try manually through Telegram UI if urgent.',
     kickOutOfChat:
       '{{mention}} /kick command only works in a group chat.',
+    captchaOutOfChat:
+      '{{mention}} Captcha only works in a group chat.',
     mustBeAdminToUseCommand:
       '{{mention}} You must be an admin to use this command.',
     mentionUserToKick:
@@ -37,6 +39,8 @@ export const translations = {
     failedToFetchContent:
       "{{mention}} Failed to find the content you're looking for.",
     unknown: '{{mention}} A problem occurred.',
+    failedToEnableCaptcha: '{{mention}} Failed to enable captcha.',
+    failedToDisableCaptcha: '{{mention}} Failed to disable captcha.',
   },
   listing: {
     noMembers: '{{mention}} There are no members registered.',
@@ -56,6 +60,15 @@ export const translations = {
   kick: {
     userGotKicked:
       '{{mention}} User {{kickedUser}} has been kicked from the group.',
+    userGotKickedCaptcha:
+      'User {{kickedUser}} has been kicked for failing to solve the captcha.',
+  },
+  captcha: {
+    enabled: '{{mention}} Captcha is enabled.',
+    disabled: '{{mention}} Captcha is disabled.',
+    noMatch: `{{mention}} Captcha doesn't match. Try again.`,
+    solveCaptcha: `{{mention}} Solve the captcha to continue. You have {{seconds}} seconds.`,
+    captchaSolved: `{{mention}} Captcha solved successfully.`,
   },
   locale: {
     changeSuccess:
