@@ -18,9 +18,8 @@ export const createCaptchaSolveMiddleware = () => {
       return next();
     }
 
-    const isUserInWaitlist = await ctx.database.isUserInCaptchaWaitlist(
-      user
-    );
+    const isUserInWaitlist =
+      await ctx.database.isUserInCaptchaWaitlist(user);
 
     if (!isUserInWaitlist) {
       return next();

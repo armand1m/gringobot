@@ -8,9 +8,9 @@ import {
   getCountryNameForCountryCode,
 } from '../countries.js';
 
-export const cmdRankCountryRemoteMemberCount: MiddlewareFn<BotContext> = async (
-  ctx
-) => {
+export const cmdRankCountryRemoteMemberCount: MiddlewareFn<
+  BotContext
+> = async (ctx) => {
   const i18n = ctx.i18n;
 
   const unsafeBaseCountryCode = markdown
@@ -39,9 +39,8 @@ export const cmdRankCountryRemoteMemberCount: MiddlewareFn<BotContext> = async (
     );
   }
 
-  const remoteMembersFromCountry = ctx.database.getRemoteMembersFrom(
-    countryCode
-  );
+  const remoteMembersFromCountry =
+    ctx.database.getRemoteMembersFrom(countryCode);
   let totalCount = 0;
   const rankMap = {} as {
     [key in Alpha2Code]: {
@@ -91,11 +90,8 @@ export const cmdRankCountryRemoteMemberCount: MiddlewareFn<BotContext> = async (
   // Standard competition ranking ("1224" ranking)
   const sortedRankOutput = sortedRank.map(
     ([, countryAndCounts], i) => {
-      const {
-        countryName,
-        countryFlagEmoji,
-        count,
-      } = countryAndCounts;
+      const { countryName, countryFlagEmoji, count } =
+        countryAndCounts;
       return `${i + 1}. ${countryFlagEmoji} ${countryName}: ${count}`;
     }
   );

@@ -4,9 +4,9 @@ import { BotContext } from '../context.js';
 import { getCountryNameForCountryCode } from '../countries.js';
 import { validateCountry } from '../utils/country.js';
 
-export const cmdRegisterRemoteMember: MiddlewareFn<BotContext> = async (
-  ctx
-) => {
+export const cmdRegisterRemoteMember: MiddlewareFn<
+  BotContext
+> = async (ctx) => {
   const i18n = ctx.i18n;
   const countries = markdown
     .escape(ctx.command.args ?? '')

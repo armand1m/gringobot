@@ -6,9 +6,8 @@ export const cmdPingRemote: MiddlewareFn<BotContext> = async (
 ) => {
   const i18n = ctx.i18n;
   const remoteMembers = await ctx.fetchRemoteMembersMentionList();
-  const silencedRemoteMembers = await ctx.fetchRemoteMembersMentionList(
-    true
-  );
+  const silencedRemoteMembers =
+    await ctx.fetchRemoteMembersMentionList(true);
 
   const hasNoMembers = remoteMembers.length === 0;
   const hasLessThanFiveMembers = remoteMembers.length < 5;

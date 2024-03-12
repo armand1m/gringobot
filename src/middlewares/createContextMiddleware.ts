@@ -76,35 +76,36 @@ export const createContextMiddleware = ({ config }: Props) => {
       return true;
     };
 
-    const replyWithAutoDestructiveMessage: BotContext['replyWithAutoDestructiveMessage'] = async (
-      markdownMessage,
-      options = {
-        deleteReplyMessage: true,
-        deleteCommandMessage: true,
-      }
-    ) => {
-      const messageSent = await ctx.replyWithMarkdown(
-        markdownMessage
-      );
+    const replyWithAutoDestructiveMessage: BotContext['replyWithAutoDestructiveMessage'] =
+      async (
+        markdownMessage,
+        options = {
+          deleteReplyMessage: true,
+          deleteCommandMessage: true,
+        }
+      ) => {
+        const messageSent = await ctx.replyWithMarkdown(
+          markdownMessage
+        );
 
-      if (!config.messageTimeoutEnabled) {
+        if (!config.messageTimeoutEnabled) {
+          return messageSent;
+        }
+
+        if (options.deleteCommandMessage && ctx.message?.message_id) {
+          await ctx.database.addAutoDeleteMessage(
+            ctx.message?.message_id
+          );
+        }
+
+        if (options.deleteReplyMessage) {
+          await ctx.database.addAutoDeleteMessage(
+            messageSent.message_id
+          );
+        }
+
         return messageSent;
-      }
-
-      if (options.deleteCommandMessage && ctx.message?.message_id) {
-        await ctx.database.addAutoDeleteMessage(
-          ctx.message?.message_id
-        );
-      }
-
-      if (options.deleteReplyMessage) {
-        await ctx.database.addAutoDeleteMessage(
-          messageSent.message_id
-        );
-      }
-
-      return messageSent;
-    };
+      };
 
     const fetchMembersMentionList = async (
       countryCode: Alpha2Code,
@@ -173,7 +174,8 @@ export const createContextMiddleware = ({ config }: Props) => {
     ctx.checkAdminAccess = checkAdminAccess;
     ctx.fetchMembersMentionList = fetchMembersMentionList;
     ctx.fetchRemoteMembersMentionList = fetchRemoteMembersMentionList;
-    ctx.replyWithAutoDestructiveMessage = replyWithAutoDestructiveMessage;
+    ctx.replyWithAutoDestructiveMessage =
+      replyWithAutoDestructiveMessage;
     ctx.loadDatabase = loadDatabase;
     ctx.database = await loadDatabase();
     ctx.config = config;
