@@ -2,6 +2,7 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 COPY package.json yarn.lock ./
 RUN yarn
+RUN npm_config_platform=linux yarn add sharp
 COPY . .
 RUN yarn build
 
