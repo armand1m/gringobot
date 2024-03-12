@@ -64,6 +64,11 @@ The bot replies in English by default. You can change the language using the `/s
  - [x] Set Group Language:
     - [x] `/set_language en`
     - [x] `/set_language ptbr`
+ - [x] Captcha:
+    - New members will face a simple captcha on groups with this enabled.
+    - All CAPTCHA messages are self-destructable, except the rejection ones.
+    - [x] `/enable_captcha`: Will enable the captcha in the group. Can only be executed by admins.
+    - [x] `/disable_captcha`: Will disable the captcha in the group. Can only be executed by admins.
  - [x] Self preservation habilities
     - [x] Handle deleted registered users and deregister those when identified
     - [x] Auto bans accounts with Cyrillic Characters _(huge sorry to all the eastern europeans for this, russians made me do it)_

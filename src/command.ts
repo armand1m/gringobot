@@ -18,6 +18,8 @@ export enum Command {
   FindRemoteMemberFrom = 'find_remote_member_from',
   Kick = 'kick',
   SetLanguage = 'set_language',
+  EnableCaptcha = 'enable_captcha',
+  DisableCaptcha = 'disable_captcha',
 }
 
 enum PortugueseCommandAlias {
@@ -36,6 +38,8 @@ enum PortugueseCommandAlias {
   RegisterRemoteMember = 'estou_remoto',
   FindRemoteMemberTo = 'quem_remoto_para',
   FindRemoteMemberFrom = 'quem_remoto_do',
+  EnableCaptcha = 'habilitar_captcha',
+  DisableCaptcha = 'desabilitar_captcha',
 }
 
 enum EnglishCommandAlias {
@@ -49,6 +53,8 @@ enum EnglishCommandAlias {
   DeregisterMemberFrom = 'leave',
   FindMember = 'whereami',
   SetLanguage = 'set_lang',
+  EnableCaptcha = 'captcha_on',
+  DisableCaptcha = 'captcha_off',
 }
 
 const DefaultCommandDescriptions: Record<Command, string> = {
@@ -79,6 +85,10 @@ const DefaultCommandDescriptions: Record<Command, string> = {
   [Command.Kick]: 'Ban mentioned user (Admin only)',
   [Command.SetLanguage]:
     'Sets the language that GringoBot should use in this (Admin only)',
+  [Command.EnableCaptcha]:
+    'Enable captcha for new members (Admin only)',
+  [Command.DisableCaptcha]:
+    'Disable captcha for new members (Admin only)',
 };
 
 const CommandDescriptionMap: Record<string, string> = {
@@ -101,6 +111,10 @@ const CommandDescriptionMap: Record<string, string> = {
     DefaultCommandDescriptions[Command.PingMembersAt],
   [EnglishCommandAlias.FindMember]:
     DefaultCommandDescriptions[Command.FindMember],
+  [EnglishCommandAlias.EnableCaptcha]:
+    DefaultCommandDescriptions[Command.EnableCaptcha],
+  [EnglishCommandAlias.DisableCaptcha]:
+    DefaultCommandDescriptions[Command.DisableCaptcha],
   [PortugueseCommandAlias.PingAdmins]: 'Notifica admins.',
   [PortugueseCommandAlias.RegisterMemberAt]:
     'Registra você em uma localização específica.',
@@ -128,6 +142,10 @@ const CommandDescriptionMap: Record<string, string> = {
     'Encontra pessoas que estão trabalhando remoto para um país',
   [PortugueseCommandAlias.RegisterRemoteMember]:
     'Se registra como trabalhando remoto',
+  [PortugueseCommandAlias.EnableCaptcha]:
+    'Habilita CAPTCHA para novos membros do grupo',
+  [PortugueseCommandAlias.DisableCaptcha]:
+    'Desabilita CAPTCHA para novos membros do grupo',
 };
 
 export const CommandDescriptions: BotCommand[] = Object.keys(
@@ -208,5 +226,13 @@ export const CommandAliases: Record<Command, string[]> = {
   [Command.SetLanguage]: [
     Command.SetLanguage,
     EnglishCommandAlias.SetLanguage,
+  ],
+  [Command.EnableCaptcha]: [
+    Command.EnableCaptcha,
+    PortugueseCommandAlias.EnableCaptcha,
+  ],
+  [Command.DisableCaptcha]: [
+    Command.DisableCaptcha,
+    PortugueseCommandAlias.DisableCaptcha,
   ],
 };

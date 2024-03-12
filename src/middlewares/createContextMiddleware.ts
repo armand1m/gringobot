@@ -8,6 +8,7 @@ import { createDatabase } from '../database.js';
 import { withRejected, withFulfilled } from '../utils/promises.js';
 import { createMemberMention } from '../member.js';
 import { getRandomValues } from '../utils/getRandomCollection.js';
+import { runCaptchaRecycling } from '../autoKickCaptcha.js';
 
 interface Props {
   config: Config;
@@ -26,6 +27,7 @@ type MessageDeletionIntervals = Record<string, NodeJS.Timeout>;
  * and the value will be an instance of NodeJS.Timeout.
  */
 const messageDeletionIntervals: MessageDeletionIntervals = {};
+const captchaIntervals: MessageDeletionIntervals = {};
 
 export const createContextMiddleware = ({ config }: Props) => {
   const middleware: Middleware<BotContext> = async (ctx, next) => {
@@ -199,6 +201,26 @@ export const createContextMiddleware = ({ config }: Props) => {
 
         process.on('SIGINT', () =>
           clearInterval(messageDeletionIntervals[chatId])
+        );
+      }
+    }
+
+    const isCaptchaEnabled = await ctx.database.isCaptchaEnabled();
+
+    if (isCaptchaEnabled) {
+      const captchaRecyclingInterval = captchaIntervals[chatId];
+
+      if (!captchaRecyclingInterval) {
+        ctx.logger.info(
+          `Creating captcha interval for chat "${chatId}".`
+        );
+
+        captchaIntervals[chatId] = setInterval(() => {
+          runCaptchaRecycling(ctx);
+        }, 5000);
+
+        process.on('SIGINT', () =>
+          clearInterval(captchaIntervals[chatId])
         );
       }
     }

@@ -1,3 +1,4 @@
+import { HTTPError } from 'got';
 import { Telegraf, TelegramError } from 'telegraf';
 import { BotContext } from './context.js';
 import { createLogger } from './logger.js';
@@ -18,12 +19,15 @@ import { cmdDeregisterRemoteMember } from './commands/deregisterRemoteMember.js'
 import { cmdListCountryMemberCount } from './commands/listCountryMemberCount.js';
 import { cmdRankCountryMemberCount } from './commands/rankCountryMemberCount.js';
 import { cmdRankCountryRemoteMemberCount } from './commands/rankCountryRemoteMemberCount.js';
-import { createContextMiddleware } from './middlewares/createContextMiddleware.js';
-import { createCommandMiddleware } from './middlewares/createCommandMiddleware.js';
 import { createBlockMiddleware } from './middlewares/createBlockMiddleware.js';
 import { createLoggerMiddleware } from './middlewares/createLoggerMiddleware.js';
+import { createCaptchaMiddleware } from './middlewares/createCaptchaMiddleware.js';
+import { createCaptchaSolveMiddleware } from './middlewares/createCaptchaSolveMiddleware.js';
+import { createContextMiddleware } from './middlewares/createContextMiddleware.js';
+import { createCommandMiddleware } from './middlewares/createCommandMiddleware.js';
 import { createTranslateMiddleware } from './middlewares/createTranslateMiddleware/index.js';
-import { HTTPError } from 'got';
+import { cmdEnableCaptcha } from './commands/enableCaptcha.js';
+import { cmdDisableCaptcha } from './commands/disableCaptcha.js';
 
 const main = async () => {
   const config = await loadConfiguration();
@@ -39,6 +43,8 @@ const main = async () => {
   );
   bot.use(createTranslateMiddleware());
   bot.use(createBlockMiddleware());
+  bot.use(createCaptchaMiddleware());
+  bot.use(createCaptchaSolveMiddleware());
 
   if (config.helpCommandEnabled) {
     bot.command(CommandAliases[Command.Help], cmdHelp);
@@ -85,6 +91,14 @@ const main = async () => {
   bot.command(CommandAliases[Command.PingRemote], cmdPingRemote);
   bot.command(CommandAliases[Command.Kick], cmdKick);
   bot.command(CommandAliases[Command.SetLanguage], cmdSetLanguage);
+  bot.command(
+    CommandAliases[Command.EnableCaptcha],
+    cmdEnableCaptcha
+  );
+  bot.command(
+    CommandAliases[Command.DisableCaptcha],
+    cmdDisableCaptcha
+  );
 
   bot.catch((err, ctx) => {
     logger.error(
