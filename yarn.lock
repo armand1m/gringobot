@@ -1856,7 +1856,7 @@ svg-captcha@^1.4.0:
   dependencies:
     opentype.js "^0.7.3"
 
-telegraf@^4.11.2:
+telegraf@^4.16.3:
   version "4.16.3"
   resolved "https://registry.yarnpkg.com/telegraf/-/telegraf-4.16.3.tgz#f03fa30482b540a7f9895af8f13ec8f432840a66"
   integrity sha512-yjEu2NwkHlXu0OARWoNhJlIjX09dRktiMQFsM678BAH/PEPVwctzL67+tvXqLCRQQvm3SDtki2saGO9hLlz68w==

@@ -225,6 +225,9 @@ export const createContextMiddleware = ({ config }: Props) => {
     }
 
     if (!isCaptchaEnabled && captchaRecyclingInterval) {
+      ctx.logger.info(
+        `Found captcha recycling intervals for chat "${chatId}" with captcha disabled. Clearing intervals.`
+      );
       clearInterval(captchaIntervals[chatId]);
     }
 

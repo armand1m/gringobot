@@ -40,7 +40,7 @@ export const createTestBotContext = async (
       mention: createMemberMention(mainFakeTestUser),
     },
     database: database,
-    command: {
+    userCommand: {
       bot: 'GringoBot',
     },
     replyWithMarkdown,

@@ -9,7 +9,7 @@ export const cmdRegisterRemoteMember: MiddlewareFn<
 > = async (ctx) => {
   const i18n = ctx.i18n;
   const countries = markdown
-    .escape(ctx.command.args ?? '')
+    .escape(ctx.userCommand.args ?? '')
     .trim()
     .split(' ');
 

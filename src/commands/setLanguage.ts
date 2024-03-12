@@ -22,7 +22,7 @@ export const cmdSetLanguage: Middleware<BotContext> = async (ctx) => {
   }
 
   const [langParam] = markdown
-    .escape(ctx.command.args ?? '')
+    .escape(ctx.userCommand.args ?? '')
     .trim()
     .split(' ');
 

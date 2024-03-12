@@ -24,7 +24,7 @@
     "pino-pretty": "^9.3.0",
     "sharp": "^0.33.2",
     "svg-captcha": "^1.4.0",
-    "telegraf": "^4.11.2",
+    "telegraf": "^4.16.3",
     "telegram-format": "^2.1.0",
     "tslib": "^2.1.0",
     "yup": "^0.32.9"

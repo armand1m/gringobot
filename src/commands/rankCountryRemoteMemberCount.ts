@@ -14,7 +14,7 @@ export const cmdRankCountryRemoteMemberCount: MiddlewareFn<
   const i18n = ctx.i18n;
 
   const unsafeBaseCountryCode = markdown
-    .escape(ctx.command.args ?? '')
+    .escape(ctx.userCommand.args ?? '')
     .trim();
 
   if (!unsafeBaseCountryCode) {

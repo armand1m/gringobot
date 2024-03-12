@@ -11,7 +11,7 @@ export const cmdFindMembersAt: MiddlewareFn<BotContext> = async (
 ) => {
   const i18n = ctx.i18n;
   const unsafeCountryName = markdown
-    .escape(ctx.command.args ?? '')
+    .escape(ctx.userCommand.args ?? '')
     .trim();
 
   if (!unsafeCountryName) {

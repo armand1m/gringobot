@@ -17,7 +17,7 @@ const getContentUrl = (section?: string, topic?: string) => {
 
 export const cmdHelp: Middleware<BotContext> = async (ctx) => {
   const [section, topic] = markdown
-    .escape(ctx.command.args ?? '')
+    .escape(ctx.userCommand.args ?? '')
     .trim()
     .split(' ');
 

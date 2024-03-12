@@ -19,7 +19,7 @@ export const createCommandMiddleware = () => {
       args: parts[3],
     };
 
-    ctx.command = command;
+    ctx.userCommand = command;
 
     return next();
   };

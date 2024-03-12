@@ -38,7 +38,7 @@ export interface BotContext extends Context {
     mention: string;
     id: number;
   };
-  command: {
+  userCommand: {
     text: string;
     command: string;
     bot?: string;
