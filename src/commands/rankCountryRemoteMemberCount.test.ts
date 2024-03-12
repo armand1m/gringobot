@@ -5,7 +5,7 @@ import { cmdRankCountryRemoteMemberCount } from './rankCountryRemoteMemberCount'
 
 it('returns error message when country code is not given', async () => {
   const { ctx, next, reply } = await createTestBotContext({
-    command: {
+    userCommand: {
       command: Command.RankCountryRemoteMemberCount,
       text: '',
       args: '',
@@ -21,7 +21,7 @@ it('returns error message when country code is not given', async () => {
 
 it('returns error message when country code is invalid', async () => {
   const { ctx, next, reply } = await createTestBotContext({
-    command: {
+    userCommand: {
       command: Command.RankCountryRemoteMemberCount,
       text: 'foobar',
       args: 'foobar',
@@ -40,7 +40,7 @@ it('returns no member count when empty', async () => {
     database: {
       getRemoteMembersFrom: () => ({}),
     },
-    command: {
+    userCommand: {
       command: Command.RankCountryRemoteMemberCount,
       text: 'BR',
       args: 'BR',
@@ -56,7 +56,7 @@ it('returns no member count when empty', async () => {
 
 it('returns rank for a list', async () => {
   const { ctx, next, reply } = await createTestBotContext({
-    command: {
+    userCommand: {
       command: Command.RankCountryRemoteMemberCount,
       text: 'BR',
       args: 'BR',

@@ -8,7 +8,7 @@ it('renders simple message when there are less than 5 members registered', async
     database: {
       getAllRemoteMembers: () => [448150814, 7823597648],
     },
-    command: {
+    userCommand: {
       command: Command.PingRemote,
       args: '',
     },
@@ -26,7 +26,7 @@ it('renders no members message when there are no members registered', async () =
     database: {
       getAllRemoteMembers: () => [],
     },
-    command: {
+    userCommand: {
       command: Command.PingRemote,
       args: '',
     },
@@ -41,7 +41,7 @@ it('renders no members message when there are no members registered', async () =
 
 it('pings all remote members', async () => {
   const { ctx, next, reply } = await createTestBotContext({
-    command: {
+    userCommand: {
       command: Command.PingRemote,
       args: '',
     },

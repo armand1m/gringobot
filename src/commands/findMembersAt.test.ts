@@ -6,7 +6,7 @@ import { cmdFindMembersAt } from './findMembersAt';
 
 it('renders error message when no location is specified', async () => {
   const { ctx, next, reply } = await createTestBotContext({
-    command: {
+    userCommand: {
       command: Command.FindMembersAt,
       args: '',
     },
@@ -21,7 +21,7 @@ it('renders error message when no location is specified', async () => {
 
 it('renders error message when the location is specified is not found', async () => {
   const { ctx, next, reply } = await createTestBotContext({
-    command: {
+    userCommand: {
       command: Command.FindMembersAt,
       args: 'NXL',
     },
@@ -39,7 +39,7 @@ it('renders simple message when there are less than 5 members registered', async
     database: {
       getMembersAt: () => fakeUserIds.slice(0, 2),
     },
-    command: {
+    userCommand: {
       command: Command.FindMembersAt,
       args: 'NL',
     },
@@ -57,7 +57,7 @@ it('renders no members message when there are no members registered', async () =
     database: {
       getMembersAt: () => [],
     },
-    command: {
+    userCommand: {
       command: Command.FindMembersAt,
       args: 'NL',
     },
@@ -72,7 +72,7 @@ it('renders no members message when there are no members registered', async () =
 
 it('lists all members of NL', async () => {
   const { ctx, next, reply } = await createTestBotContext({
-    command: {
+    userCommand: {
       command: Command.PingMembersAt,
       args: 'NL',
     },

@@ -8,7 +8,7 @@ it('returns message if member is not registered', async () => {
     database: {
       findMember: (_userId) => [],
     },
-    command: {
+    userCommand: {
       command: Command.FindMember,
       args: '',
     },
@@ -23,7 +23,7 @@ it('returns message if member is not registered', async () => {
 
 it('returns member location if found', async () => {
   const { ctx, next, reply } = await createTestBotContext({
-    command: {
+    userCommand: {
       command: Command.FindMember,
       args: '',
     },

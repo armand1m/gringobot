@@ -5,7 +5,7 @@ import { cmdDeregisterMemberFrom } from './deregisterMemberFrom';
 
 it('renders error message when no location is specified', async () => {
   const { ctx, next, reply } = await createTestBotContext({
-    command: {
+    userCommand: {
       command: Command.DeregisterMemberFrom,
       args: '',
     },
@@ -20,7 +20,7 @@ it('renders error message when no location is specified', async () => {
 
 it('renders error message when the location specified is not found', async () => {
   const { ctx, next, reply } = await createTestBotContext({
-    command: {
+    userCommand: {
       command: Command.DeregisterMemberFrom,
       args: 'NXL',
     },
@@ -35,7 +35,7 @@ it('renders error message when the location specified is not found', async () =>
 
 it('removes member from location successfully', async () => {
   const { ctx, next, reply } = await createTestBotContext({
-    command: {
+    userCommand: {
       command: Command.DeregisterMemberFrom,
       args: 'NL',
     },

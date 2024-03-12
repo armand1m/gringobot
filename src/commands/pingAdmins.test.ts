@@ -5,7 +5,7 @@ import { cmdPingAdmins } from './pingAdmins';
 
 it('pings 5 admins', async () => {
   const { ctx, next, reply } = await createTestBotContext({
-    command: {
+    userCommand: {
       command: Command.PingAdmins,
       args: '',
     },

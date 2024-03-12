@@ -5,7 +5,7 @@ import { cmdRegisterRemoteMember } from './registerRemoteMember';
 
 it('replies with syntax error when command is issued with single location', async () => {
   const { ctx, next, reply } = await createTestBotContext({
-    command: {
+    userCommand: {
       command: Command.RegisterRemoteMember,
       args: 'BR',
     },
@@ -20,7 +20,7 @@ it('replies with syntax error when command is issued with single location', asyn
 
 it('replies with syntax error when command is issued with no locations', async () => {
   const { ctx, next, reply } = await createTestBotContext({
-    command: {
+    userCommand: {
       command: Command.RegisterRemoteMember,
       args: '',
     },
@@ -35,7 +35,7 @@ it('replies with syntax error when command is issued with no locations', async (
 
 it('replies with error when command is issued with invalid source location', async () => {
   const { ctx, next, reply } = await createTestBotContext({
-    command: {
+    userCommand: {
       command: Command.RegisterRemoteMember,
       args: 'NXL BR',
     },
@@ -50,7 +50,7 @@ it('replies with error when command is issued with invalid source location', asy
 
 it('replies with error when command is issued with invalid destiny location', async () => {
   const { ctx, next, reply } = await createTestBotContext({
-    command: {
+    userCommand: {
       command: Command.RegisterRemoteMember,
       args: 'BR NXL',
     },
@@ -65,7 +65,7 @@ it('replies with error when command is issued with invalid destiny location', as
 
 it('registers user successfully', async () => {
   const { ctx, next, reply } = await createTestBotContext({
-    command: {
+    userCommand: {
       command: Command.RegisterRemoteMember,
       args: 'BR ES',
       text: 'BR ES',
@@ -84,7 +84,7 @@ it('notifies user in case they try to register to a place they are already regis
     database: {
       hasRemoteMemberRegistered: () => true,
     },
-    command: {
+    userCommand: {
       command: Command.RegisterRemoteMember,
       args: 'BR ES',
       text: 'BR ES',

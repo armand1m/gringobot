@@ -5,7 +5,7 @@ import { cmdDeregisterRemoteMember } from './deregisterRemoteMember';
 
 it('should always remove the user remote location', async () => {
   const { ctx, next, reply } = await createTestBotContext({
-    command: {
+    userCommand: {
       command: Command.DeregisterRemoteMember,
       args: '',
     },
